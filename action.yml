@@ -1,0 +1,51 @@
+name: 'PromptGreen Pre-Deploy Prompt Gate'
+description: 'Zero-budget carbon-aware prompt review action that validates prompt diffs before deployment.'
+inputs:
+  old_prompt:
+    description: 'Path or text of old baseline prompt'
+    required: true
+  new_prompt:
+    description: 'Path or text of new prompt'
+    required: true
+  budget_threshold:
+    description: 'Carbon delta budget threshold (gCO2 per 1K inferences)'
+    required: false
+    default: '0.5'
+  policy_mode:
+    description: 'Enforcement mode: warn or block'
+    required: false
+    default: 'warn'
+  model:
+    description: 'Target model key (llama-3-8b, mistral-7b, phi-3-3.8b)'
+    required: false
+    default: 'llama-3-8b'
+
+outputs:
+  status:
+    description: 'Gate result status: PASS, WARN, or FAIL'
+  carbon_delta_1k:
+    description: 'Predicted carbon delta per 1K inferences in gCO2'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install click rich tiktoken scikit-learn numpy pandas requests
+
+    - name: Run PromptGreen Gate Evaluation
+      shell: bash
+      run: |
+        python -m promptgreen.cli analyze \
+          --old "${{ inputs.old_prompt }}" \
+          --new "${{ inputs.new_prompt }}" \
+          --budget "${{ inputs.budget_threshold }}" \
+          --mode "${{ inputs.policy_mode }}" \
+          --model "${{ inputs.model }}"
