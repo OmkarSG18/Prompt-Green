@@ -91,6 +91,12 @@ prompt_ledger.db
 .pydevproject
 .settings/
 
+# Backups and archives
+*.zip
+*.tar.gz
+*.tgz
+*.bak
+
 # OS specific files
 .DS_Store
 .DS_Store?
