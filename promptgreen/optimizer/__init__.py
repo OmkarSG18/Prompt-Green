@@ -15,6 +15,11 @@ from promptgreen.optimizer.compressor import (
     CompressorConfig,
     CompressionResult
 )
+from promptgreen.optimizer.output_shaper import (
+    OutputDirectiveShaper,
+    ShaperConfig,
+    ShapingResult
+)
 
 __all__ = [
     "RuleBasedPruner",
@@ -23,5 +28,8 @@ __all__ = [
     "LLMLinguaCompressor",
     "PromptCompressor",
     "CompressorConfig",
-    "CompressionResult"
+    "CompressionResult",
+    "OutputDirectiveShaper",
+    "ShaperConfig",
+    "ShapingResult"
 ]
