@@ -20,6 +20,14 @@ from promptgreen.optimizer.output_shaper import (
     ShaperConfig,
     ShapingResult
 )
+from promptgreen.optimizer.semantic_guard import (
+    SemanticFidelityGuard,
+    GuardrailConfig,
+    GuardrailResult,
+    GuardrailMode,
+    LocalMiniLMEmbedder,
+    compute_cosine_similarity
+)
 
 __all__ = [
     "RuleBasedPruner",
@@ -31,5 +39,11 @@ __all__ = [
     "CompressionResult",
     "OutputDirectiveShaper",
     "ShaperConfig",
-    "ShapingResult"
+    "ShapingResult",
+    "SemanticFidelityGuard",
+    "GuardrailConfig",
+    "GuardrailResult",
+    "GuardrailMode",
+    "LocalMiniLMEmbedder",
+    "compute_cosine_similarity"
 ]
