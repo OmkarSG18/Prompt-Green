@@ -27,6 +27,8 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
+from promptgreen.optimizer.rule_pruner import RuleBasedPruner
+
 logger = logging.getLogger("promptgreen.optimizer.semantic_guard")
 
 # Default production thresholds and target reductions per mode
@@ -34,6 +36,13 @@ MODE_THRESHOLDS: Dict[str, float] = {
     "conservative": 0.96,
     "balanced": 0.92,
     "aggressive": 0.86,
+}
+
+# Default calibrated chunk-level thresholds per mode (multi-chunk localized safety gate)
+MODE_CHUNK_THRESHOLDS: Dict[str, float] = {
+    "conservative": 0.82,
+    "balanced": 0.75,
+    "aggressive": 0.65,
 }
 
 TARGET_REDUCTIONS: Dict[str, float] = {
@@ -113,6 +122,8 @@ class GuardrailConfig:
     """Configuration options for Stage 4 Semantic Fidelity Guardrail."""
     mode: str = "balanced"
     threshold: Optional[float] = None
+    chunk_threshold: Optional[float] = None
+    enable_chunk_validation: bool = True
     model_name: str = "sentence-transformers/all-MiniLM-L6-v2"
     cache_dir: Optional[str] = None
     max_retries: int = 2
@@ -134,6 +145,15 @@ class GuardrailConfig:
             self.threshold = float(self.threshold)
         else:
             self.threshold = MODE_THRESHOLDS[self.mode]
+
+        if self.chunk_threshold is not None:
+            if not isinstance(self.chunk_threshold, (int, float)) or not (0.0 < float(self.chunk_threshold) <= 1.0):
+                raise ValueError(
+                    f"Invalid chunk_threshold '{self.chunk_threshold}'. Must be a float strictly between 0.0 and 1.0."
+                )
+            self.chunk_threshold = float(self.chunk_threshold)
+        else:
+            self.chunk_threshold = MODE_CHUNK_THRESHOLDS.get(self.mode, 0.75)
 
         if not isinstance(self.max_retries, int) or self.max_retries < 0:
             raise ValueError(f"max_retries must be a non-negative integer, got {self.max_retries}")
@@ -161,6 +181,7 @@ class GuardrailResult:
     stage_similarities: Dict[str, float] = field(default_factory=dict)
     final_mode: Optional[str] = None
     chunk_similarities: List[float] = field(default_factory=list)
+    chunk_coverage: List[float] = field(default_factory=list)
     directive_disambiguation_applied: bool = False
     core_similarity: Optional[float] = None
 
@@ -351,7 +372,7 @@ class LocalMiniLMEmbedder:
     def chunk_text(self, text: str, max_words_per_chunk: int = 70) -> List[str]:
         """
         Split text into sentence-aware chunks fitting comfortably within the 128-token limit.
-        Handles long single sentences by sub-slicing words.
+        Handles long single sentences and dense technical identifiers by sub-slicing words.
         Safe against empty input and whitespace-only chunks.
         Bounded to a maximum of 100 chunks to prevent unbounded execution.
         """
@@ -367,31 +388,40 @@ class LocalMiniLMEmbedder:
         chunks: List[str] = []
         current_chunk: List[str] = []
         current_len = 0
+        current_chars = 0
         max_chunks = 100
+        max_chars_per_chunk = 360  # Guard against subword explosion from dense identifiers
 
         for sent in sentences:
             words = sent.split()
             if not words:
                 continue
 
-            if len(words) > max_words_per_chunk:
-                # Long sentence exceeds chunk limit: flush current and sub-slice
+            sent_chars = len(sent)
+            # If a single sentence exceeds word or character budget, sub-slice words
+            if len(words) > max_words_per_chunk or (sent_chars > max_chars_per_chunk and len(words) > 10):
                 if current_chunk:
                     chunks.append(" ".join(current_chunk))
                     current_chunk = []
                     current_len = 0
-                for i in range(0, len(words), max_words_per_chunk):
+                    current_chars = 0
+                sub_slice_step = max_words_per_chunk
+                if sent_chars > max_chars_per_chunk:
+                    sub_slice_step = max(5, int(max_words_per_chunk * (max_chars_per_chunk / max(1, sent_chars))))
+                for i in range(0, len(words), sub_slice_step):
                     if len(chunks) >= max_chunks:
                         break
-                    chunks.append(" ".join(words[i : i + max_words_per_chunk]))
+                    chunks.append(" ".join(words[i : i + sub_slice_step]))
             else:
-                if current_len + len(words) > max_words_per_chunk and current_chunk:
+                if (current_len + len(words) > max_words_per_chunk or current_chars + sent_chars > max_chars_per_chunk) and current_chunk:
                     chunks.append(" ".join(current_chunk))
                     current_chunk = [sent]
                     current_len = len(words)
+                    current_chars = sent_chars
                 else:
                     current_chunk.append(sent)
                     current_len += len(words)
+                    current_chars += sent_chars
 
             if len(chunks) >= max_chunks:
                 break
@@ -626,6 +656,98 @@ class SemanticFidelityGuard:
         return core, directives_found
 
     # -------------------------------------------------------------------------
+    # Localized Sentence Preservation & Intra-Chunk Dilution Safeguard (Task 5)
+    # -------------------------------------------------------------------------
+
+    def _extract_meaningful_sentences(self, text: str) -> List[str]:
+        """
+        Extract non-trivial instructional sentences from text for localized validation.
+        Excludes pure conversational filler and polite greetings/closures.
+        """
+        raw_sentences = re.split(r"(?<=[.!?])\s+|\n+", text)
+        sentences: List[str] = []
+        for s in raw_sentences:
+            clean_s = s.strip()
+            words = clean_s.split()
+            # Only substantive sentences (>= 6 words, >= 25 chars)
+            if len(words) < 6 or len(clean_s) < 25:
+                continue
+            # Exclude conversational polite prefixes / closures
+            if any(re.search(pat, clean_s, re.IGNORECASE) for pat, _ in RuleBasedPruner.POLITE_PREFIX_PATTERNS) and len(words) <= 12:
+                continue
+            if any(re.search(pat, clean_s, re.IGNORECASE) for pat, _ in RuleBasedPruner.POLITE_CLOSURE_PATTERNS):
+                continue
+            sentences.append(clean_s)
+        return sentences
+
+    def _evaluate_sentence_coverage(
+        self,
+        original_prompt: str,
+        candidate_prompt: str,
+    ) -> Tuple[bool, List[str]]:
+        """
+        Evaluate localized sentence-level preservation to prevent intra-chunk dilution.
+        Catches substantial semantic abandonment of individual instruction sentences
+        while permitting legitimate compression, paraphrasing, splits, and merges.
+        """
+        orig_sents = self._extract_meaningful_sentences(original_prompt)
+
+        # If original has fewer than 2 substantive sentences, intra-chunk dilution cannot occur
+        if len(orig_sents) < 2:
+            return (True, [])
+
+        # Split candidate into sentences, excluding pure Stage 3 directive blocks
+        raw_cand = re.split(r"(?<=[.!?])\s+|\n+", candidate_prompt)
+        cand_sents = []
+        for s in raw_cand:
+            clean = s.strip()
+            if not clean:
+                continue
+            if any(re.search(pat, clean, re.IGNORECASE) for pat in STAGE3_DIRECTIVE_PATTERNS):
+                continue
+            cand_sents.append(clean)
+
+        if not cand_sents:
+            return (True, [])
+
+        # Build candidate targets: single sentences + adjacent pairs (for sentence splits)
+        cand_targets = list(cand_sents)
+        for k in range(len(cand_sents) - 1):
+            cand_targets.append(cand_sents[k] + " " + cand_sents[k + 1])
+
+        cand_all_words = set(re.findall(r"\b[a-zA-Z]{4,}\b", candidate_prompt.lower()))
+        stop_words = {
+            "with", "this", "that", "then", "from", "have", "were", "your",
+            "will", "must", "each", "more", "some", "such", "into", "also"
+        }
+
+        # Embed candidate targets
+        cand_target_vecs = [self.embedder.embed(t) for t in cand_targets]
+
+        violations: List[str] = []
+        for so in orig_sents:
+            # Check content word recall in candidate
+            orig_words = set(re.findall(r"\b[a-zA-Z]{4,}\b", so.lower())) - stop_words
+            overlap = len(orig_words & cand_all_words) / len(orig_words) if orig_words else 1.0
+
+            # If strong keyword overlap (>= 65%), content is well-preserved
+            if overlap >= 0.65:
+                continue
+
+            vo = self.embedder.embed(so)
+            best_sim = max(compute_cosine_similarity(vo, vt) for vt in cand_target_vecs)
+
+            # Adversarial sentence replacement threshold:
+            # Substantive sentence with both very low similarity (< 0.35) and low keyword recall (< 0.25)
+            if best_sim < 0.35 and overlap < 0.25:
+                clean_preview = (so[:60] + "...") if len(so) > 60 else so
+                violations.append(
+                    f"Localized sentence abandonment: original instruction sentence '{clean_preview}' was replaced or omitted (similarity {best_sim:.4f}, keyword recall {overlap:.2f})."
+                )
+
+        return (len(violations) == 0, violations)
+
+    # -------------------------------------------------------------------------
     # Critical Instruction and Structural Preservation Validation (Task 2)
     # -------------------------------------------------------------------------
 
@@ -736,7 +858,10 @@ class SemanticFidelityGuard:
                 violations.append(f"Missing technical identifier '{ident}' present in original.")
 
         # 7. Exact JSON Keys, Schemas, and Fields
-        m_keys = re.search(r"\b(?:keys?|fields?|attributes?|properties)\s*(?::|are|include)?\s*([a-zA-Z0-9_,\s]+)", orig_lower)
+        m_keys = re.search(
+            r"\b(?<!foreign\s)(?<!primary\s)(?<!api\s)(?<!encryption\s)(?<!ssh\s)(?<!public\s)(?<!private\s)(?:with\s+)?(?:json\s+)?(?:keys?|fields?|attributes?|properties)\s*(?::|are|include|with)?\s*([a-zA-Z0-9_,\s]+)",
+            orig_lower
+        )
         if m_keys:
             raw_keys = re.split(r"(?:,\s*|\s+and\s+|\s+or\s+|\s+)", m_keys.group(1).strip())
             for k in raw_keys:
@@ -933,17 +1058,202 @@ class SemanticFidelityGuard:
                 similarity_score = 0.0
                 p_ok = False
 
-            # Multi-chunk diagnostic tracking
+            # Multi-chunk diagnostic tracking & localized safety gating
             chunk_sims = []
-            if self.embedder.last_chunk_count > 1:
+            chunk_cov: List[float] = []
+            cand_rel: List[float] = []
+            cand_core, directives_found = self._extract_core_and_directives(current_candidate)
+
+            orig_chunk_texts = self.embedder.chunk_text(original_prompt)
+            cand_chunk_texts = self.embedder.chunk_text(current_candidate)
+            is_multi_chunk = len(orig_chunk_texts) > 1 or len(cand_chunk_texts) > 1
+            chunk_alignment_violations: List[str] = []
+
+            if is_multi_chunk:
                 try:
                     orig_chunks = self.embedder.embed_chunks(original_prompt)
                     cand_chunks = self.embedder.embed_chunks(current_candidate)
+
+                    # Build candidate windows: single chunks + adjacent chunk pairs
+                    # Record window start and end chunk indices: (text, start_idx, end_idx)
+                    cand_windows = []
+                    for idx, c_text in enumerate(cand_chunk_texts):
+                        cand_windows.append((c_text, idx, idx))
+                    for idx in range(len(cand_chunk_texts) - 1):
+                        cand_windows.append((cand_chunk_texts[idx] + " " + cand_chunk_texts[idx + 1], idx, idx + 1))
+
+                    # Include candidate sentences and pairs to support legitimate adjacent chunk merging
+                    cand_raw_s = [
+                        s.strip() for s in re.split(r"(?<=[.!?])\s+|\n+", current_candidate)
+                        if len(s.strip().split()) >= 3
+                    ]
+                    for s_idx, cs in enumerate(cand_raw_s):
+                        c_idx = 0
+                        for idx, c_text in enumerate(cand_chunk_texts):
+                            if cs in c_text:
+                                c_idx = idx
+                                break
+                        cand_windows.append((cs, c_idx, c_idx))
+                        if s_idx < len(cand_raw_s) - 1:
+                            cs_next = cand_raw_s[s_idx + 1]
+                            c_idx_next = c_idx
+                            for idx in range(c_idx, len(cand_chunk_texts)):
+                                if cs_next in cand_chunk_texts[idx]:
+                                    c_idx_next = idx
+                                    break
+                            cand_windows.append((cs + " " + cs_next, c_idx, c_idx_next))
+
+                    cand_windows_vecs = [self.embedder.embed(w[0]) for w in cand_windows]
+
+                    # Coverage of original chunks across candidate windows & record best candidate span
+                    orig_best_spans = []
+                    cand_count = max(len(cand_chunk_texts), 1)
+                    orig_count = max(len(orig_chunk_texts), 1)
+
+                    for i, (ov, _) in enumerate(orig_chunks):
+                        best_sim = -1.0
+                        best_start = 0
+                        best_end = 0
+                        best_dist = 999.0
+                        q_pos = i / orig_count
+                        for (w_text, w_start, w_end), wv in zip(cand_windows, cand_windows_vecs):
+                            sim = float(compute_cosine_similarity(ov, wv))
+                            w_pos = w_start / cand_count
+                            dist = abs(w_pos - q_pos)
+                            if sim > best_sim + 0.015:
+                                best_sim = sim
+                                best_start = w_start
+                                best_end = w_end
+                                best_dist = dist
+                            elif abs(sim - best_sim) <= 0.015:
+                                if dist < best_dist:
+                                    best_sim = sim
+                                    best_start = w_start
+                                    best_end = w_end
+                                    best_dist = dist
+                        chunk_cov.append(round(float(best_sim), 4))
+                        orig_best_spans.append((float(best_sim), best_start, best_end))
+
+                    # Build original windows: single chunks + adjacent chunk pairs
+                    orig_windows = []
+                    for idx, o_text in enumerate(orig_chunk_texts):
+                        orig_windows.append((o_text, idx, idx))
+                    for idx in range(len(orig_chunk_texts) - 1):
+                        orig_windows.append((orig_chunk_texts[idx] + " " + orig_chunk_texts[idx + 1], idx, idx + 1))
+
+                    orig_windows_vecs = [self.embedder.embed(w[0]) for w in orig_windows]
+
+                    # Relevance of candidate chunks to original prompt & record best original span
+                    cand_best_spans = []
+                    for j, (c_text, (cv, _)) in enumerate(zip(cand_chunk_texts, cand_chunks)):
+                        is_dir = bool(directives_found and any(
+                            re.search(pat, c_text.strip(), re.IGNORECASE) for pat in STAGE3_DIRECTIVE_PATTERNS
+                        ))
+                        best_sim = -1.0
+                        best_start = 0
+                        best_end = 0
+                        best_dist = 999.0
+                        q_pos = j / cand_count
+                        for (w_text, w_start, w_end), wv in zip(orig_windows, orig_windows_vecs):
+                            sim = float(compute_cosine_similarity(cv, wv))
+                            w_pos = w_start / orig_count
+                            dist = abs(w_pos - q_pos)
+                            if sim > best_sim + 0.015:
+                                best_sim = sim
+                                best_start = w_start
+                                best_end = w_end
+                                best_dist = dist
+                            elif abs(sim - best_sim) <= 0.015:
+                                if dist < best_dist:
+                                    best_sim = sim
+                                    best_start = w_start
+                                    best_end = w_end
+                                    best_dist = dist
+                        if not is_dir:
+                            cand_rel.append(round(float(best_sim), 4))
+                        cand_best_spans.append((float(best_sim), best_start, best_end, is_dir))
+
+                    # Positional similarities if chunk counts match
                     if len(orig_chunks) == len(cand_chunks):
                         for (ov, _), (cv, _) in zip(orig_chunks, cand_chunks):
                             chunk_sims.append(round(compute_cosine_similarity(ov, cv), 4))
-                except Exception:
-                    pass
+                    else:
+                        chunk_sims = list(chunk_cov)
+
+                    # =========================================================================
+                    # MAJOR-01: Monotonic Sequence Alignment Checks
+                    # =========================================================================
+                    # 1. Original-to-Candidate Order:
+                    for i1 in range(len(orig_best_spans)):
+                        for i2 in range(i1 + 1, len(orig_best_spans)):
+                            sim1, s1, e1 = orig_best_spans[i1]
+                            sim2, s2, e2 = orig_best_spans[i2]
+                            if sim1 >= 0.50 and sim2 >= 0.50:
+                                if e2 < s1:
+                                    chunk_alignment_violations.append(
+                                        f"Localized sequence disruption: original sections {i1} and {i2} appear reordered in candidate (candidate chunks {s2}-{e2} precede {s1}-{e1})."
+                                    )
+
+                    # 2. Candidate-to-Original Order:
+                    non_dir_cand = [(j, sp) for j, sp in enumerate(cand_best_spans) if not sp[3]]
+                    for idx1 in range(len(non_dir_cand)):
+                        for idx2 in range(idx1 + 1, len(non_dir_cand)):
+                            j1, (rel1, os1, oe1, _) = non_dir_cand[idx1]
+                            j2, (rel2, os2, oe2, _) = non_dir_cand[idx2]
+                            if rel1 >= 0.50 and rel2 >= 0.50:
+                                if oe2 < os1:
+                                    chunk_alignment_violations.append(
+                                        f"Localized sequence disruption: candidate chunks {j1} and {j2} violate monotonic ordering relative to original prompt (mapped original sections {os2}-{oe2} precede {os1}-{oe1})."
+                                    )
+
+                    # =========================================================================
+                    # MAJOR-02: Candidate Duplication Checks
+                    # =========================================================================
+                    orig_to_cands: Dict[int, List[int]] = {}
+                    for j, (rel_j, os_j, oe_j, is_d) in enumerate(cand_best_spans):
+                        if not is_d and rel_j >= 0.60:
+                            orig_to_cands.setdefault(os_j, []).append(j)
+
+                    for o_idx, matched_cands in orig_to_cands.items():
+                        if len(matched_cands) > 1:
+                            is_contiguous = all(
+                                matched_cands[k + 1] == matched_cands[k] + 1
+                                for k in range(len(matched_cands) - 1)
+                            )
+                            if not is_contiguous:
+                                chunk_alignment_violations.append(
+                                    f"Duplicate candidate section detected: original section {o_idx} matched non-contiguously across candidate chunks {matched_cands}."
+                                )
+                            else:
+                                is_dup_pair = False
+                                for k1 in range(len(matched_cands)):
+                                    for k2 in range(k1 + 1, len(matched_cands)):
+                                        cj1_idx = matched_cands[k1]
+                                        cj2_idx = matched_cands[k2]
+                                        c_sim = compute_cosine_similarity(
+                                            cand_chunks[cj1_idx][0],
+                                            cand_chunks[cj2_idx][0]
+                                        )
+                                        if c_sim >= 0.88:
+                                            is_dup_pair = True
+                                            break
+                                    if is_dup_pair:
+                                        break
+
+                                combined_cand_words = sum(
+                                    len(cand_chunk_texts[cj].split())
+                                    for cj in matched_cands
+                                )
+                                orig_words = len(orig_chunk_texts[o_idx].split())
+                                word_expansion = combined_cand_words > 1.35 * orig_words and (combined_cand_words - orig_words) >= 15
+
+                                if is_dup_pair or (word_expansion and len(matched_cands) > 1):
+                                    chunk_alignment_violations.append(
+                                        f"Spurious candidate section duplication: duplicate candidate chunks {matched_cands} detected for original section {o_idx}."
+                                    )
+
+                except Exception as chunk_exc:
+                    logger.debug(f"Chunk-level evaluation diagnostic warning: {chunk_exc}")
 
             # 3. Decision Gate: Passes threshold AND preserves all instructions
             passed_threshold = (
@@ -954,7 +1264,6 @@ class SemanticFidelityGuard:
             # If candidate raw similarity is below threshold, check if added Stage 3 directives
             # caused dilution of a short prompt while the core prompt task remains preserved.
             if not passed_threshold and p_ok and similarity_score is not None:
-                cand_core, directives_found = self._extract_core_and_directives(current_candidate)
                 if directives_found and cand_core and cand_core != current_candidate:
                     try:
                         core_emb = self.embedder.embed(cand_core)
@@ -971,6 +1280,56 @@ class SemanticFidelityGuard:
                     except Exception as disc_exc:
                         logger.debug(f"Directive disambiguation calculation error: {disc_exc}")
 
+            # STAGE 5: Multi-chunk localized semantic safety gate
+            # Ensure localized tail divergence or omitted sections cannot pass via aggregate dilution
+            if passed_threshold and self.config.enable_chunk_validation and is_multi_chunk:
+                active_chunk_threshold = (
+                    self.config.chunk_threshold
+                    if self.config.chunk_threshold is not None
+                    else MODE_CHUNK_THRESHOLDS.get(current_mode, 0.75)
+                )
+
+                min_cov = min(chunk_cov) if chunk_cov else 1.0
+                min_rel = min(cand_rel) if cand_rel else 1.0
+
+                if min_cov < active_chunk_threshold:
+                    passed_threshold = False
+                    p_ok = False
+                    failure_reasons.append(
+                        f"Localized semantic change: original section coverage ({min_cov:.4f}) below chunk threshold ({active_chunk_threshold:.2f})."
+                    )
+                elif min_rel < active_chunk_threshold:
+                    passed_threshold = False
+                    p_ok = False
+                    failure_reasons.append(
+                        f"Ungrounded candidate section: candidate section relevance ({min_rel:.4f}) below chunk threshold ({active_chunk_threshold:.2f})."
+                    )
+                elif chunk_alignment_violations:
+                    passed_threshold = False
+                    p_ok = False
+                    failure_reasons.extend(chunk_alignment_violations)
+                elif len(orig_chunk_texts) == len(cand_chunk_texts) and chunk_sims:
+                    min_pos = min(chunk_sims)
+                    if min_pos < 0.50 and min_cov < active_chunk_threshold:
+                        passed_threshold = False
+                        p_ok = False
+                        failure_reasons.append(
+                            f"Localized tail divergence: positional chunk similarity ({min_pos:.4f}) below threshold."
+                        )
+
+            # STAGE 5: Intra-chunk sentence dilution check
+            if passed_threshold and self.config.enable_chunk_validation:
+                try:
+                    sent_ok, sent_violations = self._evaluate_sentence_coverage(
+                        original_prompt, current_candidate
+                    )
+                    if not sent_ok:
+                        passed_threshold = False
+                        p_ok = False
+                        failure_reasons.extend(sent_violations)
+                except Exception as sent_exc:
+                    logger.debug(f"Sentence-level evaluation diagnostic warning: {sent_exc}")
+
             accepted = p_ok and passed_threshold
 
             if accepted:
@@ -979,7 +1338,7 @@ class SemanticFidelityGuard:
             # If not accepted, record failure reason for this candidate
             if not p_ok:
                 failure_reasons.extend(p_violations)
-            if similarity_score is not None and not passed_threshold:
+            if similarity_score is not None and similarity_score < active_threshold:
                 failure_reasons.append(
                     f"Cosine similarity ({similarity_score:.4f}) below active threshold ({active_threshold:.2f})."
                 )
@@ -1033,6 +1392,7 @@ class SemanticFidelityGuard:
             model_status="ready",
             stage_similarities=stage_sims,
             chunk_similarities=chunk_sims,
+            chunk_coverage=chunk_cov,
             directive_disambiguation_applied=disambiguation_applied,
             core_similarity=core_similarity,
         )

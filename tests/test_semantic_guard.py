@@ -973,3 +973,354 @@ def test_58_retry_modes_and_attempt_counts_accurate() -> None:
     assert res.selected_mode == "aggressive"
     assert res.final_mode == "conservative"
     assert res.rollback_occurred is True
+
+
+# =============================================================================
+# GROUP J: STAGE 5 AUDIT DEFECT REGRESSION TESTS (MAJOR-01, MAJOR-02, DILUTION)
+# =============================================================================
+
+def test_59_candidate_duplication_aba_rejected() -> None:
+    """
+    MAJOR-02 REGRESSION: Candidate reusing an earlier section [A, B, A] from [A, B]
+    is rejected due to non-contiguous section reuse and ordering inversion.
+    """
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    sec_a = (
+        "Database replication distributes transactional mutations across secondary replicas to safeguard data durability. "
+        "Synchronous write replication provides zero data loss guarantees at the cost of higher round-trip commit latency. "
+        "Read queries can be directed to local replicas to alleviate connection saturation on primary cluster nodes."
+    )
+    sec_b = (
+        "Network transport encryption requires TLS 1.3 protocol negotiation with strict cipher suite whitelisting. "
+        "Mutual certificate verification authenticates microservice endpoints before establishing bidirectional gRPC channels. "
+        "All expired session tokens must be immediately revoked across edge gateway proxies."
+    )
+
+    orig = sec_a + "\n\n" + sec_b
+    cand = sec_a + "\n\n" + sec_b + "\n\n" + sec_a
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert any("sequence disruption" in r or "Duplicate candidate section" in r for r in res.failure_reasons)
+
+
+def test_60_candidate_duplication_aab_rejected() -> None:
+    """
+    MAJOR-02 REGRESSION: Candidate duplicating adjacent section [A, A, B] from [A, B]
+    is rejected due to spurious candidate section duplication.
+    """
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    sec_a = (
+        "Database replication distributes transactional mutations across secondary replicas to safeguard data durability. "
+        "Synchronous write replication provides zero data loss guarantees at the cost of higher round-trip commit latency. "
+        "Read queries can be directed to local replicas to alleviate connection saturation on primary cluster nodes."
+    )
+    sec_b = (
+        "Network transport encryption requires TLS 1.3 protocol negotiation with strict cipher suite whitelisting. "
+        "Mutual certificate verification authenticates microservice endpoints before establishing bidirectional gRPC channels. "
+        "All expired session tokens must be immediately revoked across edge gateway proxies."
+    )
+
+    orig = sec_a + "\n\n" + sec_b
+    cand = sec_a + "\n\n" + sec_a + "\n\n" + sec_b
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert any("Spurious candidate section duplication" in r for r in res.failure_reasons)
+
+
+def test_61_candidate_duplicated_final_section_abb_rejected() -> None:
+    """
+    MAJOR-02 REGRESSION: Candidate duplicating final section [A, B, B] from [A, B]
+    is rejected due to spurious candidate section duplication.
+    """
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    sec_a = (
+        "Database replication distributes transactional mutations across secondary replicas to safeguard data durability. "
+        "Synchronous write replication provides zero data loss guarantees at the cost of higher round-trip commit latency. "
+        "Read queries can be directed to local replicas to alleviate connection saturation on primary cluster nodes."
+    )
+    sec_b = (
+        "Network transport encryption requires TLS 1.3 protocol negotiation with strict cipher suite whitelisting. "
+        "Mutual certificate verification authenticates microservice endpoints before establishing bidirectional gRPC channels. "
+        "All expired session tokens must be immediately revoked across edge gateway proxies."
+    )
+
+    orig = sec_a + "\n\n" + sec_b
+    cand = sec_a + "\n\n" + sec_b + "\n\n" + sec_b
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert any("Spurious candidate section duplication" in r for r in res.failure_reasons)
+
+
+def test_62_reordered_sequence_cba_rejected() -> None:
+    """
+    MAJOR-01 REGRESSION: Candidate completely inverting original sections [C, B, A] from [A, B, C]
+    is rejected due to sequence disruption and monotonic alignment failure.
+    """
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    sec_a = (
+        "Database replication distributes transactional mutations across secondary replicas to safeguard data durability. "
+        "Synchronous write replication provides zero data loss guarantees at the cost of higher round-trip commit latency. "
+        "Read queries can be directed to local replicas to alleviate connection saturation on primary cluster nodes."
+    )
+    sec_b = (
+        "Network transport encryption requires TLS 1.3 protocol negotiation with strict cipher suite whitelisting. "
+        "Mutual certificate verification authenticates microservice endpoints before establishing bidirectional gRPC channels. "
+        "All expired session tokens must be immediately revoked across edge gateway proxies."
+    )
+    sec_c = (
+        "Continuous telemetry pipelines ingest structured metrics through distributed message brokers with partitioning. "
+        "Alerting rules evaluate sliding time windows to suppress transient anomalies and alert fatigue. "
+        "System health dashboards summarize service level indicators and request error rates in real time."
+    )
+
+    orig = sec_a + "\n\n" + sec_b + "\n\n" + sec_c
+    cand = sec_c + "\n\n" + sec_b + "\n\n" + sec_a
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert any("sequence disruption" in r for r in res.failure_reasons)
+
+
+def test_63_partially_reordered_sequence_bac_rejected() -> None:
+    """
+    MAJOR-01 REGRESSION: Candidate partially inverting original sections [B, A, C] from [A, B, C]
+    is rejected due to localized sequence disruption.
+    """
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    sec_a = (
+        "Database replication distributes transactional mutations across secondary replicas to safeguard data durability. "
+        "Synchronous write replication provides zero data loss guarantees at the cost of higher round-trip commit latency. "
+        "Read queries can be directed to local replicas to alleviate connection saturation on primary cluster nodes."
+    )
+    sec_b = (
+        "Network transport encryption requires TLS 1.3 protocol negotiation with strict cipher suite whitelisting. "
+        "Mutual certificate verification authenticates microservice endpoints before establishing bidirectional gRPC channels. "
+        "All expired session tokens must be immediately revoked across edge gateway proxies."
+    )
+    sec_c = (
+        "Continuous telemetry pipelines ingest structured metrics through distributed message brokers with partitioning. "
+        "Alerting rules evaluate sliding time windows to suppress transient anomalies and alert fatigue. "
+        "System health dashboards summarize service level indicators and request error rates in real time."
+    )
+
+    orig = sec_a + "\n\n" + sec_b + "\n\n" + sec_c
+    cand = sec_b + "\n\n" + sec_a + "\n\n" + sec_c
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert any("sequence disruption" in r for r in res.failure_reasons)
+
+
+def test_64_legitimate_adjacent_chunk_merge_accepted() -> None:
+    """
+    MAJOR-01 / MAJOR-02 COMPATIBILITY: Legitimate compression merging adjacent original chunks
+    into a concise combined candidate passage is accepted without false rejections.
+    """
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(threshold=0.82), embedder=embedder)
+
+    sec_a = (
+        "Database replication distributes transactional mutations across secondary replicas to safeguard data durability. "
+        "Synchronous write replication provides zero data loss guarantees at the cost of higher round-trip commit latency. "
+        "Read queries can be directed to local replicas to alleviate connection saturation on primary cluster nodes."
+    )
+    sec_b = (
+        "Network transport encryption requires TLS 1.3 protocol negotiation with strict cipher suite whitelisting. "
+        "Mutual certificate verification authenticates microservice endpoints before establishing bidirectional gRPC channels. "
+        "All expired session tokens must be immediately revoked across edge gateway proxies."
+    )
+
+    orig = sec_a + "\n\n" + sec_b
+
+    # Legitimate compression merging the two sections into candidate sentences
+    cand = (
+        "Replicate database transactions across secondary replicas with synchronous zero data loss guarantees, routing read queries to local replicas. "
+        "Network encryption requires TLS 1.3 protocol negotiation with cipher whitelisting, mutual certificate authentication for gRPC endpoints, and immediate revocation of expired tokens."
+    )
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is True
+    assert res.rollback_occurred is False
+    assert res.similarity_score is not None
+    assert res.similarity_score >= 0.82
+
+
+def test_65_legitimate_boundary_shift_accepted() -> None:
+    """
+    MAJOR-01 COMPATIBILITY: Legitimate paragraph boundary shifts that preserve
+    full semantic meaning and ordering are accepted.
+    """
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    sec_a = (
+        "Database replication distributes transactional mutations across secondary replicas to safeguard data durability. "
+        "Synchronous write replication provides zero data loss guarantees."
+    )
+    sec_b = (
+        "Network transport encryption requires TLS 1.3 protocol negotiation with strict cipher suite whitelisting. "
+        "Mutual certificate verification authenticates microservice endpoints."
+    )
+
+    orig = sec_a + "\n\n" + sec_b
+    cand = (
+        "Database replication distributes transactional mutations across secondary replicas to safeguard data durability.\n\n"
+        "Synchronous write replication provides zero data loss guarantees. Network transport encryption requires TLS 1.3 protocol negotiation with strict cipher suite whitelisting.\n\n"
+        "Mutual certificate verification authenticates microservice endpoints."
+    )
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is True
+    assert res.rollback_occurred is False
+
+
+def test_66_changed_instruction_sentence_surrounded_by_unchanged_text_rejected() -> None:
+    """
+    INTRA-CHUNK DILUTION REGRESSION: An altered instruction sentence embedded in a 70-word passage
+    with 90% identical surrounding text is caught and rejected by localized sentence validation.
+    """
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    prefix = (
+        "System performance metrics must be monitored continuously across all distributed compute clusters. "
+        "All incoming telemetry spans should be recorded with high fidelity and dispatched to the centralized logging queue. "
+    )
+    s_orig = "The engineering staff will convene weekly to examine structural latency bottlenecks."
+    s_bad = "The tourists traveled along the scenic mountain trail to photograph local wildlife."
+    suffix = " Ensure that memory utilization thresholds are enforced at all times."
+
+    orig = prefix + s_orig + suffix
+    cand = prefix + s_bad + suffix
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert any("sentence abandonment" in r or "below active threshold" in r for r in res.failure_reasons)
+
+
+def test_67_changed_negative_or_conditional_instruction_rejected() -> None:
+    """Altered negation or conditional restriction is caught and rejected."""
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    orig = "When exporting database tables, do not include temporary customer records in the export file."
+    cand = "When exporting database tables, include temporary customer records in the export file."
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert any("negation" in r.lower() or "polarity inversion" in r.lower() for r in res.failure_reasons)
+
+
+def test_68_changed_numerical_requirement_rejected() -> None:
+    """Altered numerical latency constraint (e.g. < 50ms changed to < 100ms) is rejected."""
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    orig = "Configure database pool connections so query latency remains strictly < 50ms."
+    cand = "Configure database pool connections so query latency remains strictly < 100ms."
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert any("numerical constraint" in r.lower() for r in res.failure_reasons)
+
+
+def test_69_harmless_sentence_paraphrase_accepted() -> None:
+    """Harmless paraphrasing of an instruction sentence with preserved meaning is accepted."""
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    prefix = (
+        "System performance metrics must be monitored continuously across all distributed compute clusters. "
+        "All incoming telemetry spans should be recorded with high fidelity and dispatched to the centralized logging queue. "
+    )
+    s_orig = "The engineering staff will convene weekly to examine structural latency bottlenecks."
+    s_good = "Engineering team will meet weekly to review latency bottlenecks."
+    suffix = " Ensure that memory utilization thresholds are enforced at all times."
+
+    orig = prefix + s_orig + suffix
+    cand = prefix + s_good + suffix
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is True
+    assert res.rollback_occurred is False
+    assert res.similarity_score is not None
+    assert res.similarity_score >= 0.92
+
+
+def test_70_legitimate_sentence_merge_and_split_accepted() -> None:
+    """Legitimate sentence merging and splitting that preserves all clauses is accepted."""
+    embedder = LocalMiniLMEmbedder()
+    if not embedder.initialize():
+        pytest.skip("Local model unavailable.")
+
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=embedder)
+
+    orig = (
+        "Analyze the database schema structure carefully. "
+        "Verify that foreign keys are indexed properly across tables. "
+        "Generate an execution plan summary report."
+    )
+    cand = (
+        "Analyze the database schema structure carefully and verify foreign keys are properly indexed. "
+        "Generate an execution plan summary report."
+    )
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is True
+    assert res.rollback_occurred is False
+    assert res.similarity_score is not None
+    assert res.similarity_score >= 0.92

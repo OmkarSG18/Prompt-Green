@@ -28,6 +28,15 @@ from promptgreen.optimizer.semantic_guard import (
     LocalMiniLMEmbedder,
     compute_cosine_similarity
 )
+from promptgreen.optimizer.pipeline import (
+    PromptGreenPipeline,
+    PromptGreenOptimizer,
+    PipelineConfig,
+    PipelineResult,
+    OptimizationResult,
+    StageExecution,
+    optimize_prompt,
+)
 
 __all__ = [
     "RuleBasedPruner",
@@ -45,5 +54,12 @@ __all__ = [
     "GuardrailResult",
     "GuardrailMode",
     "LocalMiniLMEmbedder",
-    "compute_cosine_similarity"
+    "compute_cosine_similarity",
+    "PromptGreenPipeline",
+    "PromptGreenOptimizer",
+    "PipelineConfig",
+    "PipelineResult",
+    "OptimizationResult",
+    "StageExecution",
+    "optimize_prompt",
 ]
