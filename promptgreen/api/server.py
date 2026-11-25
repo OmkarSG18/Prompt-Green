@@ -160,6 +160,34 @@ def read_root():
     }
 
 
+@app.get("/api/v2/health")
+def health_check_v2():
+    """Lightweight V2 API health-check distinguishing API availability from dependency health."""
+    pw = LocalMiniLMEmbedder.get_prewarm_status()
+    db_status = "unavailable"
+    db_path = os.path.abspath(getattr(PromptLedger, "DEFAULT_DB", "prompt_ledger.db"))
+    if os.path.exists(db_path):
+        try:
+            import sqlite3
+            conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=2.0)
+            conn.execute("SELECT 1").fetchone()
+            conn.close()
+            db_status = "connected"
+        except Exception:
+            db_status = "error"
+
+    return {
+        "status": "healthy",
+        "service": "PromptGreen API",
+        "version": "2.0.0",
+        "api": "available",
+        "dependencies": {
+            "database": db_status,
+            "embedder_prewarmed": bool(pw.get("is_prewarmed")),
+        },
+    }
+
+
 @app.get("/")
 @app.get("/app")
 @app.get("/website")

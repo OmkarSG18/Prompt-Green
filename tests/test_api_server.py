@@ -335,6 +335,22 @@ def test_evaluation_route_exists():
     assert "/studio" in routes
 
 
+def test_v2_health_endpoint():
+    """Verify GET /api/v2/health returns HTTP 200 with structured health payload."""
+    from fastapi.testclient import TestClient
+    from promptgreen.api.server import app
+
+    client = TestClient(app)
+    resp = client.get("/api/v2/health")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["status"] == "healthy"
+    assert data["service"] == "PromptGreen API"
+    assert data["api"] == "available"
+    assert "dependencies" in data
+    assert data["dependencies"]["database"] in {"connected", "unavailable", "error"}
+
+
 # ==============================================================================
 # STAGE B.2 API TELEMETRY & PERSISTENCE VERIFICATION TESTS
 # ==============================================================================
