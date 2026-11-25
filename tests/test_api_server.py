@@ -328,7 +328,7 @@ def test_v2_optimize_error_diagnostics():
 def test_evaluation_route_exists():
     """Verify that Website/server.py registers the /evaluation route."""
     import Website.server as ws
-    routes = [r.path for r in ws.api_app.routes]
+    routes = [getattr(r, "path", None) for r in ws.api_app.routes]
     assert "/evaluation" in routes
     assert "/evolution" in routes
     assert "/" in routes

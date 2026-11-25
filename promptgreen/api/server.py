@@ -52,6 +52,7 @@ from promptgreen.predictor.hybrid_predictor import HybridPredictor
 from promptgreen.ledger.database import PromptLedger, OptimizationEvent
 from promptgreen.gate.prompt_gate import PromptGate, GateResult
 from promptgreen.analysis.diff_parser import PromptDiffAnalyzer
+from promptgreen.api.benchmark_routes import router as benchmark_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -81,6 +82,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(benchmark_router)
 
 analyzer = PromptDiffAnalyzer()
 predictor = HybridPredictor()

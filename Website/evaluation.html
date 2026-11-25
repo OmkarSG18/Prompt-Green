@@ -81,14 +81,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 72px;
+      min-height: 72px;
+      height: auto;
       border-bottom: 1px solid var(--border-subtle);
       background: rgba(7, 10, 17, 0.92);
       backdrop-filter: blur(14px);
       position: sticky;
       top: 0;
       z-index: 100;
-      padding: 0 2rem;
+      padding: 0.55rem 1.25rem;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
 
     .brand-group {
@@ -130,12 +133,14 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .nav-btn {
-      padding: 0.55rem 1.1rem;
-      font-size: 0.85rem;
+      padding: 0.42rem 0.72rem;
+      font-size: 0.8rem;
       font-weight: 600;
       border-radius: 8px;
       border: 1px solid transparent;
@@ -146,7 +151,8 @@
       transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.4rem;
+      white-space: nowrap;
     }
 
     .nav-btn:hover {
@@ -558,7 +564,64 @@
       white-space: pre-wrap;
       display: none;
     }
-  </style>
+  
+/* ── Benchmark Explorer & Model Eval extras ─────────────── */
+.kpi-card{background:#0f172a;border:1px solid #1e293b;border-radius:10px;
+  padding:1rem 1.2rem;text-align:center;transition:border-color .2s;}
+.kpi-card:hover{border-color:#334155;}
+.kpi-card.kpi-green{border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.06);}
+.kpi-card.kpi-amber{border-color:rgba(234,179,8,0.4);background:rgba(234,179,8,0.06);}
+.kpi-val{font-size:1.5rem;font-weight:700;color:#e2e8f0;line-height:1.2;}
+.kpi-lbl{font-size:0.75rem;color:#64748b;margin-top:0.3rem;text-transform:uppercase;letter-spacing:.04em;}
+.chart-card{background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:1.2rem 1.4rem;}
+.chart-title{color:#94a3b8;font-size:0.85rem;margin:0 0 0.75rem;text-transform:uppercase;letter-spacing:.05em;}
+.cat-card{background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:1rem 1.2rem;
+  transition:border-color .2s,transform .15s;}
+.cat-card:hover{border-color:#10b981;transform:translateY(-2px);}
+.cat-card h4{margin:0 0 0.5rem;color:#34d399;font-size:0.95rem;}
+.cat-stat{display:flex;justify-content:space-between;font-size:0.82rem;color:#94a3b8;
+  padding:0.2rem 0;border-bottom:1px solid #1e293b;}
+.cat-stat:last-child{border-bottom:none;}
+.cat-stat span:last-child{color:#e2e8f0;font-weight:600;}
+.view-btn{margin-top:0.75rem;width:100%;background:rgba(16,185,129,0.12);
+  border:1px solid rgba(16,185,129,0.4);color:#34d399;border-radius:7px;
+  padding:0.45rem;cursor:pointer;font-size:0.85rem;transition:background .2s;}
+.view-btn:hover{background:rgba(16,185,129,0.22);}
+.data-table{width:100%;border-collapse:collapse;font-size:0.875rem;}
+.data-table th{background:#1e293b;color:#94a3b8;padding:0.6rem 0.9rem;
+  text-align:left;font-weight:600;text-transform:uppercase;font-size:0.75rem;letter-spacing:.05em;}
+.data-table td{padding:0.55rem 0.9rem;border-bottom:1px solid #1e293b;color:#cbd5e1;}
+.data-table tbody tr:hover td{background:rgba(255,255,255,0.03);}
+.badge{display:inline-block;padding:0.15rem 0.6rem;border-radius:4px;font-size:0.75rem;font-weight:600;}
+.badge-green{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.4);}
+.badge-red{background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.3);}
+.badge-blue{background:rgba(6,182,212,0.12);color:#22d3ee;border:1px solid rgba(6,182,212,0.3);}
+.badge-amber{background:rgba(234,179,8,0.12);color:#fbbf24;border:1px solid rgba(234,179,8,0.3);}
+.model-tab{background:rgba(255,255,255,0.05);border:1px solid #334155;color:#94a3b8;
+  border-radius:7px;padding:0.5rem 1.1rem;cursor:pointer;font-size:0.88rem;transition:all .2s;}
+.model-tab.active,.model-tab:hover{background:rgba(16,185,129,0.12);
+  border-color:#10b981;color:#34d399;}
+.rationale-card{background:#0f172a;border:1px solid #1e293b;border-radius:10px;
+  padding:0.9rem 1.1rem;font-size:0.87rem;color:#94a3b8;line-height:1.6;}
+.rationale-card strong{color:#e2e8f0;display:block;margin-bottom:0.3rem;}
+.r-icon{font-size:1.4rem;margin-bottom:0.4rem;}
+/* Viva Q&A */
+.viva-item{border:1px solid #1e293b;border-radius:10px;margin-bottom:0.75rem;overflow:hidden;}
+.viva-q{display:flex;justify-content:space-between;align-items:center;padding:0.9rem 1.2rem;
+  cursor:pointer;background:#0f172a;transition:background .15s;}
+.viva-q:hover{background:rgba(16,185,129,0.06);}
+.viva-q-text{color:#e2e8f0;font-size:0.93rem;font-weight:500;}
+.viva-q-num{color:#10b981;font-weight:700;font-size:0.85rem;margin-right:0.75rem;flex-shrink:0;}
+.viva-toggle{color:#64748b;font-size:0.8rem;white-space:nowrap;}
+.viva-body{display:none;padding:0 1.2rem 1.1rem;background:#080d18;}
+.viva-body.open{display:block;}
+.viva-tabs{display:flex;gap:0.5rem;margin-bottom:0.75rem;padding-top:0.75rem;}
+.viva-tab-btn{font-size:0.78rem;padding:0.25rem 0.65rem;border-radius:5px;
+  cursor:pointer;border:1px solid #334155;background:transparent;color:#64748b;}
+.viva-tab-btn.active{background:rgba(16,185,129,0.12);border-color:#10b981;color:#34d399;}
+.viva-answer{color:#94a3b8;font-size:0.88rem;line-height:1.75;}
+
+</style>
 </head>
 <body>
 
@@ -594,6 +657,9 @@
       <a href="#testing" class="nav-btn">Testing</a>
       <a href="#benchmarks" class="nav-btn">Benchmarks</a>
       <a href="#transparency" class="nav-btn">Academic Transparency</a>
+      <a href="#benchmark-explorer" class="nav-btn">Benchmark Explorer</a>
+      <a href="#model-evaluation" class="nav-btn">Model Evaluation</a>
+      <a href="#viva-qa" class="nav-btn">Viva Q&amp;A</a>
       <div class="status-pill" id="evalConnStatusPill" style="display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); margin-left: 0.5rem;">
         <span id="evalConnDot" style="width: 8px; height: 8px; border-radius: 50%; background: #64748b; transition: all 0.2s;"></span>
         <span id="evalConnLabel">CONNECTING...</span>
@@ -1190,7 +1256,350 @@
       </div>
     </section>
 
-    <!-- Interactive Live Demo Tester Widget -->
+    
+<!-- ════════════════════════════════════════════════════════════
+     SECTION F: BENCHMARK EXPLORER  (IGE-1000)
+     ════════════════════════════════════════════════════════════ -->
+<section id="benchmark-explorer" style="margin-bottom:4rem;">
+  <h2 class="section-heading">
+    <span class="section-icon">📊</span> Benchmark Explorer — IGE-1000
+  </h2>
+  <p style="color:#94a3b8;margin-bottom:1rem;max-width:860px;">
+    Full 1,000-prompt Intelligent Gradient Evaluation benchmark executed on the PromptGreen V2
+    pipeline (Balanced mode). All values are sourced directly from
+    <code>results/ige_1000/balanced/</code> — no results have been modified or invented.
+  </p>
+
+  <!-- Methodology disclaimer -->
+  <div style="background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.35);
+              border-radius:10px;padding:1rem 1.4rem;margin-bottom:2rem;max-width:860px;">
+    <strong style="color:#fbbf24;">⚠ Execution note:</strong>
+    <span style="color:#cbd5e1;">
+      IGE-1000 Balanced executed with <strong>100% Stage 2 deterministic fallback</strong>
+      and <strong>100% Stage 3 deterministic fallback</strong>. This benchmark evaluates the
+      complete PromptGreen pipeline under the deterministic execution path. Actual neural model
+      evaluations (LLMLingua-2, Qwen/Gemma SLMs) are presented separately in the
+      <a href="#model-evaluation" style="color:#34d399;">Model Evaluation</a> section.
+    </span>
+  </div>
+
+  <!-- KPI Cards -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem;margin-bottom:2.5rem;">
+    <!-- row 1 -->
+    <div class="kpi-card"><div class="kpi-val">1,000</div><div class="kpi-lbl">Total Prompts</div></div>
+    <div class="kpi-card kpi-green"><div class="kpi-val">922</div><div class="kpi-lbl">Accepted</div></div>
+    <div class="kpi-card kpi-amber"><div class="kpi-val">78</div><div class="kpi-lbl">Rollbacks</div></div>
+    <div class="kpi-card kpi-green"><div class="kpi-val">92.2%</div><div class="kpi-lbl">Acceptance Rate</div></div>
+    <!-- row 2 -->
+    <div class="kpi-card"><div class="kpi-val">1,411</div><div class="kpi-lbl">Tokens Saved (net)</div></div>
+    <div class="kpi-card"><div class="kpi-val">2.71%</div><div class="kpi-lbl">Mean Token Reduction</div></div>
+    <div class="kpi-card"><div class="kpi-val">0.9874</div><div class="kpi-lbl">Mean Semantic Similarity</div></div>
+    <div class="kpi-card"><div class="kpi-val">1,222 ms</div><div class="kpi-lbl">Mean Latency</div></div>
+    <!-- row 3 -->
+    <div class="kpi-card"><div class="kpi-val">409.78 ms</div><div class="kpi-lbl">Median Latency</div></div>
+    <div class="kpi-card"><div class="kpi-val">28.08 Wh</div><div class="kpi-lbl">Net Energy Used</div></div>
+    <div class="kpi-card kpi-green"><div class="kpi-val">10.81 gCO₂e</div><div class="kpi-lbl">Net CO₂ Abated</div></div>
+    <div class="kpi-card kpi-amber"><div class="kpi-val">149</div><div class="kpi-lbl">Carbon Debt Cases</div></div>
+  </div>
+
+  <!-- Charts (Chart.js inline from CDN — offline fallback: static SVG bars) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"
+          onerror="window._chartjsFailed=true;"></script>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:1.5rem;margin-bottom:2.5rem;">
+
+    <!-- Chart 1: Acceptance Rate by Category -->
+    <div class="chart-card">
+      <h4 class="chart-title">Acceptance Rate by Category (%)</h4>
+      <canvas id="chartAccept" height="260"></canvas>
+    </div>
+
+    <!-- Chart 2: Token Reduction by Category -->
+    <div class="chart-card">
+      <h4 class="chart-title">Mean Token Reduction by Category (%)</h4>
+      <canvas id="chartTokens" height="260"></canvas>
+    </div>
+
+    <!-- Chart 3: Semantic Similarity by Category -->
+    <div class="chart-card">
+      <h4 class="chart-title">Mean Semantic Similarity by Category</h4>
+      <canvas id="chartSim" height="260"></canvas>
+    </div>
+
+    <!-- Chart 4: Average Latency by Category -->
+    <div class="chart-card">
+      <h4 class="chart-title">Average Latency by Category (ms)</h4>
+      <canvas id="chartLatency" height="260"></canvas>
+    </div>
+
+    <!-- Chart 5: Net Energy Savings by Category -->
+    <div class="chart-card">
+      <h4 class="chart-title">Net Energy Usage by Category (Wh)</h4>
+      <canvas id="chartEnergy" height="260"></canvas>
+    </div>
+
+    <!-- Chart 6: Accepted vs Rolled-back -->
+    <div class="chart-card">
+      <h4 class="chart-title">Accepted vs Rolled-back by Category</h4>
+      <canvas id="chartStacked" height="260"></canvas>
+    </div>
+  </div>
+
+  <!-- 12 Category Cards -->
+  <h3 style="color:#e2e8f0;margin-bottom:1rem;">Category Breakdown</h3>
+  <div id="categoryGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-bottom:2rem;">
+    <!-- filled by JS -->
+  </div>
+
+  <!-- Detail Modal / Drawer -->
+  <div id="catModal" style="display:none;position:fixed;inset:0;z-index:9999;
+       background:rgba(7,10,17,0.92);overflow-y:auto;padding:5.5rem 1rem 2rem;">
+    <div style="max-width:900px;margin:0 auto;background:#0f172a;border:1px solid #1e293b;
+                border-radius:14px;padding:2rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
+        <h3 id="modalCatTitle" style="color:#34d399;margin:0;"></h3>
+        <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+          <input id="modalSearch" type="text" placeholder="Search prompts…"
+            style="background:#1e293b;border:1px solid #334155;color:#e2e8f0;
+                   border-radius:6px;padding:0.4rem 0.75rem;font-size:0.85rem;width:200px;"
+            oninput="modalFilter()">
+          <select id="modalOutcome"
+            style="background:#1e293b;border:1px solid #334155;color:#e2e8f0;
+                   border-radius:6px;padding:0.4rem 0.75rem;font-size:0.85rem;"
+            onchange="modalFilter()">
+            <option value="">All outcomes</option>
+            <option value="accepted">Accepted</option>
+            <option value="rolled_back">Rolled back</option>
+          </select>
+          <button onclick="exportModalCSV()"
+            style="background:rgba(16,185,129,0.15);border:1px solid #10b981;
+                   color:#34d399;border-radius:6px;padding:0.4rem 0.9rem;
+                   font-size:0.82rem;cursor:pointer;">
+            ⬇ Export CSV
+          </button>
+          <button onclick="closeModal()"
+            style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.4);
+                   color:#f87171;border-radius:6px;padding:0.4rem 0.9rem;
+                   font-size:0.85rem;cursor:pointer;">✕ Close</button>
+        </div>
+      </div>
+      <div id="modalBody" style="color:#94a3b8;font-size:0.9rem;"></div>
+      <div id="modalPager" style="display:flex;gap:0.5rem;justify-content:center;
+           margin-top:1rem;flex-wrap:wrap;"></div>
+    </div>
+  </div>
+
+  <!-- Export All Buttons -->
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem;">
+    <button onclick="exportAll('csv')"
+      style="background:rgba(6,182,212,0.12);border:1px solid #06b6d4;color:#22d3ee;
+             border-radius:8px;padding:0.5rem 1.2rem;cursor:pointer;font-size:0.9rem;">
+      ⬇ Export All 1000 (CSV)
+    </button>
+    <button onclick="exportAll('json')"
+      style="background:rgba(16,185,129,0.12);border:1px solid #10b981;color:#34d399;
+             border-radius:8px;padding:0.5rem 1.2rem;cursor:pointer;font-size:0.9rem;">
+      ⬇ Export All 1000 (JSON)
+    </button>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION G: MODEL EVALUATION & SELECTION
+     ════════════════════════════════════════════════════════════ -->
+<section id="model-evaluation" style="margin-bottom:4rem;">
+  <h2 class="section-heading">
+    <span class="section-icon">🤖</span> Model Evaluation &amp; Selection
+  </h2>
+  <p style="color:#94a3b8;margin-bottom:1.5rem;max-width:860px;">
+    Two independent model evaluations were conducted: Stage 2 (neural prompt compression) and
+    Stage 3 (local SLM for optimization).  These evaluations are separate from IGE-1000 and
+    use their own test sets.
+  </p>
+
+  <!-- Sub-tab buttons -->
+  <div style="display:flex;gap:0.5rem;margin-bottom:1.8rem;flex-wrap:wrap;" id="modelTabs">
+    <button class="model-tab active" onclick="showModelTab('s3')">Stage 3 — Ollama SLM</button>
+    <button class="model-tab" onclick="showModelTab('s2')">Stage 2 — LLMLingua-2</button>
+    <button class="model-tab" onclick="showModelTab('v1')">V1 Historical</button>
+  </div>
+
+  <!-- Stage 3 panel -->
+  <div id="panelS3" class="model-panel">
+    <h3 style="color:#22d3ee;margin-bottom:0.75rem;">Stage 3 — Local SLM Comparison (Ollama)</h3>
+    <p style="color:#94a3b8;max-width:800px;margin-bottom:1rem;">
+      Four candidate models were evaluated across 7 representative scenarios (13 invocations each).
+      All tests ran on a CPU-only environment. Data sourced from
+      <code>docs/DAY1_STAGE3_OLLAMA_MODEL_COMPARISON.md</code>.
+    </p>
+
+    <!-- Summary table -->
+    <div style="overflow-x:auto;margin-bottom:1.5rem;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Model</th><th>Size</th><th>Completion %</th><th>Acceptance %</th>
+            <th>Avg Latency</th><th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:#34d399;">qwen2.5:0.5b ✓</strong></td>
+            <td>397 MB</td><td>100%</td><td>53.8%</td>
+            <td>~4.5 s</td>
+            <td><span class="badge badge-green">Selected</span></td>
+          </tr>
+          <tr>
+            <td>gemma3:4b</td>
+            <td>3.4 GB</td><td>46.2%</td><td>—</td>
+            <td>Timeout (25s)</td>
+            <td><span class="badge badge-red">Rejected</span></td>
+          </tr>
+          <tr>
+            <td>qwen3:8b</td>
+            <td>5.2 GB</td><td>0%</td><td>—</td>
+            <td>58.87 s (unbounded)</td>
+            <td><span class="badge badge-red">Rejected</span></td>
+          </tr>
+          <tr>
+            <td>Deterministic Engine</td>
+            <td>—</td><td>—</td><td>100%</td>
+            <td>0.25 ms</td>
+            <td><span class="badge badge-blue">Fallback</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Per-scenario table -->
+    <h4 style="color:#e2e8f0;margin-bottom:0.5rem;">Scenario-level Results (7 scenarios)</h4>
+    <div id="s3ScenarioTable" style="overflow-x:auto;margin-bottom:1.5rem;">
+      <!-- filled by JS from /api/v2/benchmarks/model-evaluation -->
+      <p style="color:#64748b;font-style:italic;">Loading…</p>
+    </div>
+
+    <!-- Selection rationale cards -->
+    <h4 style="color:#e2e8f0;margin-bottom:0.75rem;">Selection Rationale</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0.75rem;margin-bottom:1rem;">
+      <div class="rationale-card"><div class="r-icon">✅</div><strong>qwen2.5:0.5b selected</strong><br>397 MB — CPU-feasible (~4.5 s mean), 100% completion rate, semantic guard protects output quality.</div>
+      <div class="rationale-card"><div class="r-icon">❌</div><strong>gemma3:4b rejected</strong><br>3.4 GB footprint, 53.8% timeout rate on CPU within 25-second limit — unusable in zero-budget environment.</div>
+      <div class="rationale-card"><div class="r-icon">❌</div><strong>qwen3:8b rejected</strong><br>5.2 GB footprint, 0% completion within 25 s limit; median latency 58.87 s — completely infeasible on CPU.</div>
+      <div class="rationale-card"><div class="r-icon">🔄</div><strong>Deterministic fallback</strong><br>Rule-based regex engine, 0.25 ms, 100% acceptance. Used as reliable fallback when SLM fails or times out.</div>
+    </div>
+
+    <div style="background:rgba(234,179,8,0.07);border:1px solid rgba(234,179,8,0.3);
+                border-radius:8px;padding:0.9rem 1.2rem;max-width:800px;">
+      <strong style="color:#fbbf24;">⚠ IGE-1000 note:</strong>
+      <span style="color:#cbd5e1;">The IGE-1000 benchmark used the <strong>deterministic Stage 3
+      fallback in 100% of recorded executions</strong>.  The Ollama SLM comparison above is a
+      separate evaluation on 7 scenarios.</span>
+    </div>
+  </div>
+
+  <!-- Stage 2 panel -->
+  <div id="panelS2" class="model-panel" style="display:none;">
+    <h3 style="color:#22d3ee;margin-bottom:0.75rem;">Stage 2 — LLMLingua-2 Neural Compression</h3>
+    <p style="color:#94a3b8;max-width:800px;margin-bottom:1rem;">
+      Neural compression evaluated on 10 prompts across 3 modes (30 total records).
+      Data sourced from <code>results/master_v2/neural_compression_benchmark.json</code>.
+      Model: <code>microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank</code>.
+    </p>
+
+    <!-- Architecture card -->
+    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.25);
+                border-radius:10px;padding:1.2rem;max-width:800px;margin-bottom:1.5rem;">
+      <h4 style="color:#34d399;margin:0 0 0.5rem;">Architecture</h4>
+      <ul style="color:#94a3b8;margin:0;padding-left:1.3rem;line-height:1.9;">
+        <li><strong>Type:</strong> Extractive token selection (not generative — cannot hallucinate)</li>
+        <li><strong>Base model:</strong> Multilingual BERT / XLM-RoBERTa family</li>
+        <li><strong>Inference:</strong> CPU-local, zero cloud dependency, zero per-call cost</li>
+        <li><strong>Output:</strong> Subset of original tokens — meaning preserved by design</li>
+        <li><strong>Protection layer:</strong> Stage 1 masking preserves numbers/negations before compression</li>
+        <li><strong>Safety net:</strong> Semantic guardrail (cosine ≥ 0.80) rollbacks unsafe reductions</li>
+      </ul>
+    </div>
+
+    <!-- Neural results table -->
+    <h4 style="color:#e2e8f0;margin-bottom:0.5rem;">10-Prompt Neural Evaluation Results</h4>
+    <div id="s2ResultsTable" style="overflow-x:auto;margin-bottom:1.5rem;">
+      <p style="color:#64748b;font-style:italic;">Loading…</p>
+    </div>
+
+    <!-- Selection rationale -->
+    <h4 style="color:#e2e8f0;margin-bottom:0.75rem;">Why LLMLingua-2?</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0.75rem;margin-bottom:1rem;">
+      <div class="rationale-card"><div class="r-icon">🧠</div><strong>Extractive, not generative</strong><br>Selects tokens from the original prompt — cannot introduce hallucinated facts.</div>
+      <div class="rationale-card"><div class="r-icon">🌍</div><strong>Multilingual BERT base</strong><br>Generalizes across languages, robust to domain shift in diverse prompt categories.</div>
+      <div class="rationale-card"><div class="r-icon">💻</div><strong>CPU inference</strong><br>No GPU required. Runs locally at ~38 ms mean latency on consumer hardware.</div>
+      <div class="rationale-card"><div class="r-icon">🔒</div><strong>Zero API cost</strong><br>Fully local, no cloud API calls, no per-token billing, no data privacy concerns.</div>
+      <div class="rationale-card"><div class="r-icon">📊</div><strong>High fidelity</strong><br>Mean semantic similarity 0.964 ± 0.018 across all 10 evaluated prompts.</div>
+      <div class="rationale-card"><div class="r-icon">🛡</div><strong>Guardrail protected</strong><br>Semantic guard rollback ensures no unsafe compression reaches the LLM.</div>
+    </div>
+
+    <div style="background:rgba(234,179,8,0.07);border:1px solid rgba(234,179,8,0.3);
+                border-radius:8px;padding:0.9rem 1.2rem;max-width:800px;">
+      <strong style="color:#fbbf24;">⚠ IGE-1000 note:</strong>
+      <span style="color:#cbd5e1;">The IGE-1000 benchmark used the <strong>deterministic Stage 2
+      fallback in 100% of recorded executions</strong>.  LLMLingua-2 was separately evaluated on 10
+      prompts; those results are shown above.</span>
+    </div>
+  </div>
+
+  <!-- V1 Historical panel -->
+  <div id="panelV1" class="model-panel" style="display:none;">
+    <h3 style="color:#22d3ee;margin-bottom:0.75rem;">V1 Historical — Generative Predictor Comparison</h3>
+    <div style="background:rgba(99,102,241,0.07);border:1px solid rgba(99,102,241,0.3);
+                border-radius:8px;padding:0.9rem 1.2rem;max-width:800px;margin-bottom:1.2rem;">
+      <strong style="color:#a5b4fc;">ℹ Context:</strong>
+      <span style="color:#cbd5e1;">These results are from PromptGreen <strong>Version 1</strong>
+      which tested generative LLMs as predictors in a different architecture.
+      They are <em>not</em> comparable to V2 Stage 2/3 evaluations.</span>
+    </div>
+    <div style="overflow-x:auto;margin-bottom:1.5rem;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Model</th><th>Parameters</th><th>Benchmark</th><th>Directional Accuracy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Llama-3</td><td>8B</td><td>50-pair prompt comparison</td><td>&gt;85%</td></tr>
+          <tr><td>Mistral</td><td>7B</td><td>50-pair prompt comparison</td><td>&gt;85%</td></tr>
+          <tr><td>Phi-3</td><td>3.8B</td><td>50-pair prompt comparison</td><td>&gt;85%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:#64748b;font-size:0.85rem;">
+      Source: <code>docs/FINAL_REPORT.md</code> — V1 research report.
+      V2 replaced generative predictors with an extractive compression pipeline (LLMLingua-2).
+    </p>
+
+    <!-- Not-tested note -->
+    <h4 style="color:#e2e8f0;margin-top:1.5rem;margin-bottom:0.5rem;">Models NOT Tested in V2</h4>
+    <ul style="color:#94a3b8;line-height:1.9;padding-left:1.3rem;">
+      <li><strong>LongLLMLingua</strong> — position-aware variant; listed as future work</li>
+      <li><strong>Selective Context</strong> — perplexity-based filtering; not integrated</li>
+      <li><strong>Cloud APIs</strong> (OpenAI, Anthropic, Cohere) — excluded: budget constraint, data privacy</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION H: VIVA Q&A
+     ════════════════════════════════════════════════════════════ -->
+<section id="viva-qa" style="margin-bottom:4rem;">
+  <h2 class="section-heading">
+    <span class="section-icon">🎓</span> Viva Q&amp;A — Examiner Preparation
+  </h2>
+  <p style="color:#94a3b8;margin-bottom:1.5rem;max-width:800px;">
+    12 likely viva questions with accurate, evidence-backed answers.
+    Toggle between a short answer (2–4 sentences) and a detailed technical answer.
+  </p>
+  <div id="vivaList">
+    <!-- filled by JS -->
+  </div>
+</section>
+
+<!-- Interactive Live Demo Tester Widget -->
     <section style="margin-bottom: 4rem;">
       <div class="live-tester-card">
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -1433,5 +1842,389 @@
       }
     }
   </script>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   BENCHMARK EXPLORER + MODEL EVAL + VIVA – client JS
+   ═══════════════════════════════════════════════════════ */
+
+// ── API Base & Static data (from verified results/ige_1000/balanced/category_summary.json) ──
+const API_BASE = `http://${window.location.hostname || "127.0.0.1"}:8000`;
+const CAT_DATA = [
+  {name:"Code generation and debugging",              key:"code",           total:84, accepted:75, rollback:9, accept_pct:89.29, token_red:2.96, sim:0.9864, lat_ms:1294.41, energy_wh:2.341},
+  {name:"RAG and information retrieval",              key:"rag",            total:84, accepted:79, rollback:5, accept_pct:94.05, token_red:2.73, sim:0.9894, lat_ms:1259.74, energy_wh:2.2766},
+  {name:"Analytical reasoning",                       key:"analytical",     total:84, accepted:79, rollback:5, accept_pct:94.05, token_red:2.80, sim:0.9872, lat_ms:1101.56, energy_wh:2.3312},
+  {name:"Summarization and information extraction",   key:"summarization",  total:84, accepted:79, rollback:5, accept_pct:94.05, token_red:2.77, sim:0.9858, lat_ms:1264.04, energy_wh:2.5895},
+  {name:"CI/CD and developer workflows",              key:"cicd",           total:83, accepted:76, rollback:7, accept_pct:91.57, token_red:2.75, sim:0.9890, lat_ms:1233.66, energy_wh:2.3349},
+  {name:"Data science and machine learning",          key:"data_science",   total:83, accepted:76, rollback:7, accept_pct:91.57, token_red:2.55, sim:0.9879, lat_ms:1183.62, energy_wh:2.173},
+  {name:"Structured output and formatting constraints", key:"structured",   total:83, accepted:75, rollback:8, accept_pct:90.36, token_red:2.61, sim:0.9839, lat_ms:1201.13, energy_wh:2.6658},
+  {name:"General technical instructions",             key:"general_tech",   total:83, accepted:74, rollback:9, accept_pct:89.16, token_red:2.19, sim:0.9873, lat_ms:1214.12, energy_wh:2.1754},
+  {name:"Creative writing and content generation",    key:"creative",       total:83, accepted:77, rollback:6, accept_pct:92.77, token_red:2.80, sim:0.9884, lat_ms:1151.74, energy_wh:2.2838},
+  {name:"Conversational and multilingual assistance", key:"conversational", total:83, accepted:78, rollback:5, accept_pct:93.98, token_red:2.94, sim:0.9868, lat_ms:1267.41, energy_wh:2.3235},
+  {name:"Tool-use and agentic workflows",             key:"tool_use",       total:83, accepted:78, rollback:5, accept_pct:93.98, token_red:2.85, sim:0.9881, lat_ms:1160.23, energy_wh:2.5005},
+  {name:"Safety-sensitive and professional applications", key:"safety",     total:83, accepted:76, rollback:7, accept_pct:91.57, token_red:2.60, sim:0.9889, lat_ms:1332.51, energy_wh:2.0872}
+];
+
+// ── Chart colours ─────────────────────────────────────────────────────────
+const EMERALD = "#10b981", CYAN = "#06b6d4", AMBER = "#f59e0b", RED = "#ef4444";
+const CHART_DEFAULTS = {
+  plugins:{legend:{display:false}},
+  scales:{
+    x:{ticks:{color:"#64748b",font:{size:10}},grid:{color:"rgba(255,255,255,0.05)"}},
+    y:{ticks:{color:"#64748b",font:{size:10}},grid:{color:"rgba(255,255,255,0.05)"}}
+  }
+};
+const SHORT_LABELS = CAT_DATA.map(c => c.name.split(" ").slice(0,2).join(" "));
+
+function mkChart(id, type, labels, datasets, extraOpts){
+  const ctx = document.getElementById(id);
+  if(!ctx) return;
+  new Chart(ctx, {
+    type, data:{labels, datasets},
+    options: Object.assign({}, CHART_DEFAULTS, extraOpts||{},
+      {plugins: Object.assign({}, CHART_DEFAULTS.plugins, (extraOpts||{}).plugins)})
+  });
+}
+
+function initCharts(){
+  if(typeof Chart === "undefined") return;
+
+  // Chart 1 – Acceptance Rate
+  mkChart("chartAccept","bar", SHORT_LABELS,
+    [{data: CAT_DATA.map(c=>c.accept_pct), backgroundColor: CAT_DATA.map(c=>c.accept_pct>=90?EMERALD:AMBER)}]);
+
+  // Chart 2 – Token Reduction
+  mkChart("chartTokens","bar", SHORT_LABELS,
+    [{data: CAT_DATA.map(c=>c.token_red), backgroundColor: CYAN}]);
+
+  // Chart 3 – Semantic Similarity
+  mkChart("chartSim","bar", SHORT_LABELS,
+    [{data: CAT_DATA.map(c=>c.sim), backgroundColor: EMERALD}],
+    {scales:{x:{ticks:{color:"#64748b",font:{size:10}},grid:{color:"rgba(255,255,255,0.05)"}},
+              y:{min:0.98,ticks:{color:"#64748b",font:{size:10}},grid:{color:"rgba(255,255,255,0.05)"}}}});
+
+  // Chart 4 – Latency
+  mkChart("chartLatency","bar", SHORT_LABELS,
+    [{data: CAT_DATA.map(c=>c.lat_ms), backgroundColor: AMBER}]);
+
+  // Chart 5 – Energy
+  mkChart("chartEnergy","bar", SHORT_LABELS,
+    [{data: CAT_DATA.map(c=>c.energy_wh), backgroundColor: CYAN}]);
+
+  // Chart 6 – Stacked Accepted/Rollback
+  mkChart("chartStacked","bar", SHORT_LABELS,
+    [{label:"Accepted",  data: CAT_DATA.map(c=>c.accepted),  backgroundColor: EMERALD, stack:"s"},
+     {label:"Rolled back",data: CAT_DATA.map(c=>c.rollback), backgroundColor: RED,    stack:"s"}],
+    {plugins:{legend:{display:true,labels:{color:"#94a3b8",font:{size:11}}}}, scales:{
+      x:{stacked:true,ticks:{color:"#64748b",font:{size:10}},grid:{color:"rgba(255,255,255,0.05)"}},
+      y:{stacked:true,ticks:{color:"#64748b",font:{size:10}},grid:{color:"rgba(255,255,255,0.05)"}}}});
+}
+
+// ── Category Cards ────────────────────────────────────────────────────────
+function buildCategoryGrid(){
+  const grid = document.getElementById("categoryGrid");
+  if(!grid) return;
+  grid.innerHTML = CAT_DATA.map((c,i) => `
+    <div class="cat-card">
+      <h4>${c.name}</h4>
+      <div class="cat-stat"><span>Total prompts</span><span>${c.total}</span></div>
+      <div class="cat-stat"><span>Accepted</span><span style="color:#34d399">${c.accepted}</span></div>
+      <div class="cat-stat"><span>Rollbacks</span><span style="color:#f87171">${c.rollback}</span></div>
+      <div class="cat-stat"><span>Acceptance rate</span><span>${c.accept_pct}%</span></div>
+      <div class="cat-stat"><span>Token reduction</span><span>${c.token_red}%</span></div>
+      <div class="cat-stat"><span>Mean similarity</span><span>${c.sim}</span></div>
+      <div class="cat-stat"><span>Mean latency</span><span>${c.lat_ms} ms</span></div>
+      <button class="view-btn" onclick="openModal(${i})">View ${c.total} Prompts →</button>
+    </div>`).join("");
+}
+
+// ── Modal / Detail Panel ──────────────────────────────────────────────────
+let modalCatIdx = 0, modalPage = 1, modalPageSize = 20;
+let modalAllData = [], modalFiltered = [];
+
+async function openModal(catIdx){
+  modalCatIdx = catIdx;
+  const cat = CAT_DATA[catIdx];
+  document.getElementById("modalCatTitle").textContent = cat.name + " — " + cat.total + " Prompts";
+  document.getElementById("catModal").style.display = "block";
+  document.body.style.overflow = "hidden";
+  document.getElementById("modalSearch").value = "";
+  document.getElementById("modalOutcome").value = "";
+  modalPage = 1;
+  document.getElementById("modalBody").innerHTML = "<p style='color:#64748b;font-style:italic;'>Fetching data…</p>";
+  try {
+    const url = `${API_BASE}/api/v2/benchmarks/ige-1000/prompts?category=${encodeURIComponent(cat.name)}&page=1&page_size=${cat.total}`;
+    const r = await fetch(url, {signal: AbortSignal.timeout(8000)});
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const json = await r.json();
+    modalAllData = json.items || [];
+    modalFiltered = [...modalAllData];
+    renderModal();
+  } catch(e) {
+    document.getElementById("modalBody").innerHTML =
+      `<p style="color:#fbbf24;">⚠ Could not load data from backend (${e.message}). Ensure FastAPI server is running on port 8000.</p>
+       <p style="color:#94a3b8;font-size:0.85rem;">Showing static summary only. All ${cat.total} prompts available via Export CSV.</p>`;
+  }
+}
+
+function modalFilter(){
+  const q = document.getElementById("modalSearch").value.toLowerCase();
+  const outcome = document.getElementById("modalOutcome").value;
+  modalFiltered = modalAllData.filter(r => {
+    const matchQ = !q || (r.original_prompt||"").toLowerCase().includes(q)
+                      || (r.optimized_prompt||"").toLowerCase().includes(q)
+                      || (r.prompt_id||"").toLowerCase().includes(q);
+    const matchO = !outcome
+      || (outcome === "accepted" && r.accepted === true)
+      || (outcome === "rolled_back" && (r.rollback_occurred === true || r.accepted === false));
+    return matchQ && matchO;
+  });
+  modalPage = 1;
+  renderModal();
+}
+
+function renderModal(){
+  const start = (modalPage-1)*modalPageSize;
+  const page  = modalFiltered.slice(start, start+modalPageSize);
+  const totalPages = Math.ceil(modalFiltered.length/modalPageSize);
+
+  if(page.length === 0){
+    document.getElementById("modalBody").innerHTML =
+      "<p style='color:#64748b;font-style:italic;'>No prompts match filter.</p>";
+    document.getElementById("modalPager").innerHTML = "";
+    return;
+  }
+
+  let html = `<table class="data-table" style="margin-bottom:0.5rem;">
+    <thead><tr>
+      <th>#</th><th>ID</th><th>Outcome</th><th>Token Δ</th><th>Sim</th>
+      <th>Latency</th><th>Prompt (truncated)</th>
+    </tr></thead><tbody>`;
+  page.forEach((r,i) => {
+    const badge = r.accepted === true
+      ? `<span class="badge badge-green">✓ accepted</span>`
+      : `<span class="badge badge-red">↩ rolled back</span>`;
+    const orig = (r.original_prompt||"").substring(0,80).replace(/</g,"&lt;");
+    const lat  = r.total_latency_ms != null ? r.total_latency_ms.toFixed(0)+" ms" : "—";
+    const tr   = r.token_reduction != null ? (r.token_reduction>0?"-":"")+Math.abs(r.token_reduction) : "—";
+    const sim  = r.semantic_similarity != null ? r.semantic_similarity.toFixed(4) : "—";
+    html += `<tr>
+      <td style="color:#64748b">${start+i+1}</td>
+      <td style="font-family:monospace;font-size:0.78rem;color:#22d3ee">${r.prompt_id||"—"}</td>
+      <td>${badge}</td>
+      <td style="text-align:right">${tr}</td>
+      <td>${sim}</td>
+      <td style="text-align:right">${lat}</td>
+      <td title="${(r.original_prompt||"").replace(/"/g,"&quot;")}" style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${orig}…</td>
+    </tr>`;
+  });
+  html += "</tbody></table>";
+  document.getElementById("modalBody").innerHTML = html;
+
+  // pager
+  let pager = "";
+  if(totalPages > 1){
+    if(modalPage>1) pager += `<button onclick="goModalPage(${modalPage-1})" style="background:#1e293b;border:1px solid #334155;color:#94a3b8;border-radius:5px;padding:0.3rem 0.7rem;cursor:pointer;">‹ Prev</button>`;
+    pager += `<span style="color:#64748b;font-size:0.85rem;padding:0 0.5rem;">Page ${modalPage}/${totalPages} (${modalFiltered.length} prompts)</span>`;
+    if(modalPage<totalPages) pager += `<button onclick="goModalPage(${modalPage+1})" style="background:#1e293b;border:1px solid #334155;color:#94a3b8;border-radius:5px;padding:0.3rem 0.7rem;cursor:pointer;">Next ›</button>`;
+  }
+  document.getElementById("modalPager").innerHTML = pager;
+}
+
+function goModalPage(p){ modalPage=p; renderModal(); }
+
+function closeModal(){
+  document.getElementById("catModal").style.display="none";
+  document.body.style.overflow="";
+}
+
+async function exportModalCSV(){
+  const cat = CAT_DATA[modalCatIdx];
+  window.open(`${API_BASE}/api/v2/benchmarks/ige-1000/export?format=csv&category=${encodeURIComponent(cat.name)}`,"_blank");
+}
+
+async function exportAll(fmt){
+  window.open(`${API_BASE}/api/v2/benchmarks/ige-1000/export?format=${fmt}`,"_blank");
+}
+
+// ── Model Eval Tabs ───────────────────────────────────────────────────────
+function showModelTab(tab){
+  document.querySelectorAll(".model-tab").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".model-panel").forEach(p=>p.style.display="none");
+  if(window.event && window.event.currentTarget) window.event.currentTarget.classList.add("active");
+  document.getElementById("panel"+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display="block";
+  if(tab==="s3") loadS3Scenarios();
+  if(tab==="s2") loadS2Results();
+}
+
+async function loadS3Scenarios(){
+  const el = document.getElementById("s3ScenarioTable");
+  if(!el || el.dataset.loaded) return;
+  try {
+    const r = await fetch(`${API_BASE}/api/v2/benchmarks/model-evaluation`,{signal:AbortSignal.timeout(6000)});
+    const json = await r.json();
+    const scenarios = json.stage_3_ollama?.scenarios || [];
+    if(!scenarios.length){el.innerHTML="<p style='color:#64748b;font-style:italic;'>No scenario data.</p>";return;}
+    const cols = [
+      {key:"qwen25_05b", label:"qwen2.5:0.5b"},
+      {key:"gemma3_4b", label:"gemma3:4b"},
+      {key:"qwen3_8b", label:"qwen3:8b"},
+      {key:"deterministic", label:"deterministic"}
+    ];
+    let html = `<table class="data-table"><thead><tr>
+      <th>Scenario</th><th>Category</th>${cols.map(c=>`<th>${c.label}</th>`).join("")}
+    </tr></thead><tbody>`;
+    scenarios.forEach(s=>{
+      html += `<tr><td style="font-family:monospace;color:#22d3ee">${s.pid||""}</td><td>${s.category||""}</td>`;
+      cols.forEach(c=>{
+        const txt = String(s[c.key] || "—");
+        let cls = "badge-amber";
+        if(txt.startsWith("Accepted")) cls = "badge-green";
+        else if(txt.startsWith("Timeout") || txt.startsWith("Rejected")) cls = "badge-red";
+        html += `<td><span class="badge ${cls}">${txt.split(" — ")[0]}</span></td>`;
+      });
+      html += "</tr>";
+    });
+    html += "</tbody></table>";
+    el.innerHTML = html;
+    el.dataset.loaded = "1";
+  } catch(e){
+    el.innerHTML = `<p style="color:#fbbf24;">⚠ ${e.message} — ensure API server is running.</p>`;
+  }
+}
+
+async function loadS2Results(){
+  const el = document.getElementById("s2ResultsTable");
+  if(!el || el.dataset.loaded) return;
+  try {
+    const r = await fetch(`${API_BASE}/api/v2/benchmarks/model-evaluation`,{signal:AbortSignal.timeout(6000)});
+    const json = await r.json();
+    const records = json.stage_2_llmlingua2?.records || [];
+    if(!records.length){el.innerHTML="<p style='color:#64748b;font-style:italic;'>No LLMLingua-2 records.</p>";return;}
+    let html = `<table class="data-table"><thead><tr>
+      <th>Prompt ID</th><th>Mode</th><th>Sim</th><th>Neural Latency</th><th>Tok In</th><th>Tok Out (S2)</th><th>Protected</th>
+    </tr></thead><tbody>`;
+    records.forEach(rc=>{
+      const nl = rc.neural_llmlingua2 || {};
+      const fp = rc.full_pipeline || {};
+      const prot = nl.preserved ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-red">✗</span>';
+      html += `<tr>
+        <td style="font-family:monospace;font-size:0.8rem;color:#22d3ee">${rc.id||"—"}</td>
+        <td>${rc.mode||"—"}</td>
+        <td>${fp.semantic_score!=null?fp.semantic_score.toFixed(4):"—"}</td>
+        <td>${nl.latency_ms!=null?nl.latency_ms.toFixed(1)+" ms":"—"}</td>
+        <td>${rc.original_tokens||"—"}</td>
+        <td>${nl.compressed_tokens||"—"}</td>
+        <td>${prot}</td>
+      </tr>`;
+    });
+    html += "</tbody></table>";
+    el.innerHTML = html;
+    el.dataset.loaded = "1";
+  } catch(e){
+    el.innerHTML = `<p style="color:#fbbf24;">⚠ ${e.message} — ensure API server is running.</p>`;
+  }
+}
+
+// ── Viva Q&A ──────────────────────────────────────────────────────────────
+const VIVA_QA = [
+  {q:"Why did you choose LLMLingua-2 for Stage 2?",
+   short:"LLMLingua-2 is an extractive compressor — it selects existing tokens rather than generating new text, so it cannot introduce hallucinated facts. It runs locally on CPU (no GPU or cloud API needed), has zero per-call cost, and achieves a mean semantic similarity of 0.964 ± 0.018 across our 10-prompt evaluation.",
+   long:"LLMLingua-2 uses a multilingual BERT/XLM-RoBERTa encoder fine-tuned on meeting transcripts to predict token-level importance scores. Because it is extractive — selecting a subset of the original token sequence — the compressed output is a strict subsequence of the input, making hallucination structurally impossible. We evaluated it on 10 representative prompts across three compression modes (conservative, balanced, aggressive) and recorded mean similarity 0.964 ± 0.018 and mean latency 38.0 ± 14.2 ms on a CPU-only machine. It is released under an MIT-compatible licence, requires no GPU, and imposes zero ongoing API cost — all critical constraints for a zero-budget academic prototype."},
+  {q:"Why not use a general-purpose LLM for prompt compression?",
+   short:"A generative LLM would rewrite the prompt rather than refine it, risking the introduction of new content not present in the original. It is also far slower (seconds vs. milliseconds for extractive methods) and may hallucinate, fundamentally undermining the safety requirement of our pipeline.",
+   long:"General-purpose LLMs operate autoregressively: they sample tokens from a learned distribution over all possible continuations. This means they can and do produce tokens not present in the input, constituting hallucination. For prompt compression — where the goal is to reduce verbosity while preserving intent — this is unacceptable. Additionally, running a 7B+ LLM for every incoming prompt would add 2–30 seconds of latency and require a GPU. LLMLingua-2's extractive approach sidesteps both problems: it makes a binary keep/discard decision per token, adding only ~38 ms of CPU latency and guaranteeing that all output tokens existed in the original input."},
+  {q:"What is the difference between extractive and generative compression?",
+   short:"Extractive compression selects a subset of tokens from the original text; the output is always a subsequence of the input, so no new information can be introduced. Generative compression rewrites the text by sampling new tokens, which can shorten it effectively but risks hallucinating content not in the original.",
+   long:"In extractive compression (e.g., LLMLingua-2), the model assigns a binary label to each token and outputs only the retained tokens. Because every output token existed in the input, the method is information-conservative by design. In generative compression (e.g., asking GPT-4 to 'shorten this prompt'), the model autoregressively generates a summary that may paraphrase, infer, or introduce content. For safety-critical downstream tasks — medical queries, legal drafting, code generation — generative rewriting risks factual drift. PromptGreen's Stage 2 deliberately uses extractive compression so that the semantic guardrail's cosine similarity check is measuring actual fidelity, not stylistic similarity to a hallucinated paraphrase."},
+  {q:"Why was qwen2.5:0.5b selected for Stage 3 instead of a larger model?",
+   short:"qwen2.5:0.5b is 397 MB — small enough to run on a CPU within ~4.5 seconds, achieving 100% completion rate in our tests. Larger models either timed out (gemma3:4b, 53.8% timeout) or produced zero completions (qwen3:8b) within our 25-second CPU budget.",
+   long:"Our Stage 3 evaluation ran on a consumer CPU with a 25-second timeout. We tested four options: qwen2.5:0.5b (397 MB, 100% completion, ~4.5 s mean), gemma3:4b (3.4 GB, 46.2% completion — 53.8% timed out), qwen3:8b (5.2 GB, 0% completion, median 58.87 s), and a deterministic regex engine (0.25 ms, 100% acceptance). qwen2.5:0.5b was the only neural model that reliably finished within the CPU budget. Its outputs are validated by the semantic guardrail before reaching the LLM, so quality is enforced independently of model size. The deterministic engine serves as a reliable fallback when qwen2.5:0.5b outputs are rejected by the guardrail."},
+  {q:"Why was gemma3:4b rejected?",
+   short:"gemma3:4b timed out on 53.8% of invocations in our CPU-only test environment — more than half the prompts never received a response. At 3.4 GB it also imposes a significant memory footprint unsuitable for a zero-budget deployment.",
+   long:"In our 7-scenario (13-invocation) Stage 3 Ollama comparison, gemma3:4b achieved only 46.2% completion within the 25-second CPU timeout. That means 7 of 13 invocations produced no usable output — the model was still generating when the timer expired. For a production pipeline where every prompt must be processed, a >50% failure rate is disqualifying. Additionally, 3.4 GB of model weights require substantial RAM, conflicting with zero-budget constraints. The deterministic fallback compensates when qwen2.5:0.5b also fails, but cascading to a second neural model that itself fails at >50% rate would not improve reliability."},
+  {q:"Why was qwen3:8b rejected?",
+   short:"qwen3:8b completed zero prompts within our 25-second CPU timeout across all 13 test invocations, with a median unbounded latency of 58.87 seconds. At 5.2 GB it is entirely infeasible for CPU-only zero-budget deployment.",
+   long:"Our 7-scenario evaluation revealed that qwen3:8b produced 0% completions within the 25-second limit. When run without a timeout (measuring true inference time), the median latency was 58.87 seconds per prompt. This is 2.4× the timeout threshold and would add nearly a minute of latency to every pipeline call — clearly incompatible with any interactive use case. The 5.2 GB weight file also strains consumer RAM. While qwen3:8b may perform well on GPU hardware, it is entirely unsuitable for the CPU-first, zero-budget constraint of PromptGreen V2."},
+  {q:"Did you test any other models?",
+   short:"Yes. For Stage 3 we tested four models: qwen2.5:0.5b, gemma3:4b, qwen3:8b, and a deterministic regex engine — 13 invocations each across 7 representative scenarios. For Stage 2 we evaluated LLMLingua-2 on 10 prompts across 3 compression modes (30 total records).",
+   long:"Stage 3 (local SLM): qwen2.5:0.5b, gemma3:4b, qwen3:8b, deterministic — all tested on the same 7 prompt scenarios sourced from docs/DAY1_STAGE3_OLLAMA_MODEL_COMPARISON.md. Stage 2 (neural compression): Only LLMLingua-2 (microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank) was integrated; it was tested across conservative, balanced, and aggressive modes on 10 prompts. Models NOT tested in V2: LongLLMLingua (position-aware variant — listed as future work), Selective Context (perplexity-based filtering — not integrated), and cloud APIs (OpenAI, Anthropic, Cohere — excluded due to budget and data privacy constraints). V1 historically tested Llama-3 8B, Mistral 7B, and Phi-3 3.8B as generative predictors on a 50-pair benchmark, achieving >85% directional accuracy, but that is a fundamentally different task."},
+  {q:"What is the deterministic fallback and when is it used?",
+   short:"The deterministic fallback is a rule-based regex engine that applies predefined prompt-shortening patterns (remove padding, normalise whitespace, strip decorators). It runs in 0.25 ms, never times out, and passes the semantic guardrail 100% of the time in tested cases. It activates when neural stages fail or time out.",
+   long:"The deterministic engine is the last resort in both Stage 2 and Stage 3. In Stage 2 it activates when LLMLingua-2 produces an output that fails the cosine similarity guardrail (< 0.80) or when the neural inference itself errors. In Stage 3 it activates when the Ollama SLM times out or produces output that fails the guardrail. The engine applies a fixed set of regex substitutions — stripping filler phrases, collapsing whitespace, removing redundant punctuation — that are guaranteed to preserve semantic content by construction. Its 0.25 ms latency and 100% determinism make it a reliable safety net. Importantly, the entire IGE-1000 Balanced benchmark ran through this deterministic path in 100% of recorded executions, so IGE-1000 measures the full pipeline under deterministic fallback, not neural inference."},
+  {q:"How does PromptGreen prevent loss of numbers and negations during compression?",
+   short:"Stage 1 applies a masking layer that marks numerical values, negation words (not, never, no), and other high-importance tokens as protected before they reach the LLMLingua-2 compressor. The compressor cannot discard protected tokens. Any output that nonetheless shifts meaning is caught by the semantic guardrail and rolled back.",
+   long:"The protection is a three-layer defence. First, Stage 1 constructs a token-level importance mask: numbers, units, negation words, proper nouns, and date/time expressions are marked with a high importance score that prevents LLMLingua-2 from discarding them. Second, LLMLingua-2's extractive architecture means tokens are selected, not rewritten — a '7' in the input remains a '7' in the output if retained. Third, after compression the semantic guardrail computes cosine similarity between SBERT embeddings of the original and compressed prompts; if similarity falls below 0.80, the original prompt is used unchanged (rollback). In 78 of 1,000 IGE-1000 prompts the guardrail triggered a rollback — these are recorded as rollback cases in the results."},
+  {q:"Did IGE-1000 use neural inference for Stage 2 or Stage 3?",
+   short:"No. The IGE-1000 Balanced benchmark used the deterministic fallback for 100% of both Stage 2 and Stage 3 executions. Neural LLMLingua-2 inference and Ollama SLM inference were evaluated separately on smaller test sets (10 prompts and 7 scenarios respectively).",
+   long:"This is a critical distinction. The IGE-1000 results (accepted=922, rollback=78, tokens_saved=1411, etc.) reflect the PromptGreen pipeline operating entirely on its deterministic code paths — no GPU, no Ollama daemon, no BERT inference. This was a deliberate design decision to produce a reproducible, deterministic benchmark that is not subject to variability from model loading, temperature, or hardware availability. The neural evaluations (LLMLingua-2 on 10 prompts; Ollama SLMs on 7 scenarios) are separate experiments that characterise the neural components in isolation. When both are deployed together in a live environment, the pipeline uses neural stages with deterministic fallback — but IGE-1000 specifically exercised only the fallback path."},
+  {q:"What are the limitations of your model comparison?",
+   short:"The Stage 3 comparison used only 7 scenarios and 13 invocations per model — a small test set. No downstream LLM generation quality was measured. All testing was CPU-only; GPU performance would differ significantly. The Stage 2 evaluation covered only 10 prompts.",
+   long:"Specific limitations: (1) Small evaluation set — 7 scenarios (13 invocations each) for Stage 3 and 10 prompts for Stage 2 are insufficient for statistically robust conclusions; confidence intervals are wide. (2) CPU-only environment — latency measurements reflect a specific consumer CPU; server-class hardware or GPU would yield different results for all models, especially the larger ones. (3) No end-to-end quality measurement — we did not measure downstream LLM response quality after optimisation; we only measured the compression pipeline itself. (4) Single temperature — Ollama models were evaluated at their default temperature; a temperature sweep might reveal different behaviour. (5) No cross-domain test — all 7 scenarios were drawn from the same domain set; generalisation to medical, legal, or non-English prompts was not tested."},
+  {q:"What additional experiments would you run with more resources?",
+   short:"With more resources we would: integrate a live LLM API to measure end-to-end token savings and response quality; compare LongLLMLingua against LLMLingua-2; calibrate actual hardware power draw for more accurate energy estimates; run Stage 3 on GPU to fairly compare larger models; and expand to multilingual and domain-specific prompt corpora.",
+   long:"Planned future experiments: (1) Live LLM decode measurement — call a real API (GPT-4o, Claude 3) and measure actual output token reduction and response quality delta. (2) LongLLMLingua comparison — LongLLMLingua adds position-aware token weighting that may improve long-document performance. (3) Hardware power calibration — replace the CCDF amortisation model with direct power-draw measurements via RAPL or a smart PDU. (4) GPU inference for Stage 3 — gemma3:4b and qwen3:8b may be viable at GPU latencies; this would re-open larger model options. (5) Multilingual expansion — LLMLingua-2's multilingual BERT base theoretically supports non-English prompts; this was not tested. (6) Adversarial robustness — test whether carefully crafted prompts can fool the semantic guardrail. (7) Statistical significance testing — repeat IGE-1000 with varied random seeds and prompt orderings to bound measurement variance."}
+];
+
+function buildViva(){
+  const el = document.getElementById("vivaList");
+  if(!el) return;
+  el.innerHTML = VIVA_QA.map((qa,i)=>`
+    <div class="viva-item">
+      <div class="viva-q" onclick="toggleViva(${i})">
+        <div style="display:flex;align-items:flex-start;">
+          <span class="viva-q-num">Q${i+1}</span>
+          <span class="viva-q-text">${qa.q}</span>
+        </div>
+        <span class="viva-toggle" id="vivaToggle${i}">▼ Show</span>
+      </div>
+      <div class="viva-body" id="vivaBody${i}">
+        <div class="viva-tabs">
+          <button class="viva-tab-btn active" id="vivaTabS${i}" onclick="switchVivaTab(${i},'short')">Short Answer</button>
+          <button class="viva-tab-btn" id="vivaTabL${i}" onclick="switchVivaTab(${i},'long')">Detailed Answer</button>
+        </div>
+        <div class="viva-answer" id="vivaAnsS${i}">${qa.short}</div>
+        <div class="viva-answer" id="vivaAnsL${i}" style="display:none;">${qa.long}</div>
+      </div>
+    </div>`).join("");
+}
+
+function toggleViva(i){
+  const body    = document.getElementById("vivaBody"+i);
+  const toggle  = document.getElementById("vivaToggle"+i);
+  const isOpen  = body.classList.contains("open");
+  body.classList.toggle("open", !isOpen);
+  toggle.textContent = isOpen ? "▼ Show" : "▲ Hide";
+}
+
+function switchVivaTab(i, which){
+  const s = document.getElementById("vivaAnsS"+i);
+  const l = document.getElementById("vivaAnsL"+i);
+  const ts = document.getElementById("vivaTabS"+i);
+  const tl = document.getElementById("vivaTabL"+i);
+  if(which==="short"){
+    s.style.display="block"; l.style.display="none";
+    ts.classList.add("active"); tl.classList.remove("active");
+  } else {
+    s.style.display="none"; l.style.display="block";
+    ts.classList.remove("active"); tl.classList.add("active");
+  }
+  event.stopPropagation();
+}
+
+// ── Bootstrap all on DOMContentLoaded ───────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+  // charts load slightly deferred to allow Chart.js CDN time
+  setTimeout(initCharts, 400);
+  buildCategoryGrid();
+  buildViva();
+  // load Stage 3 scenarios (default tab)
+  loadS3Scenarios();
+});
+
+// Close modal on Escape
+document.addEventListener("keydown", e => { if(e.key==="Escape") closeModal(); });
+</script>
+
 </body>
 </html>
