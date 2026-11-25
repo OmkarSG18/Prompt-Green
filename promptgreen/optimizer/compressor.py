@@ -603,7 +603,7 @@ class LLMLinguaCompressor:
                 seg,
             )
 
-            # 4. Numerical values, version strings, multipliers, and units
+            # 4. Numerical values, hyphenated ranges/phone numbers, version strings, and units
             def repl_num(m: re.Match) -> str:
                 nonlocal ext_idx
                 ph = f"__PG_EXT_NUM_{ext_idx}__"
@@ -611,10 +611,38 @@ class LLMLinguaCompressor:
                 ext_map[ph] = m.group(0)
                 return ph
             seg = re.sub(
-                r"\bv?\d+(?:\.\d+)+(?:-[a-zA-Z0-9.]+)?\b"
+                r"\b\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)+(?:[a-zA-Z%]+)?\b"
+                r"|\bv?\d+(?:\.\d+)+(?:-[a-zA-Z0-9.]+)?\b"
                 r"|\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?(?:[a-zA-Z%]+)?\b",
                 repl_num,
                 seg,
+            )
+
+            # 4b. Email addresses
+            def repl_email(m: re.Match) -> str:
+                nonlocal ext_idx
+                ph = f"__PG_EXT_EMAIL_{ext_idx}__"
+                ext_idx += 1
+                ext_map[ph] = m.group(0)
+                return ph
+            seg = re.sub(
+                r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b",
+                repl_email,
+                seg,
+            )
+
+            # 4c. Strict output format directive phrases
+            def repl_fmt(m: re.Match) -> str:
+                nonlocal ext_idx
+                ph = f"__PG_EXT_FMT_{ext_idx}__"
+                ext_idx += 1
+                ext_map[ph] = m.group(0)
+                return ph
+            seg = re.sub(
+                r"\b(?:return\s+(?:valid\s+)?code\s+only|code\s+only|valid\s+json(?:\s+format)?|json\s+only)\b",
+                repl_fmt,
+                seg,
+                flags=re.IGNORECASE,
             )
 
             # 5. Non-ASCII unicode entities (complete words or symbols)

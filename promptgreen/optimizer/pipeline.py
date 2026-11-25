@@ -484,6 +484,18 @@ class PromptGreenPipeline:
                 method_label = shaper_res.shaping_method
                 status_label = "completed" if shaper_res.shaping_applied else "completed_noop"
 
+                # Prevent Stage 3 from negating Stage 2 savings by expanding tokens >= original
+                if s3_tokens > s2_tokens and s3_tokens >= orig_tokens and s2_tokens < orig_tokens:
+                    exp_warn = (
+                        f"Stage 3 shaping expanded tokens ({s2_tokens} -> {s3_tokens} >= original {orig_tokens}); "
+                        f"preserving Stage 2 compressed output."
+                    )
+                    warnings.append(exp_warn)
+                    s3_output = s2_output
+                    s3_tokens = s2_tokens
+                    status_label = "completed_noop"
+                    method_label = "stage2_preserved"
+
                 stage_executions["stage_3"] = StageExecution(
                     stage_id=3,
                     stage_name="OutputDirectiveShaper",
@@ -585,12 +597,9 @@ class PromptGreenPipeline:
                 else:
                     relaxed_s2 = s1_output
 
-                # Re-run Stage 3 on relaxed compressed prompt
-                if do_s3:
-                    retry_shaper = self.shaper.shape(relaxed_s2)
-                    new_candidate = retry_shaper.shaped_prompt
-                else:
-                    new_candidate = relaxed_s2
+                # During fidelity-recovery retries, preserve relaxed Stage 2 output directly
+                # without re-running generative Stage 3 shaping that may reintroduce drift/expansion.
+                new_candidate = relaxed_s2
 
                 retry_lat = (time.perf_counter() - t_retry_start) * 1000.0
                 cand_tok, _ = self._count_tokens(new_candidate)

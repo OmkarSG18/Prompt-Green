@@ -510,3 +510,26 @@ def test_effective_retention_rate_resolution():
 
     compressor.compress(prompt_35w, mode="conservative", target_retention_rate=0.45)
     assert fallback_rates[-1] == ("conservative", 0.45)
+
+
+def test_extended_entity_protection_ranges_emails_and_formats():
+    """Verify hyphenated ranges/phone numbers, emails, and strict format directives are masked atomically."""
+    compressor = LLMLinguaCompressor()
+    text = (
+        "Extract contact via alice@greentech.org or 555-0199 into valid JSON format. "
+        "Repeat in 5-15 minutes and return valid code only."
+    )
+    masked, ext_map = compressor._mask_extended_preservation(text, {})
+    values = list(ext_map.values())
+
+    assert "555-0199" in values
+    assert "5-15" in values
+    assert "alice@greentech.org" in values
+    assert "valid JSON format" in values
+    assert "return valid code only" in values
+
+    # Round-trip restoration preserves exact formatting without stray hyphen spaces
+    restored = masked
+    for ph, orig in ext_map.items():
+        restored = restored.replace(ph, orig)
+    assert restored == text
