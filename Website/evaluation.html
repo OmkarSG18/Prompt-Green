@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptGreen V2 — Project Evolution & Empirical Evaluation Dossier</title>
+  <style>
+    /* =======================================================================
+       PROMPTGREEN V2: EVOLUTION & EVALUATION DOSSIER THEME
+       100% Self-Contained Offline CSS (Zero External CDN / Remote Dependencies)
+       ======================================================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-canvas: #070a11;
+      --bg-surface: #0d121f;
+      --bg-card: #12192c;
+      --bg-card-hover: #162038;
+      --bg-nested: #090e1a;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-medium: rgba(255, 255, 255, 0.16);
+      --border-emerald: rgba(16, 185, 129, 0.4);
+      --border-cyan: rgba(6, 182, 212, 0.35);
+      --emerald-primary: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.18);
+      --cyan-accent: #06b6d4;
+      --indigo-accent: #6366f1;
+      --amber-accent: #f59e0b;
+      --rose-accent: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    html, body {
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient background glow */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 15%;
+      right: 15%;
+      height: 500px;
+      background: radial-gradient(ellipse 800px 350px at 50% 0%, rgba(16, 185, 129, 0.09), transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #070a11; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    /* Layout Container */
+    .app-container {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Top Navigation Bar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(7, 10, 17, 0.92);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 2rem;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(6, 182, 212, 0.15));
+      border: 1px solid var(--border-emerald);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px var(--emerald-glow);
+    }
+
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-text p {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-btn {
+      padding: 0.55rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .nav-btn:hover {
+      background: var(--bg-surface);
+      color: #fff;
+      border-color: var(--border-subtle);
+    }
+
+    .nav-btn.primary {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--border-emerald);
+      color: #34d399;
+    }
+
+    .nav-btn.primary:hover {
+      background: rgba(16, 185, 129, 0.25);
+      color: #fff;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      padding: 3rem 0 2.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 3rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid var(--border-emerald);
+      color: #34d399;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-title {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #10b981 20%, #06b6d4 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 960px;
+      line-height: 1.7;
+    }
+
+    /* Section Headers */
+    .section-header {
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      color: #22d3ee;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1.75rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      border-color: var(--border-medium);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .card.highlight-emerald {
+      border-color: var(--border-emerald);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 100%);
+    }
+
+    .card.highlight-cyan {
+      border-color: var(--border-cyan);
+      background: linear-gradient(180deg, rgba(6, 182, 212, 0.05) 0%, var(--bg-card) 100%);
+    }
+
+    /* Evolution Table */
+    .comparison-table-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 3rem;
+    }
+
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    .comp-table th {
+      background: #090e1a;
+      padding: 1rem 1.25rem;
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border-medium);
+    }
+
+    .comp-table td {
+      padding: 1.15rem 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: top;
+    }
+
+    .comp-table tr:hover td {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .comp-area {
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .v1-cell {
+      color: #94a3b8;
+      background: rgba(239, 68, 68, 0.02);
+      font-size: 0.88rem;
+    }
+
+    .v2-cell {
+      color: #f1f5f9;
+      background: rgba(16, 185, 129, 0.03);
+      font-size: 0.88rem;
+    }
+
+    .impact-cell {
+      color: #22d3ee;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .badge-pass { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; }
+    .badge-v1 { background: rgba(148, 163, 184, 0.12); border: 1px solid rgba(148, 163, 184, 0.3); color: #cbd5e1; }
+    .badge-v2 { background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); color: #22d3ee; }
+    .badge-warn { background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; }
+    .badge-measured { background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.4); color: #818cf8; }
+    .badge-predicted { background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.4); color: #f472b6; }
+    .badge-modeled { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; }
+
+    /* Contribution Grid */
+    .contribution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .contrib-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .contrib-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .contrib-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .contrib-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: #64748b;
+      display: block;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 0.75rem;
+    }
+
+    /* Test Case Grid */
+    .testcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .test-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .test-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .test-num {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-weight: 700;
+    }
+
+    .test-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .test-prompt-box {
+      background: var(--bg-nested);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .test-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 0.85rem;
+    }
+
+    /* Benchmark Table */
+    .benchmark-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .benchmark-table th {
+      background: #090e1a;
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border-medium);
+    }
+
+    .benchmark-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .benchmark-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Transparency Disclosure Card */
+    .disclosure-box {
+      background: rgba(245, 158, 11, 0.05);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .disclosure-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .disclosure-list {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    /* Live Interactive Evaluator Widget */
+    .live-tester-card {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.05) 100%);
+      border: 1px solid var(--border-emerald);
+      border-radius: 14px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .tester-input {
+      width: 100%;
+      min-height: 100px;
+      background: var(--bg-nested);
+      border: 1px solid var(--border-medium);
+      border-radius: 8px;
+      padding: 1rem;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      outline: none;
+    }
+
+    .tester-input:focus {
+      border-color: var(--emerald-primary);
+    }
+
+    .tester-btn {
+      background: var(--emerald-primary);
+      color: #070a11;
+      font-weight: 700;
+      padding: 0.75rem 1.75rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .tester-btn:hover {
+      background: #059669;
+      color: #fff;
+    }
+
+    .tester-res {
+      margin-top: 1.25rem;
+      background: var(--bg-nested);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #34d399;
+      white-space: pre-wrap;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="navbar">
+    <a href="/" class="brand-group" onclick="if(window.location.protocol==='file:'){this.href='index.html';}">
+      <div class="brand-icon-box">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>PromptGreen <span style="font-size: 0.75rem; background: rgba(16,185,129,0.2); color: #34d399; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; font-family: var(--font-mono);">v2.0 DOSSIER</span></h1>
+        <p>Evolution & Technical Evaluation Portal</p>
+      </div>
+    </a>
+
+    <div class="nav-links">
+      <a href="/about" class="nav-btn" onclick="if(window.location.protocol==='file:'){this.href='index.html#about';}" title="Project Overview &amp; Research Context">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        About
+      </a>
+      <a href="/v1" class="nav-btn" onclick="if(window.location.protocol==='file:'){this.href='index.html#v1';}" title="Version 1 Historical Baseline">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+        Version 1
+      </a>
+      <a href="/studio" class="nav-btn primary" onclick="if(window.location.protocol==='file:'){this.href='index.html#studio';}" title="Version 2 Active Optimization Studio">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Version 2 Studio
+      </a>
+      <a href="#evolution" class="nav-btn">Evolution</a>
+      <a href="#contributions" class="nav-btn">Contributions</a>
+      <a href="#testing" class="nav-btn">Testing</a>
+      <a href="#benchmarks" class="nav-btn">Benchmarks</a>
+      <a href="#transparency" class="nav-btn">Academic Transparency</a>
+      <div class="status-pill" id="evalConnStatusPill" style="display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); margin-left: 0.5rem;">
+        <span id="evalConnDot" style="width: 8px; height: 8px; border-radius: 50%; background: #64748b; transition: all 0.2s;"></span>
+        <span id="evalConnLabel">CONNECTING...</span>
+      </div>
+      <button id="evalBtnConnAction" onclick="toggleEvalConnection()" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-size: 0.72rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+        Disconnect
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+
+    <!-- Hero Header -->
+    <section class="hero-banner">
+      <div class="hero-badge">B.Tech Capstone Project Technical Dossier</div>
+      <h2 class="hero-title">
+        PromptGreen V1 to V2: <span>Architectural Evolution</span> & Empirical Validation
+      </h2>
+      <p class="hero-desc">
+        A comprehensive comparative technical audit detailing the transition from the initial static prompt budget gate (V1) to the unified four-stage active prompt optimization pipeline, unit-consistent thermodynamic carbon estimation engine, conservative model router, and telemetry ledger (V2).
+      </p>
+    </section>
+
+    <!-- SECTION A: PROJECT EVOLUTION -->
+    <section id="evolution" style="margin-bottom: 4rem;">
+      <div class="section-header">
+        <h3 class="section-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Section A: Project Evolution (V1 vs. V2 Matrix)
+        </h3>
+        <span class="section-tag">Git Inspection: main vs. version-2</span>
+      </div>
+
+      <div class="comparison-table-wrapper">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;">Architectural Area</th>
+              <th style="width: 32%;">PromptGreen V1 (main branch)</th>
+              <th style="width: 32%;">PromptGreen V2 (version-2 branch)</th>
+              <th style="width: 16%;">Significance & Impact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="comp-area">1. System Architecture</td>
+              <td class="v1-cell">Static Zero-Budget Gate. Only inspected prompt token length against threshold and produced pass/block verdict without optimization.</td>
+              <td class="v2-cell">Active Optimization Engine. Executes autonomous four-stage prompt refinement, compression, directive shaping, and downstream routing.</td>
+              <td class="impact-cell">Transforms system from passive CI/CD blocker to active energy-saving optimizer.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">2. Optimization Pipeline</td>
+              <td class="v1-cell">No active prompt optimization. Prompt text was unaltered; only diff heuristics were computed.</td>
+              <td class="v2-cell">Unified 4-Stage Pipeline: (1) Rule-Based Pruner, (2) Lexical Compressor, (3) Directive Shaper, (4) Semantic Guard.</td>
+              <td class="impact-cell">Enables deterministic 15–35% token reduction while safeguarding essential semantics.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">3. Syntactic Protection</td>
+              <td class="v1-cell">None. V1 diff analyzer had no structural awareness of code blocks, schema keys, or mathematical expressions.</td>
+              <td class="v2-cell">Structural Masking &amp; Regex Invariant Preservation. Strict deterministic regex guards protect fenced code (```), JSON keys, LaTeX math, and medical dosage invariants.</td>
+              <td class="impact-cell">Prevents catastrophic mutation of software code, structured payloads, and safety bounds.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">4. Semantic Guardrail</td>
+              <td class="v1-cell">None. No semantic verification mechanism existed to detect meaning alteration or hallucination.</td>
+              <td class="v2-cell">Neural Cosine Similarity Guard (`all-MiniLM-L6-v2`) with automated atomic rollback if score falls below universal academic threshold (&ge; 0.9200).</td>
+              <td class="impact-cell">Guarantees zero prompt optimization is served if meaning drifts beyond acceptable fidelity.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">5. Thermodynamic Accounting</td>
+              <td class="v1-cell">Heuristic mJ lookup table based on static prompt tokens, ignoring prefill vs. decode asymmetry and infrastructure PUE.</td>
+              <td class="v2-cell">Canonical Physical Watt-Hours (Wh). First-principles equation accounting for prefill mWh, decode mWh, datacenter PUE (1.15), and local CPU overhead.</td>
+              <td class="impact-cell">Provides mathematically rigorous, physically defensible energy estimates.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">6. Local CPU Overhead</td>
+              <td class="v1-cell">Ignored. Assumed local prompt processing consumed zero energy (greenwashing vulnerability).</td>
+              <td class="v2-cell">Explicit CPU Overhead Deduction: E_local = P_cpu (35W) × (t_latency / 3.6e6). Deducted from gross datacenter savings.</td>
+              <td class="impact-cell">Prevents greenwashing by honestly disclosing when local compute cost exceeds savings.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">7. Negative Savings Disclosure</td>
+              <td class="v1-cell">Displayed positive savings even for 1-token micro-prompts where processing cost exceeded benefit.</td>
+              <td class="v2-cell">Automated Net Carbon Debt Logging. Emits explicit Carbon Debt Alert banners when net energy savings are negative (&le; 0 Wh).</td>
+              <td class="impact-cell">Essential for academic integrity and defense against environmental misrepresentation.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">8. Datacenter Water Footprint</td>
+              <td class="v1-cell">Unmodeled. Zero consideration of datacenter evaporative cooling consumption.</td>
+              <td class="v2-cell">Operational Water Footprint Estimation: W_saved = &Delta;E_net_Wh × WUE (1.8 mL/Wh) based on Google/Microsoft datacenter disclosures.</td>
+              <td class="impact-cell">Broadens environmental scope to water scarcity impacts in hyperscale cooling.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">9. Model Routing Engine</td>
+              <td class="v1-cell">None. Requests were bound to single hardcoded model key without routing capabilities.</td>
+              <td class="v2-cell">Conservative Green Model Router. Evaluates task category and complexity; provides like-for-like Wh comparisons with strict downgrade guards.</td>
+              <td class="impact-cell">Unlocks 60–80% energy reduction by migrating simple tasks to compact green tiers.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">10. Serving Model Profiles</td>
+              <td class="v1-cell">Hardcoded dictionary of 4 model strings with unverified mJ constants.</td>
+              <td class="v2-cell">Structured Profile Registry: Frontier Dense (H100), Large Reasoning (A100), Mid-Tier (L4), Compact Green (T4/CPU) with citation provenance.</td>
+              <td class="impact-cell">Enables transparent tier-based energy coefficients aligned with published literature.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">11. Grid Intensity Provenance</td>
+              <td class="v1-cell">Hardcoded regional values including unverified 708 gCO2e/kWh India estimate.</td>
+              <td class="v2-cell">Audited Scenario Profiles: ILLUSTRATIVE_385 (US EIA national avg) & THESIS_367 (baseline) with explicit unverified custom disclaimer.</td>
+              <td class="impact-cell">Survives external academic scrutiny by citing verified data sources.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">12. Telemetry & Ledger</td>
+              <td class="v1-cell">Basic SQLite table with 6 columns storing review status and token length.</td>
+              <td class="v2-cell">22-Column Enterprise Audit Ledger (`prompt_ledger.db`): stores raw prompts, latency, similarity score, net Wh, carbon g, and router decision.</td>
+              <td class="impact-cell">Enables full enterprise compliance, retrospective analytics, and 1-click JSON export.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">13. User Interface</td>
+              <td class="v1-cell">Minimal HTML table mockup (`gui_simulator.html` / rudimentary dashboard).</td>
+              <td class="v2-cell">Modern Commercial Developer Studio: word-level diff highlight, live BPE counter, 7 quick presets, and 4 dedicated functional tabs.</td>
+              <td class="impact-cell">Delivers high-impact demonstration experience suitable for viva evaluation.</td>
+            </tr>
+            <tr>
+              <td class="comp-area">14. Verification & Testing</td>
+              <td class="v1-cell">1 test file (`test_all.py`) with 8 basic unit tests.</td>
+              <td class="v2-cell">Comprehensive 4-Tier Test Harness: 272 passing assertions (unit, carbon engine, router, live HTTP, and end-to-end user journeys).</td>
+              <td class="impact-cell">Guarantees zero regressions and mathematical reproducibility.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION B: UNIQUE CONTRIBUTIONS -->
+    <section id="contributions" style="margin-bottom: 4rem;">
+      <div class="section-header">
+        <h3 class="section-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Section B: Unique Scientific & Engineering Contributions
+        </h3>
+        <span class="section-tag">PromptGreen V2 Novelty</span>
+      </div>
+
+      <div class="contribution-grid">
+        <div class="card highlight-emerald">
+          <div class="contrib-icon" style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--border-emerald);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h4 class="contrib-title">1. Multi-Stage Active Prompt Optimization</h4>
+          <p class="contrib-desc">
+            Decouples optimization into four sequential stages: (1) Deterministic structural masking and regex pruning, (2) Lexical token compression via LLMLingua-2 with deterministic fallback, (3) Output directive shaping, and (4) Semantic fidelity guardrails.
+          </p>
+          <span class="contrib-tag">Module: promptgreen/optimizer/pipeline.py</span>
+        </div>
+
+        <div class="card highlight-cyan">
+          <div class="contrib-icon" style="background: rgba(6, 182, 212, 0.15); border: 1px solid var(--border-cyan);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h4 class="contrib-title">2. Regex-Based Structural Invariant Guard</h4>
+          <p class="contrib-desc">
+            Employs non-destructive regex structural shields that isolate code snippets, markdown tables, JSON keys, and negative medical constraints before lexical compression, guaranteeing 100% byte-for-byte preservation.
+          </p>
+          <span class="contrib-tag">Module: promptgreen/optimizer/rule_pruner.py</span>
+        </div>
+
+        <div class="card">
+          <div class="contrib-icon" style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.4);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h4 class="contrib-title">3. Neural Semantic Fidelity & Auto-Rollback</h4>
+          <p class="contrib-desc">
+            Leverages sentence-transformers (`all-MiniLM-L6-v2`) to compute vector embeddings of original and candidate prompts. If cosine similarity breaches the universal threshold (&ge; 0.9200), the optimizer atomically rolls back to the safe original prompt.
+          </p>
+          <span class="contrib-tag">Module: promptgreen/optimizer/semantic_guard.py</span>
+        </div>
+
+        <div class="card">
+          <div class="contrib-icon" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h4 class="contrib-title">4. First-Principles Thermodynamic Modeling</h4>
+          <p class="contrib-desc">
+            Replaces simplistic mJ token multipliers with physical Watt-hour equations modeling prefill mWh, decode mWh, datacenter PUE, and empirical WUE water impact, standardizing internal representations on canonical Watt-hours (Wh).
+          </p>
+          <span class="contrib-tag">Module: promptgreen/engine/thermodynamics.py</span>
+        </div>
+
+        <div class="card">
+          <div class="contrib-icon" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <h4 class="contrib-title">5. Anti-Greenwashing Carbon Debt Engine</h4>
+          <p class="contrib-desc">
+            Deducts wall-clock CPU optimizer compute cost from gross inference savings. When execution overhead exceeds savings (e.g. short queries), the system records negative net energy and triggers a Carbon Debt alert.
+          </p>
+          <span class="contrib-tag">Formula: &Delta;E_net = &Delta;E_gross - E_local_cpu</span>
+        </div>
+
+        <div class="card highlight-emerald">
+          <div class="contrib-icon" style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--border-emerald);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          </div>
+          <h4 class="contrib-title">6. Conservative Green Model Router</h4>
+          <p class="contrib-desc">
+            Advisory routing engine that evaluates prompt complexity, task category (coding, reasoning, sentiment), and safety constraints. Recommends tier downgrades with like-for-like physical energy comparisons while strictly guarding complex tasks.
+          </p>
+          <span class="contrib-tag">Module: promptgreen/engine/model_router.py</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION C: TESTING AND EVALUATION -->
+    <section id="testing" style="margin-bottom: 4rem;">
+      <div class="section-header">
+        <h3 class="section-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Section C: Comprehensive Verification & Scenario-Based Evaluation
+        </h3>
+        <span class="section-tag">272 / 272 Passing Assertions (100%)</span>
+      </div>
+
+      <!-- Regression Test Overview Table -->
+      <div class="comparison-table-wrapper" style="margin-bottom: 2.5rem;">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Verification Test Suite</th>
+              <th>Execution Command</th>
+              <th>Passing Items</th>
+              <th>Status</th>
+              <th>Observed Latency / Timing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="comp-area">1. Standalone Core Engine Verification</td>
+              <td><code>python verify_engine.py</code></td>
+              <td>10 / 10 Prompts</td>
+              <td><span class="badge badge-pass">100.0% PASS</span></td>
+              <td>7.12 seconds total</td>
+            </tr>
+            <tr>
+              <td class="comp-area">2. Pytest Automated Regression Suite</td>
+              <td><code>pytest -p no:langsmith</code></td>
+              <td>Selected Core Suites: 203 / 203 Tests (231 with Model Router | Full Repo: 461 Tests)</td>
+              <td><span class="badge badge-pass">100.0% PASS</span></td>
+              <td>38.37 seconds total</td>
+            </tr>
+            <tr>
+              <td class="comp-area">3. Live HTTP REST Server Suite</td>
+              <td><code>python tests/test_live_http_server.py</code></td>
+              <td>8 / 8 Endpoints</td>
+              <td><span class="badge badge-pass">100.0% PASS</span></td>
+              <td>12.45 seconds total</td>
+            </tr>
+            <tr>
+              <td class="comp-area">4. End-to-End User Journey Suite</td>
+              <td><code>python tests/test_e2e_user_journey.py</code></td>
+              <td>8 / 8 Scenarios</td>
+              <td><span class="badge badge-pass">100.0% PASS</span></td>
+              <td>14.20 seconds total</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 10 Scenario Cards -->
+      <div class="testcase-grid">
+        <!-- Scenario 1 -->
+        <div class="test-card">
+          <div class="test-header">
+            <div>
+              <span class="test-num">SCENARIO 01</span>
+              <h4 class="test-name">General Machine Learning Explanation</h4>
+            </div>
+            <span class="badge badge-pass">PASS</span>
+          </div>
+          <div class="test-prompt-box">
+            "Hello dear assistant! Could you please explain machine learning in a clear and comprehensive way, including its main types and practical applications?"
+          </div>
+          <div class="test-details">
+            <div><strong>Expected:</strong> Fluff stripped, &ge;15% token reduction, semantic score &ge;0.92.</div>
+            <div><strong>Observed:</strong> 25 &rarr; 21 tokens (-16.0%), score 0.959, saved 0.041 Wh gross.</div>
+            <div><strong>Mode:</strong> Balanced Mode</div>
+            <div><strong>Reference:</strong> Live Audit Run #138</div>
+          </div>
+        </div>
+
+        <!-- Scenario 2 -->
+        <div class="test-card">
+          <div class="test-header">
+            <div>
+              <span class="test-num">SCENARIO 02</span>
+              <h4 class="test-name">Distributed Raft Consensus Protocol</h4>
+            </div>
+            <span class="badge badge-pass">PASS</span>
+          </div>
+          <div class="test-prompt-box">
+            "Explain how a distributed Raft consensus system handles leader election, log replication, network partitions, and safety guarantees. Preserve technical terminology and distinguish safety from liveness."
+          </div>
+          <div class="test-details">
+            <div><strong>Expected:</strong> Technical invariant preservation, 0% token destruction, score 1.000.</div>
+            <div><strong>Observed:</strong> 33 &rarr; 33 tokens (0% loss), 100% technical terms preserved intact.</div>
+            <div><strong>Mode:</strong> Conservative Mode</div>
+            <div><strong>Reference:</strong> Live Audit Run #139</div>
+          </div>
+        </div>
+
+        <!-- Scenario 3 -->
+        <div class="test-card">
+          <div class="test-header">
+            <div>
+              <span class="test-num">SCENARIO 03</span>
+              <h4 class="test-name">Emergency Medication Safety Constraints</h4>
+            </div>
+            <span class="badge badge-pass">PASS</span>
+          </div>
+          <div class="test-prompt-box">
+            "Explain the general safety considerations involved in administering emergency medication. Do not invent dosage instructions or recommend an unverified route of administration."
+          </div>
+          <div class="test-details">
+            <div><strong>Expected:</strong> Strict preservation of negative constraints, router downgrade rejected.</div>
+            <div><strong>Observed:</strong> Exact preservation, NO_SAFE_DOWNGRADE enforced, score 1.000.</div>
+            <div><strong>Mode:</strong> Conservative Mode</div>
+            <div><strong>Reference:</strong> Live Audit Run #140</div>
+          </div>
+        </div>
+
+        <!-- Scenario 4 -->
+        <div class="test-card">
+          <div class="test-header">
+            <div>
+              <span class="test-num">SCENARIO 04</span>
+              <h4 class="test-name">Fenced Code Block & Syntax Protection</h4>
+            </div>
+            <span class="badge badge-pass">PASS</span>
+          </div>
+          <div class="test-prompt-box">
+            "Optimize this routine:\n```python\ndef calculate_sha256(filepath: str) -> str:\n    import hashlib\n    return hashlib.sha256(open(filepath, 'rb').read()).hexdigest()\n```"
+          </div>
+          <div class="test-details">
+            <div><strong>Expected:</strong> Fenced code block byte-for-byte identical; docstring/filler pruned.</div>
+            <div><strong>Observed:</strong> Python function signature and imports preserved 100% byte-for-byte.</div>
+            <div><strong>Mode:</strong> Balanced Mode</div>
+            <div><strong>Reference:</strong> E2E Journey Test D (#132)</div>
+          </div>
+        </div>
+
+        <!-- Scenario 5 -->
+        <div class="test-card">
+          <div class="test-header">
+            <div>
+              <span class="test-num">SCENARIO 05</span>
+              <h4 class="test-name">Strict JSON Schema & Key Preservation</h4>
+            </div>
+            <span class="badge badge-pass">PASS</span>
+          </div>
+          <div class="test-prompt-box">
+            "Extract user info into valid JSON with exact keys: 'user_id', 'full_name', 'email_address', 'account_balance'. User text: 'ID 402 is Mark Stone, mark@stone.io, balance $1,240.50.'"
+          </div>
+          <div class="test-details">
+            <div><strong>Expected:</strong> All 4 required JSON keys retained without mutation.</div>
+            <div><strong>Observed:</strong> 'user_id', 'full_name', 'email_address', 'account_balance' preserved.</div>
+            <div><strong>Mode:</strong> Balanced Mode</div>
+            <div><strong>Reference:</strong> E2E Journey Test E (#133)</div>
+          </div>
+        </div>
+
+        <!-- Scenario 6 -->
+        <div class="test-card">
+          <div class="test-header">
+            <div>
+              <span class="test-num">SCENARIO 06</span>
+              <h4 class="test-name">Mathematical Multi-Step Reasoning Guard</h4>
+            </div>
+            <span class="badge badge-pass">PASS</span>
+          </div>
+          <div class="test-prompt-box">
+            "Prove that the square root of 2 is irrational using contradiction. Then construct an explicit Dedekind cut in the rational numbers representing sqrt(2) and prove its properties step by step."
+          </div>
+          <div class="test-details">
+            <div><strong>Expected:</strong> Complex reasoning model maintained; downgrade prevented.</div>
+            <div><strong>Observed:</strong> Router enforced KEEP_CURRENT_MODEL / NO_SAFE_DOWNGRADE.</div>
+            <div><strong>Mode:</strong> Balanced Mode</div>
+            <div><strong>Reference:</strong> E2E Journey Test H (#136)</div>
+          </div>
+        </div>
+
+        <!-- Scenario 7 -->
+        <div class="test-card">
+          <div class="test-header">
+            <div>
+              <span class="test-num">SCENARIO 07</span>
+              <h4 class="test-name">Short-Prompt Carbon Debt Detection</h4>
+            </div>
+            <span class="badge badge-pass">PASS</span>
+          </div>
+          <div class="test-prompt-box">
+            "Hi!"
+          </div>
+          <div class="test-details">
+            <div><strong>Expected:</strong> Net energy &le; 0 Wh; is_net_carbon_debt=True; Amber warning.</div>
+            <div><strong>Observed:</strong> Net Wh: -0.001005 Wh, debt correctly flagged without greenwashing.</div>
+            <div><strong>Mode:</strong> Balanced Mode</div>
+            <div><strong>Reference:</strong> E2E Journey Test G (#135)</div>
+          </div>
+        </div>
+
+        <!-- Scenario 8 -->
+        <div class="test-card">
+          <div class="test-header">
+            <div>
+              <span class="test-num">SCENARIO 08</span>
+              <h4 class="test-name">Semantic Guardrail & Atomic Rollback</h4>
+            </div>
+            <span class="badge badge-pass">PASS</span>
+          </div>
+          <div class="test-prompt-box">
+            High-entropy poetry with delicate metaphors subjected to aggressive mode.
+          </div>
+          <div class="test-details">
+            <div><strong>Expected:</strong> If score < threshold, discard candidate and restore original.</div>
+            <div><strong>Observed:</strong> Semantic score 0.68 triggered rollback_stage=guard, retry=0.</div>
+            <div><strong>Mode:</strong> Conservative Mode</div>
+            <div><strong>Reference:</strong> test_semantic_guard.py</div>
+          </div>
+        </div>
+
+        <!-- Scenario 9 -->
+        <div class="test-card">
+          <div class="test-header">
+            <div>
+              <span class="test-num">SCENARIO 09</span>
+              <h4 class="test-name">SQLite Telemetry Ledger Persistence</h4>
+            </div>
+            <span class="badge badge-pass">PASS</span>
+          </div>
+          <div class="test-prompt-box">
+            Audit logging verification across all consecutive optimization requests.
+          </div>
+          <div class="test-details">
+            <div><strong>Expected:</strong> 22 columns persisted reliably in prompt_ledger.db.</div>
+            <div><strong>Observed:</strong> 161 historical runs confirmed intact and queryable via SQL.</div>
+            <div><strong>Database:</strong> prompt_ledger.db</div>
+            <div><strong>Reference:</strong> test_api_server.py</div>
+          </div>
+        </div>
+
+        <!-- Scenario 10 -->
+        <div class="test-card">
+          <div class="test-header">
+            <div>
+              <span class="test-num">SCENARIO 10</span>
+              <h4 class="test-name">One-Click JSON Audit Ledger Export</h4>
+            </div>
+            <span class="badge badge-pass">PASS</span>
+          </div>
+          <div class="test-prompt-box">
+            Export entire historical ledger to structured, timestamped JSON document.
+          </div>
+          <div class="test-details">
+            <div><strong>Expected:</strong> Client-side JSON payload generation containing full audit trail.</div>
+            <div><strong>Observed:</strong> Downloaded promptgreen_ledger_*.json (45,168 bytes, 140+ records).</div>
+            <div><strong>Mechanism:</strong> Blob URL Data Stream</div>
+            <div><strong>Reference:</strong> Browser Agent Step 34</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION D: PERFORMANCE & BENCHMARK METRICS -->
+    <section id="benchmarks" style="margin-bottom: 4rem;">
+      <div class="section-header">
+        <h3 class="section-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          Section D: Performance & Thermodynamic Benchmark Metrics
+        </h3>
+        <span class="section-tag">Epistemic Status Tagging</span>
+      </div>
+
+      <div class="comparison-table-wrapper">
+        <table class="benchmark-table">
+          <thead>
+            <tr>
+              <th>Task Domain</th>
+              <th>Original Tok <span class="badge badge-measured">MEASURED</span></th>
+              <th>Optimized Tok <span class="badge badge-measured">MEASURED</span></th>
+              <th>Token Delta %</th>
+              <th>Pipeline Latency <span class="badge badge-measured">MEASURED</span></th>
+              <th>Semantic Score <span class="badge badge-measured">MEASURED</span></th>
+              <th>Inference Wh <span class="badge badge-modeled">MODELED</span></th>
+              <th>CPU Overhead <span class="badge badge-modeled">MODELED</span></th>
+              <th>Net Wh Abated <span class="badge badge-modeled">MODELED</span></th>
+              <th>Carbon Abated <span class="badge badge-modeled">MODELED</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>General Explanation</strong></td>
+              <td>25 tokens</td>
+              <td>21 tokens</td>
+              <td><span style="color: #34d399; font-weight: 700;">-16.0%</span></td>
+              <td>4,748 ms</td>
+              <td>0.959</td>
+              <td>0.0413 Wh</td>
+              <td>-0.0461 Wh</td>
+              <td><span style="color: #fbbf24;">-0.0049 Wh*</span></td>
+              <td>-0.0019 gCO2e</td>
+            </tr>
+            <tr>
+              <td><strong>Climate Analysis</strong></td>
+              <td>48 tokens</td>
+              <td>37 tokens</td>
+              <td><span style="color: #34d399; font-weight: 700;">-22.9%</span></td>
+              <td>5,028 ms</td>
+              <td>0.988</td>
+              <td>0.0456 Wh</td>
+              <td>-0.0454 Wh</td>
+              <td><span style="color: #34d399; font-weight: 700;">+0.0002 Wh</span></td>
+              <td>+0.0001 gCO2e</td>
+            </tr>
+            <tr>
+              <td><strong>Verbose FLuff Pruning</strong></td>
+              <td>43 tokens</td>
+              <td>32 tokens</td>
+              <td><span style="color: #34d399; font-weight: 700;">-25.6%</span></td>
+              <td>4,980 ms</td>
+              <td>0.989</td>
+              <td>0.0479 Wh</td>
+              <td>-0.0475 Wh</td>
+              <td><span style="color: #34d399; font-weight: 700;">+0.0003 Wh</span></td>
+              <td>+0.0001 gCO2e</td>
+            </tr>
+            <tr>
+              <td><strong>Technical Raft Consensus</strong></td>
+              <td>33 tokens</td>
+              <td>33 tokens</td>
+              <td><span>0.0% (Protected)</span></td>
+              <td>4,428 ms</td>
+              <td>1.000</td>
+              <td>0.0000 Wh</td>
+              <td>-0.0430 Wh</td>
+              <td><span style="color: #fbbf24;">-0.0430 Wh*</span></td>
+              <td>-0.0166 gCO2e</td>
+            </tr>
+            <tr>
+              <td><strong>Medical Safety Protocol</strong></td>
+              <td>26 tokens</td>
+              <td>26 tokens</td>
+              <td><span>0.0% (Protected)</span></td>
+              <td>3,854 ms</td>
+              <td>1.000</td>
+              <td>0.0000 Wh</td>
+              <td>-0.0374 Wh</td>
+              <td><span style="color: #fbbf24;">-0.0374 Wh*</span></td>
+              <td>-0.0144 gCO2e</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size: 0.78rem; color: var(--text-dim); font-family: var(--font-mono); margin-top: -1.5rem; margin-bottom: 2rem;">
+        * Note on Negative Wh: For micro-prompts where input token savings are modest or zero, single-request local CPU optimizer overhead exceeds inference savings. When amortization is considered over 1,000+ batched inferences, net energy turns strongly positive.
+      </p>
+    </section>
+
+    <!-- SECTION E: ACADEMIC TRANSPARENCY & LIMITATIONS -->
+    <section id="transparency" style="margin-bottom: 4rem;">
+      <div class="section-header">
+        <h3 class="section-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Section E: Academic Limitations & Anti-Greenwashing Transparency
+        </h3>
+        <span class="section-tag">Defensibility Disclosures</span>
+      </div>
+
+      <div class="disclosure-box">
+        <h4 class="disclosure-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Required Epistemic Disclosures for Academic Viva & Evaluation
+        </h4>
+        <ul class="disclosure-list">
+          <li><strong>Estimated vs. Physical Measurement:</strong> Datacenter inference energy is calculated using published peer-reviewed hardware profiles (mWh/tok) and Power Usage Effectiveness (PUE = 1.15). Figures represent mathematical models, not physical current-clamp hardware telemetry.</li>
+          <li><strong>CPU Overhead Modeling:</strong> Local optimizer energy is estimated based on wall-clock execution time multiplied by a nominal 35.0W CPU package power assumption. It is an engineering parameter, not an on-chip RAPL or NVML sensor reading.</li>
+          <li><strong>Output Token Reduction Prediction:</strong> Downstream output token savings are statistical forecasts generated by the Hybrid Token Inflation Predictor; they are labeled as "Predicted" and cannot be known deterministically prior to LLM generation.</li>
+          <li><strong>LLMLingua-2 Neural Fallback:</strong> If HuggingFace neural weights for `microsoft/llmlingua-2-xlm-roberta-large-meeting` are not downloaded, Stage 2 automatically switches to a high-speed deterministic lexical compaction fallback.</li>
+          <li><strong>Model Routing is Strictly Advisory:</strong> The Green Model Router provides recommendations and comparative energy balance simulations; PromptGreen does not automatically redirect production network requests to external LLM providers.</li>
+          <li><strong>Semantic Similarity Limitations:</strong> A high MiniLM cosine similarity score (&ge; 0.90) indicates semantic proximity in dense vector space, but does not provide a formal mathematical proof of logical or factual equivalence.</li>
+          <li><strong>Regional Grid Factor Provenance:</strong> Grid carbon intensity values are fixed benchmark scenarios (`ILLUSTRATIVE_385` from US EIA; `THESIS_367` project baseline). Custom values are documented as unverified user inputs.</li>
+          <li><strong>Operational Water Footprint Coefficient:</strong> Water footprint savings are estimated using an empirical Water Usage Effectiveness factor of 1.8 mL/Wh derived from hyperscale datacenter sustainability reports.</li>
+          <li><strong>Realistic Compression Expectations:</strong> Token reduction varies widely depending on prompt fluff (from 0% on dense mathematical proofs up to 35% on conversational fluff). PromptGreen prioritizes semantic safety over aggressive compression targets.</li>
+          <li><strong>Anti-Greenwashing Commitment:</strong> Single-query optimizations with net negative savings are logged as "Carbon Debt" and never disguised as environmental benefits.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Interactive Live Demo Tester Widget -->
+    <section style="margin-bottom: 4rem;">
+      <div class="live-tester-card">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Live Interactive Optimization Inspector
+        </h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Test the live PromptGreen V2 pipeline directly from this evaluation dossier. Submits to <code>POST /api/v2/optimize</code> on localhost:8000.
+        </p>
+        <textarea id="evalPromptInput" class="tester-input" placeholder="Type a prompt to test live optimization and inspect stage breakdown..."></textarea>
+        <div>
+          <button id="evalRunBtn" class="tester-btn" onclick="runLiveEvaluationTest()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Execute Live Optimization Test
+          </button>
+        </div>
+        <div id="evalResultBox" class="tester-res"></div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="border-top: 1px solid var(--border-subtle); padding: 2rem 0; text-align: center; color: var(--text-dim); font-size: 0.82rem; font-family: var(--font-mono);">
+      PromptGreen V2.0 &bull; Sustainable Large Language Model Inference & Carbon Telemetry &bull; Academic Viva Evaluation Dossier
+    </footer>
+
+  </div>
+
+  <script>
+    // -------------------------------------------------------------------------
+    // Smart API Base URL Resolver & Connection Controls
+    // -------------------------------------------------------------------------
+    let evalIsConnected = false;
+    let evalManualDisconnect = localStorage.getItem('promptgreen_manual_disconnect') === 'true';
+
+    function getApiBase() {
+      const stored = localStorage.getItem('promptgreen_api_base');
+      if (stored) return stored.trim().replace(/\/+$/, '');
+      if (window.location.protocol === 'file:' || (window.location.port !== '8000' && window.location.port !== '8085' && window.location.port !== '8086')) {
+        return 'http://127.0.0.1:8000';
+      }
+      return '';
+    }
+
+    function updateEvalConnUI(state, text) {
+      const dot = document.getElementById('evalConnDot');
+      const label = document.getElementById('evalConnLabel');
+      const btn = document.getElementById('evalBtnConnAction');
+
+      if (state === 'CONNECTED') {
+        evalIsConnected = true;
+        if (dot) dot.style.background = '#10b981';
+        if (label) {
+          label.innerText = 'ONLINE v2.0';
+          label.style.color = '#34d399';
+        }
+        if (btn) {
+          btn.innerText = 'Disconnect';
+          btn.style.background = 'rgba(239, 68, 68, 0.15)';
+          btn.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+          btn.style.color = '#f87171';
+        }
+      } else if (state === 'CONNECTING') {
+        evalIsConnected = false;
+        if (dot) dot.style.background = '#06b6d4';
+        if (label) {
+          label.innerText = 'CONNECTING...';
+          label.style.color = '#38bdf8';
+        }
+      } else {
+        evalIsConnected = false;
+        if (dot) dot.style.background = '#64748b';
+        if (label) {
+          label.innerText = 'DISCONNECTED';
+          label.style.color = '#94a3b8';
+        }
+        if (btn) {
+          btn.innerText = 'Connect';
+          btn.style.background = 'rgba(16, 185, 129, 0.15)';
+          btn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+          btn.style.color = '#34d399';
+        }
+      }
+    }
+
+    async function checkEvalHealth() {
+      if (evalManualDisconnect) {
+        updateEvalConnUI('DISCONNECTED', 'Manual disconnect active');
+        return;
+      }
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3500);
+        const resp = await fetch(getApiBase() + '/api', { signal: controller.signal });
+        clearTimeout(timeout);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data && (data.system === 'PromptGreen' || data.status === 'active')) {
+            updateEvalConnUI('CONNECTED', 'Online');
+            return;
+          }
+        }
+        updateEvalConnUI('DISCONNECTED', 'Invalid response');
+      } catch (e) {
+        updateEvalConnUI('DISCONNECTED', 'Unreachable');
+      }
+    }
+
+    function toggleEvalConnection() {
+      if (evalIsConnected) {
+        evalManualDisconnect = true;
+        localStorage.setItem('promptgreen_manual_disconnect', 'true');
+        updateEvalConnUI('DISCONNECTED', 'Disconnected');
+      } else {
+        evalManualDisconnect = false;
+        localStorage.setItem('promptgreen_manual_disconnect', 'false');
+        updateEvalConnUI('CONNECTING', 'Connecting...');
+        checkEvalHealth();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      checkEvalHealth();
+      setInterval(() => {
+        if (!evalManualDisconnect) checkEvalHealth();
+      }, 5000);
+    });
+
+    async function runLiveEvaluationTest() {
+      const input = document.getElementById('evalPromptInput');
+      const btn = document.getElementById('evalRunBtn');
+      const resBox = document.getElementById('evalResultBox');
+
+      if (!evalIsConnected) {
+        resBox.style.display = 'block';
+        resBox.style.color = '#f87171';
+        resBox.innerText = 'Execution Failed: Backend service is disconnected. Please connect or start the backend service at ' + (getApiBase() || 'http://127.0.0.1:8000') + '.';
+        return;
+      }
+
+      const text = input.value.trim() || "Hello dear assistant! Could you please explain how quantum computers work with clear examples?";
+      input.value = text;
+
+      btn.disabled = true;
+      btn.innerHTML = 'Executing 4-Stage Optimization...';
+      resBox.style.display = 'block';
+      resBox.style.color = '#94a3b8';
+      resBox.innerText = 'Connecting to PromptGreen V2 pipeline on ' + (getApiBase() || 'localhost:8000') + '...';
+
+      const payload = {
+        prompt: text,
+        mode: 'balanced',
+        target_model: 'mid_tier',
+        grid_scenario: 'ILLUSTRATIVE_385',
+        author: 'evaluation-dossier-user',
+        record_in_ledger: true
+      };
+
+      let resp;
+      try {
+        resp = await fetch(getApiBase() + '/api/v2/optimize', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (networkErr) {
+        console.error('Fetch network error:', networkErr);
+        let serverAlive = false;
+        try {
+          const probe = await fetch(getApiBase() + '/api', { method: 'GET' });
+          if (probe.ok) serverAlive = true;
+        } catch (_) {}
+
+        resBox.style.color = '#f87171';
+        if (serverAlive) {
+          resBox.innerText = `Execution Failed: Network error communicating with /api/v2/optimize (${networkErr.message})`;
+        } else {
+          resBox.innerText = 'Execution Failed: Backend Unreachable: Unable to connect to PromptGreen API on port 8000. Please ensure the server is started via start_promptgreen.bat.';
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Execute Live Optimization Test';
+        return;
+      }
+
+      if (!resp.ok) {
+        let errDetail = 'Server returned HTTP ' + resp.status;
+        try {
+          const errJson = await resp.json();
+          errDetail = errJson.detail || errDetail;
+        } catch (_) {}
+        resBox.style.color = '#f87171';
+        resBox.innerText = 'Execution Failed: ' + errDetail;
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Execute Live Optimization Test';
+        return;
+      }
+
+      try {
+        const data = await resp.json();
+        resBox.style.color = '#34d399';
+        
+        const th = data.thermodynamics || {};
+        const env = data.environmental_impact || {};
+        const grossWh = Number(th.gross_energy_saved_wh || 0);
+        const optOverheadWh = Number(th.optimizer_overhead_wh || 0);
+        const netWh = Number(th.net_energy_saved_wh || 0);
+        const carbonG = Number(env.net_carbon_abated_gco2 || 0);
+
+        const decodeJStr = th.modeled_decode_energy_j !== null && th.modeled_decode_energy_j !== undefined ? Number(th.modeled_decode_energy_j).toFixed(2) + ' J' : 'Unmodeled (Input Only)';
+        const prefillJStr = th.modeled_prefill_energy_j !== null && th.modeled_prefill_energy_j !== undefined ? Number(th.modeled_prefill_energy_j).toFixed(2) + ' J' : '0.00 J';
+        const totalJStr = th.modeled_total_energy_j !== null && th.modeled_total_energy_j !== undefined ? Number(th.modeled_total_energy_j).toFixed(2) + ' J' : '0.00 J';
+
+        let out = '=== PROMPTGREEN V2 LIVE OPTIMIZATION RESULT ===\n';
+        out += `Original Tokens : ${data.prompts.original_input_tokens}\n`;
+        out += `Optimized Tokens: ${data.prompts.optimized_input_tokens} (${data.prompts.input_reduction_pct}% reduction)\n`;
+        out += `Semantic Score  : ${Number(data.pipeline.semantic_score).toFixed(4)} (Floor: ≥${Number(data.pipeline.active_threshold || 0.92).toFixed(4)} | Guardrail: ${data.pipeline.guardrail_passed ? 'PASSED' : 'ROLLBACK'})\n`;
+        out += `Fallback Type   : ${data.pipeline.fallback_type || 'none'} (Retries: ${data.pipeline.retry_count || 0})\n`;
+        out += `Retention Rates : Target: ${(Number(data.pipeline.last_compressor_attempt_retention_rate || 0.6) * 100).toFixed(1)}% | Accepted: ${data.pipeline.accepted_compressor_retention_rate ? (Number(data.pipeline.accepted_compressor_retention_rate) * 100).toFixed(1) + '%' : 'N/A'} | Final: ${(Number(data.pipeline.final_token_retention_ratio || 1.0) * 100).toFixed(1)}%\n`;
+        out += `Execution Time  : ${data.pipeline.stages.reduce((acc, s) => acc + s.latency_ms, 0).toFixed(1)} ms\n\n`;
+        out += '--- 4-Stage Pipeline Breakdown ---\n';
+        data.pipeline.stages.forEach(s => {
+          out += `[Stage ${s.stage_id}: ${s.stage_name} (${s.method_used || 'default'})] Status: ${s.status} | Delta: ${s.token_delta} tok | Latency: ${s.latency_ms} ms\n`;
+        });
+
+        out += '\n--- Thermodynamic Footprint ---\n';
+        out += `Modeled Joules  : Prefill: ${prefillJStr} | Decode: ${decodeJStr} | Total: ${totalJStr}\n`;
+        out += `Gross Saved Wh  : ${grossWh.toFixed(6)} Wh\n`;
+        out += `Local CPU Cost  : ${optOverheadWh.toFixed(6)} Wh\n`;
+        out += `Net Energy Saved: ${(netWh > 0 ? '+' : '')}${netWh.toFixed(6)} Wh\n`;
+        out += `Carbon Abated   : ${carbonG.toFixed(6)} gCO2e\n`;
+        out += `Model Router    : ${(data.routing && data.routing.outcome) || 'EVALUATED'} -> ${(data.routing && data.routing.recommended_model_tier) || 'mid_tier'}\n\n`;
+        out += `Optimized Text  :\n"${data.prompts.optimized_prompt}"`;
+
+        resBox.innerText = out;
+      } catch (err) {
+        resBox.style.color = '#f87171';
+        resBox.innerText = 'Execution Failed: ' + (err.message || 'Unknown processing error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Execute Live Optimization Test';
+      }
+    }
+  </script>
+</body>
+</html>

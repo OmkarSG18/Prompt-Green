@@ -1,0 +1,266 @@
+{
+  "conservative": [
+    {
+      "prompt_id": "pg-bench-091",
+      "category": "Summarization and information extraction",
+      "difficulty": "easy",
+      "original_tokens": 38,
+      "optimized_tokens": 38,
+      "token_reduction": 0,
+      "semantic_similarity": 0.9596,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Cosine similarity (0.9596) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [],
+      "scenario_a_net_energy_wh": -0.00148108,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00148108,
+      "scenario_b_is_carbon_debt": true
+    },
+    {
+      "prompt_id": "pg-bench-111",
+      "category": "Summarization and information extraction",
+      "difficulty": "easy",
+      "original_tokens": 33,
+      "optimized_tokens": 33,
+      "token_reduction": 0,
+      "semantic_similarity": 0.9812,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed."
+      ],
+      "scenario_a_net_energy_wh": -0.00164607,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00164607,
+      "scenario_b_is_carbon_debt": true
+    },
+    {
+      "prompt_id": "pg-bench-184",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "adversarial",
+      "original_tokens": 58,
+      "optimized_tokens": 58,
+      "token_reduction": 0,
+      "semantic_similarity": 1.0,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Output format inversion: candidate explicitly negates required format 'json'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Output format inversion: candidate explicitly negates required format 'json'."
+      ],
+      "scenario_a_net_energy_wh": -0.00269276,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00269276,
+      "scenario_b_is_carbon_debt": true
+    },
+    {
+      "prompt_id": "pg-bench-187",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_tokens": 73,
+      "optimized_tokens": 73,
+      "token_reduction": 0,
+      "semantic_similarity": 0.9827,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed."
+      ],
+      "scenario_a_net_energy_wh": -0.0020194,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.0020194,
+      "scenario_b_is_carbon_debt": true
+    },
+    {
+      "prompt_id": "pg-bench-199",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_tokens": 83,
+      "optimized_tokens": 83,
+      "token_reduction": 0,
+      "semantic_similarity": 0.9954,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed."
+      ],
+      "scenario_a_net_energy_wh": -0.00384407,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00384407,
+      "scenario_b_is_carbon_debt": true
+    }
+  ],
+  "balanced": [
+    {
+      "prompt_id": "pg-bench-111",
+      "category": "Summarization and information extraction",
+      "difficulty": "easy",
+      "original_tokens": 33,
+      "optimized_tokens": 33,
+      "token_reduction": 0,
+      "semantic_similarity": 0.9812,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed."
+      ],
+      "scenario_a_net_energy_wh": -0.00289479,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00289479,
+      "scenario_b_is_carbon_debt": true
+    },
+    {
+      "prompt_id": "pg-bench-184",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "adversarial",
+      "original_tokens": 58,
+      "optimized_tokens": 58,
+      "token_reduction": 0,
+      "semantic_similarity": 1.0,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Output format inversion: candidate explicitly negates required format 'json'.; Output format inversion: candidate explicitly negates required format 'json'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Output format inversion: candidate explicitly negates required format 'json'."
+      ],
+      "scenario_a_net_energy_wh": -0.00434593,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00434593,
+      "scenario_b_is_carbon_debt": true
+    },
+    {
+      "prompt_id": "pg-bench-187",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_tokens": 73,
+      "optimized_tokens": 73,
+      "token_reduction": 0,
+      "semantic_similarity": 0.9827,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed."
+      ],
+      "scenario_a_net_energy_wh": -0.00251854,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00251854,
+      "scenario_b_is_carbon_debt": true
+    },
+    {
+      "prompt_id": "pg-bench-199",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_tokens": 83,
+      "optimized_tokens": 83,
+      "token_reduction": 0,
+      "semantic_similarity": 0.9954,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed."
+      ],
+      "scenario_a_net_energy_wh": -0.00573213,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00573213,
+      "scenario_b_is_carbon_debt": true
+    }
+  ],
+  "aggressive": [
+    {
+      "prompt_id": "pg-bench-111",
+      "category": "Summarization and information extraction",
+      "difficulty": "easy",
+      "original_tokens": 33,
+      "optimized_tokens": 33,
+      "token_reduction": 0,
+      "semantic_similarity": 0.9812,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed."
+      ],
+      "scenario_a_net_energy_wh": -0.00336389,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00336389,
+      "scenario_b_is_carbon_debt": true
+    },
+    {
+      "prompt_id": "pg-bench-184",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "adversarial",
+      "original_tokens": 58,
+      "optimized_tokens": 58,
+      "token_reduction": 0,
+      "semantic_similarity": 1.0,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Output format inversion: candidate explicitly negates required format 'json'.; Output format inversion: candidate explicitly negates required format 'json'.; Output format inversion: candidate explicitly negates required format 'json'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Output format inversion: candidate explicitly negates required format 'json'."
+      ],
+      "scenario_a_net_energy_wh": -0.00643319,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00643319,
+      "scenario_b_is_carbon_debt": true
+    },
+    {
+      "prompt_id": "pg-bench-187",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_tokens": 73,
+      "optimized_tokens": 73,
+      "token_reduction": 0,
+      "semantic_similarity": 0.9827,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed."
+      ],
+      "scenario_a_net_energy_wh": -0.00367481,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00367481,
+      "scenario_b_is_carbon_debt": true
+    },
+    {
+      "prompt_id": "pg-bench-199",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_tokens": 83,
+      "optimized_tokens": 83,
+      "token_reduction": 0,
+      "semantic_similarity": 0.9954,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_stage": "original",
+      "rollback_reason": "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "preservation_violations": [
+        "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed."
+      ],
+      "scenario_a_net_energy_wh": -0.00808374,
+      "scenario_a_is_carbon_debt": true,
+      "scenario_b_net_energy_wh": -0.00808374,
+      "scenario_b_is_carbon_debt": true
+    }
+  ]
+}

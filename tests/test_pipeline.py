@@ -229,7 +229,12 @@ def test_8_semantic_rejection_triggers_less_aggressive_retry() -> None:
     """A candidate failing aggressive threshold triggers bounded relaxation to balanced or conservative."""
     # Custom compressor mock that produces low similarity on aggressive, high on balanced
     class ControllableCompressor(LLMLinguaCompressor):
-        def compress(self, prompt: str, mode: str | None = None) -> CompressionResult:
+        def compress(
+            self,
+            prompt: str,
+            mode: str | None = None,
+            target_retention_rate: float | None = None,
+        ) -> CompressionResult:
             active_m = mode or self.config.mode
             if active_m == "aggressive":
                 comp_text = prompt + " mild_diff"
@@ -390,9 +395,11 @@ def test_12_long_prompts_receive_meaningful_chunk_level_validation() -> None:
     long_prompt = (
         "Software architecture requires clean separation of concerns, disciplined layering, and reliable interfaces. "
         "Presentation layers render user interfaces and validate input schemas. "
-        "Service layers orchestrate business workflows and domain rules. "
-        "Database access layers encapsulate schema queries and transactional operations. "
-    ) * 3
+        "Service layers orchestrate business workflows and domain rules across microservice boundaries. "
+        "Distributed tracing provides visibility into inter-service latency and error propagation. "
+        "Database access layers encapsulate schema queries, transactional operations, and connection pooling. "
+        "Storage replication guarantees high availability and disaster recovery across regions."
+    )
 
     res = pipeline.optimize(long_prompt, mode="balanced")
 
@@ -534,4 +541,5 @@ def test_20_mode_selection_affects_retention_and_threshold() -> None:
     p_agg = PromptGreenPipeline(config=PipelineConfig(mode="aggressive"))
 
     assert p_cons.config.guardrail_config.threshold == 0.96
-    assert p_agg.config.guardrail_config.threshold == 0.86
+    # Strict academic compliance: aggressive threshold is strengthened to 0.92 floor
+    assert p_agg.config.guardrail_config.threshold == 0.92

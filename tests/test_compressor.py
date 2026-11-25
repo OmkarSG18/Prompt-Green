@@ -302,20 +302,22 @@ def test_placeholder_collision_immunity():
 def test_llmlingua_unavailable_fallback():
     # Test that when neural model is unavailable, fallback is seamlessly used
     compressor = LLMLinguaCompressor()
-    prompt = (
-        "In order to optimize throughput, it is important to note that you must make sure "
-        "to verify the database connection prior to running benchmark tests."
-    )
-    result = compressor.compress(prompt, mode="balanced")
+    with patch.object(compressor, "is_model_available", return_value=False):
+        prompt = (
+            "In order to optimize throughput, it is important to note that you must make sure "
+            "to verify the database connection prior to running benchmark tests."
+        )
+        result = compressor.compress(prompt, mode="balanced")
 
-    assert result.success is True
-    assert result.fallback_used is True
-    assert result.compression_method == "deterministic_lexical_fallback"
-    assert result.compressed_token_count < result.original_token_count
+        assert result.success is True
+        assert result.fallback_used is True
+        assert result.compression_method == "deterministic_lexical_fallback"
+        assert result.compressed_token_count < result.original_token_count
 
 
 def test_model_loading_failure_fallback():
     # Simulate an error during model loading (e.g., RuntimeError or OSError)
+    LLMLinguaCompressor.reset_shared_model()
     compressor = LLMLinguaCompressor()
     mock_llmlingua = MagicMock()
     mock_llmlingua.PromptCompressor.side_effect = RuntimeError("Out of memory on CPU")
@@ -441,3 +443,70 @@ def test_mock_neural_compression_integration():
     mock_llm.compress_prompt.assert_called_once()
     call_kwargs = mock_llm.compress_prompt.call_args[1]
     assert "rate" in call_kwargs or "target_rate" in call_kwargs or "force_tokens" in call_kwargs
+
+
+def test_effective_retention_rate_resolution():
+    """
+    Establish that inside the compression logic:
+    - Aggressive mode with no explicit override resolves to 0.40.
+    - Balanced mode with an explicit target resolves to 0.60.
+    - Conservative mode with an explicit target resolves to 0.80.
+    - Explicit target values take precedence over mode defaults (e.g. 0.45 in conservative).
+    - Fallback natural text pruner also receives the resolved effective rates.
+    """
+    mock_llm = MagicMock()
+    mock_llm.compress_prompt.return_value = {
+        "compressed_prompt": "compressed output",
+        "origin_tokens": 50,
+        "compressed_tokens": 20,
+    }
+    compressor = LLMLinguaCompressor(llm_lingua_instance=mock_llm)
+
+    prompt_35w = (
+        "Software architecture requires clean separation of concerns across all distributed compute "
+        "clusters in enterprise cloud environments. All telemetry spans must be recorded with high "
+        "fidelity and dispatched to the centralized logging queue to ensure complete observability."
+    )
+
+    # 1. Aggressive mode with no explicit override resolves to 0.40
+    compressor.compress(prompt_35w, mode="aggressive")
+    rate_agg = mock_llm.compress_prompt.call_args[1]["rate"]
+    assert rate_agg == 0.40
+
+    # 2. Balanced mode with explicit target resolves to 0.60
+    compressor.compress(prompt_35w, mode="balanced", target_retention_rate=0.60)
+    rate_bal = mock_llm.compress_prompt.call_args[1]["rate"]
+    assert rate_bal == 0.60
+
+    # 3. Conservative mode with explicit target resolves to 0.80
+    compressor.compress(prompt_35w, mode="conservative", target_retention_rate=0.80)
+    rate_cons = mock_llm.compress_prompt.call_args[1]["rate"]
+    assert rate_cons == 0.80
+
+    # 4. Explicit target value takes precedence over mode default
+    compressor.compress(prompt_35w, mode="conservative", target_retention_rate=0.45)
+    rate_override = mock_llm.compress_prompt.call_args[1]["rate"]
+    assert rate_override == 0.45
+
+    # 5. Deterministic fallback path observation
+    fallback_rates = []
+    original_fallback = compressor._compress_fallback_natural_text
+
+    def spy_fallback(text, mode="balanced", target_rate=0.55, is_start_of_sentence=True):
+        fallback_rates.append((mode, target_rate))
+        return original_fallback(text, mode=mode, target_rate=target_rate, is_start_of_sentence=is_start_of_sentence)
+
+    compressor._compress_fallback_natural_text = spy_fallback
+    compressor.config.use_llmlingua2 = False  # Force fallback path
+
+    compressor.compress(prompt_35w, mode="aggressive")
+    assert fallback_rates[-1] == ("aggressive", 0.40)
+
+    compressor.compress(prompt_35w, mode="balanced", target_retention_rate=0.60)
+    assert fallback_rates[-1] == ("balanced", 0.60)
+
+    compressor.compress(prompt_35w, mode="conservative", target_retention_rate=0.80)
+    assert fallback_rates[-1] == ("conservative", 0.80)
+
+    compressor.compress(prompt_35w, mode="conservative", target_retention_rate=0.45)
+    assert fallback_rates[-1] == ("conservative", 0.45)

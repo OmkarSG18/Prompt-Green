@@ -1,8 +1,30 @@
 import requests
 from dataclasses import dataclass
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Union
 from promptgreen.analysis.diff_parser import PromptDiffAnalyzer, PromptDeltaFeatures
 from promptgreen.predictor.hybrid_predictor import HybridPredictor, PredictionResult
+from promptgreen.engine.model_profiles import (
+    ModelTierProfile,
+    HardwareProfile,
+    GridIntensityScenario,
+    DEFAULT_PROFILE_REGISTRY,
+    STANDARD_MODEL_TIERS,
+    STANDARD_GRID_SCENARIOS,
+    THESIS_PROVENANCE_WARNING,
+    GRID_PROVENANCE_US_ILLUSTRATIVE,
+    GRID_PROVENANCE_THESIS_GLOBAL,
+    WATER_COEFFICIENT_WARNING,
+    CPU_POWER_ESTIMATE_WARNING,
+)
+from promptgreen.engine.thermodynamics import (
+    EnergyCarbonResult,
+    calculate_inference_energy_wh,
+    estimate_optimizer_overhead_wh,
+    calculate_net_energy_wh,
+    calculate_net_carbon_g,
+    calculate_water_impact_ml,
+    calculate_thermodynamic_impact,
+)
 
 
 @dataclass
@@ -207,3 +229,45 @@ class CarbonEngine:
                 "monthly_carbon_gco2": res.monthly_carbon_delta_gco2
             })
         return matrix
+
+    def calculate_thermodynamic(
+        self,
+        tin_orig: int,
+        tout_orig: float,
+        tin_opt: int,
+        tout_opt: float,
+        model_tier: Union[str, ModelTierProfile] = "frontier_dense",
+        grid_scenario: Optional[Union[str, GridIntensityScenario, float]] = None,
+        custom_grid_provenance: Optional[str] = None,
+        optimizer_latency_ms: float = 0.0,
+        p_cpu_w: float = 35.0,
+        pue: float = 1.15,
+        wue_ml_per_wh: float = 1.8,
+        is_output_predicted: bool = True,
+    ) -> EnergyCarbonResult:
+        """
+        V2 foundational thermodynamic impact calculation adhering strictly to canonical Wh energy units.
+        Computes prefill vs. decode asymmetry, PUE, local CPU optimizer deduction,
+        net carbon abatement, and datacenter cooling water footprint.
+        """
+        if grid_scenario is not None:
+            scenario = grid_scenario
+        elif self.region == "US":
+            scenario = "ILLUSTRATIVE_385"
+        else:
+            scenario = self.region
+
+        return calculate_thermodynamic_impact(
+            tin_original=tin_orig,
+            tout_original=tout_orig,
+            tin_optimized=tin_opt,
+            tout_optimized=tout_opt,
+            model_tier=model_tier,
+            grid_scenario=scenario,
+            custom_grid_provenance=custom_grid_provenance,
+            optimizer_latency_ms=optimizer_latency_ms,
+            p_cpu_w=p_cpu_w,
+            pue=pue,
+            wue_ml_per_wh=wue_ml_per_wh,
+            is_output_predicted=is_output_predicted,
+        )

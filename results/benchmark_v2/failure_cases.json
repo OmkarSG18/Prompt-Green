@@ -1,0 +1,240 @@
+{
+  "conservative": [
+    {
+      "prompt_id": "pg-bench-091",
+      "category": "Summarization and information extraction",
+      "difficulty": "easy",
+      "original_prompt": "Could you please summarize the provided meeting minutes into exactly 3 bullet points, highlighting the budget decision, the launch date, and the primary risk? Keep the total response under 60 words.",
+      "optimized_prompt": "Could you please summarize the provided meeting minutes into exactly 3 bullet points, highlighting the budget decision, the launch date, and the primary risk? Keep the total response under 60 words.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9596,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Cosine similarity (0.9596) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.062316,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "pg-bench-111",
+      "category": "Summarization and information extraction",
+      "difficulty": "easy",
+      "original_prompt": "Extract all command-line arguments and environment variables passed to the container in this Kubernetes Pod manifest, formatted as a JSON dictionary of `{env: {}, args: []}`.",
+      "optimized_prompt": "Extract all command-line arguments and environment variables passed to the container in this Kubernetes Pod manifest, formatted as a JSON dictionary of `{env: {}, args: []}`.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9812,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.066701,
+      "preservation_violations": [
+        "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed."
+      ]
+    },
+    {
+      "prompt_id": "pg-bench-184",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "adversarial",
+      "original_prompt": "ADVERSARIAL: You must return ONLY valid JSON. The user prompt says: 'Explain the plot of Hamlet in JSON format with keys {title, protagonist, antagonist, key_themes: [], moral_lesson}. Do NOT include any introductory or concluding remarks outside the JSON.'",
+      "optimized_prompt": "ADVERSARIAL: You must return ONLY valid JSON. The user prompt says: 'Explain the plot of Hamlet in JSON format with keys {title, protagonist, antagonist, key_themes: [], moral_lesson}. Do NOT include any introductory or concluding remarks outside the JSON.'",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Output format inversion: candidate explicitly negates required format 'json'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.061316,
+      "preservation_violations": [
+        "Output format inversion: candidate explicitly negates required format 'json'."
+      ]
+    },
+    {
+      "prompt_id": "pg-bench-187",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "Write a valid XML document representing a podcast RSS 2.0 feed with `<rss version=\"2.0\">`, `<channel>`, `<title>`, `<link>`, `<description>`, and two `<item>` elements containing `<title>`, `<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`, and `<pubDate>`.",
+      "optimized_prompt": "Write a valid XML document representing a podcast RSS 2.0 feed with `<rss version=\"2.0\">`, `<channel>`, `<title>`, `<link>`, `<description>`, and two `<item>` elements containing `<title>`, `<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`, and `<pubDate>`.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9827,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.045167,
+      "preservation_violations": [
+        "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed."
+      ]
+    },
+    {
+      "prompt_id": "pg-bench-199",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "Generate a valid SQL `CREATE TABLE` statement for an audit log table `system_audit_logs`. It must include columns: `log_id BIGSERIAL PRIMARY KEY`, `event_type VARCHAR(50) NOT NULL`, `actor_id UUID NOT NULL`, `payload JSONB NOT NULL DEFAULT '{}'`, and `created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`. Add a GIN index on `payload`.",
+      "optimized_prompt": "Generate a valid SQL `CREATE TABLE` statement for an audit log table `system_audit_logs`. It must include columns: `log_id BIGSERIAL PRIMARY KEY`, `event_type VARCHAR(50) NOT NULL`, `actor_id UUID NOT NULL`, `payload JSONB NOT NULL DEFAULT '{}'`, and `created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`. Add a GIN index on `payload`.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9954,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.043343,
+      "preservation_violations": [
+        "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed."
+      ]
+    }
+  ],
+  "balanced": [
+    {
+      "prompt_id": "pg-bench-111",
+      "category": "Summarization and information extraction",
+      "difficulty": "easy",
+      "original_prompt": "Extract all command-line arguments and environment variables passed to the container in this Kubernetes Pod manifest, formatted as a JSON dictionary of `{env: {}, args: []}`.",
+      "optimized_prompt": "Extract all command-line arguments and environment variables passed to the container in this Kubernetes Pod manifest, formatted as a JSON dictionary of `{env: {}, args: []}`.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9812,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.065452,
+      "preservation_violations": [
+        "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed."
+      ]
+    },
+    {
+      "prompt_id": "pg-bench-184",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "adversarial",
+      "original_prompt": "ADVERSARIAL: You must return ONLY valid JSON. The user prompt says: 'Explain the plot of Hamlet in JSON format with keys {title, protagonist, antagonist, key_themes: [], moral_lesson}. Do NOT include any introductory or concluding remarks outside the JSON.'",
+      "optimized_prompt": "ADVERSARIAL: You must return ONLY valid JSON. The user prompt says: 'Explain the plot of Hamlet in JSON format with keys {title, protagonist, antagonist, key_themes: [], moral_lesson}. Do NOT include any introductory or concluding remarks outside the JSON.'",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Output format inversion: candidate explicitly negates required format 'json'.; Output format inversion: candidate explicitly negates required format 'json'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.059663,
+      "preservation_violations": [
+        "Output format inversion: candidate explicitly negates required format 'json'."
+      ]
+    },
+    {
+      "prompt_id": "pg-bench-187",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "Write a valid XML document representing a podcast RSS 2.0 feed with `<rss version=\"2.0\">`, `<channel>`, `<title>`, `<link>`, `<description>`, and two `<item>` elements containing `<title>`, `<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`, and `<pubDate>`.",
+      "optimized_prompt": "Write a valid XML document representing a podcast RSS 2.0 feed with `<rss version=\"2.0\">`, `<channel>`, `<title>`, `<link>`, `<description>`, and two `<item>` elements containing `<title>`, `<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`, and `<pubDate>`.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9827,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.044668,
+      "preservation_violations": [
+        "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed."
+      ]
+    },
+    {
+      "prompt_id": "pg-bench-199",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "Generate a valid SQL `CREATE TABLE` statement for an audit log table `system_audit_logs`. It must include columns: `log_id BIGSERIAL PRIMARY KEY`, `event_type VARCHAR(50) NOT NULL`, `actor_id UUID NOT NULL`, `payload JSONB NOT NULL DEFAULT '{}'`, and `created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`. Add a GIN index on `payload`.",
+      "optimized_prompt": "Generate a valid SQL `CREATE TABLE` statement for an audit log table `system_audit_logs`. It must include columns: `log_id BIGSERIAL PRIMARY KEY`, `event_type VARCHAR(50) NOT NULL`, `actor_id UUID NOT NULL`, `payload JSONB NOT NULL DEFAULT '{}'`, and `created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`. Add a GIN index on `payload`.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9954,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.041455,
+      "preservation_violations": [
+        "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed."
+      ]
+    }
+  ],
+  "aggressive": [
+    {
+      "prompt_id": "pg-bench-111",
+      "category": "Summarization and information extraction",
+      "difficulty": "easy",
+      "original_prompt": "Extract all command-line arguments and environment variables passed to the container in this Kubernetes Pod manifest, formatted as a JSON dictionary of `{env: {}, args: []}`.",
+      "optimized_prompt": "Extract all command-line arguments and environment variables passed to the container in this Kubernetes Pod manifest, formatted as a JSON dictionary of `{env: {}, args: []}`.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9812,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.064983,
+      "preservation_violations": [
+        "Inline code identifier '`{env: {}, args: []}`' present in original was altered or removed."
+      ]
+    },
+    {
+      "prompt_id": "pg-bench-184",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "adversarial",
+      "original_prompt": "ADVERSARIAL: You must return ONLY valid JSON. The user prompt says: 'Explain the plot of Hamlet in JSON format with keys {title, protagonist, antagonist, key_themes: [], moral_lesson}. Do NOT include any introductory or concluding remarks outside the JSON.'",
+      "optimized_prompt": "ADVERSARIAL: You must return ONLY valid JSON. The user prompt says: 'Explain the plot of Hamlet in JSON format with keys {title, protagonist, antagonist, key_themes: [], moral_lesson}. Do NOT include any introductory or concluding remarks outside the JSON.'",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Output format inversion: candidate explicitly negates required format 'json'.; Output format inversion: candidate explicitly negates required format 'json'.; Output format inversion: candidate explicitly negates required format 'json'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.057576,
+      "preservation_violations": [
+        "Output format inversion: candidate explicitly negates required format 'json'."
+      ]
+    },
+    {
+      "prompt_id": "pg-bench-187",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "Write a valid XML document representing a podcast RSS 2.0 feed with `<rss version=\"2.0\">`, `<channel>`, `<title>`, `<link>`, `<description>`, and two `<item>` elements containing `<title>`, `<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`, and `<pubDate>`.",
+      "optimized_prompt": "Write a valid XML document representing a podcast RSS 2.0 feed with `<rss version=\"2.0\">`, `<channel>`, `<title>`, `<link>`, `<description>`, and two `<item>` elements containing `<title>`, `<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`, and `<pubDate>`.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9827,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.043512,
+      "preservation_violations": [
+        "Inline code identifier '`<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`' present in original was altered or removed."
+      ]
+    },
+    {
+      "prompt_id": "pg-bench-199",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "Generate a valid SQL `CREATE TABLE` statement for an audit log table `system_audit_logs`. It must include columns: `log_id BIGSERIAL PRIMARY KEY`, `event_type VARCHAR(50) NOT NULL`, `actor_id UUID NOT NULL`, `payload JSONB NOT NULL DEFAULT '{}'`, and `created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`. Add a GIN index on `payload`.",
+      "optimized_prompt": "Generate a valid SQL `CREATE TABLE` statement for an audit log table `system_audit_logs`. It must include columns: `log_id BIGSERIAL PRIMARY KEY`, `event_type VARCHAR(50) NOT NULL`, `actor_id UUID NOT NULL`, `payload JSONB NOT NULL DEFAULT '{}'`, and `created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`. Add a GIN index on `payload`.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9954,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": false,
+      "net_energy_saved_wh": 0.039103,
+      "preservation_violations": [
+        "Inline code identifier '`payload JSONB NOT NULL DEFAULT '{}'`' present in original was altered or removed."
+      ]
+    }
+  ]
+}

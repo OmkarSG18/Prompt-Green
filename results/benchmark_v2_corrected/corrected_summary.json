@@ -1,0 +1,269 @@
+{
+  "conservative": {
+    "mode": "conservative",
+    "total_prompts": 240,
+    "accepted_count": 235,
+    "acceptance_rate_pct": 97.92,
+    "rollback_count": 5,
+    "rollback_rate_pct": 2.08,
+    "safety_rejections": 5,
+    "preservation_violations_count": 4,
+    "zero_token_savings_count": 159,
+    "exact_text_identical_count": 156,
+    "latency_ms": {
+      "mean": 290.98,
+      "median": 272.82,
+      "std": 133.64,
+      "min": 109.31,
+      "max": 1138.44
+    },
+    "token_reduction_tokens": {
+      "mean": 0.7,
+      "median": 0.0,
+      "std": 1.27,
+      "min": 0,
+      "max": 10,
+      "total_tokens_saved": 167
+    },
+    "token_reduction_pct": {
+      "mean": 1.24,
+      "median": 0.0,
+      "std": 2.43,
+      "min": 0.0,
+      "max": 21.74
+    },
+    "semantic_similarity": {
+      "mean": 0.9961,
+      "median": 1.0,
+      "min": 0.9596,
+      "max": 1.0,
+      "std": 0.0076
+    },
+    "scenario_a_verified_input_only": {
+      "accounting_status": "VERIFIED_BASELINE",
+      "epistemic_level": "Directly verifiable from measured token reductions",
+      "single_inference_n1": {
+        "total_gross_energy_saved_wh": 0.046092,
+        "mean_gross_saved_wh": 0.000192,
+        "total_optimizer_overhead_wh": 0.678954,
+        "mean_optimizer_overhead_wh": 0.002829,
+        "total_net_energy_saved_wh": -0.632862,
+        "mean_net_saved_wh": -0.002637,
+        "prompts_with_net_savings_count": 2,
+        "net_carbon_debt_count": 238,
+        "net_carbon_debt_rate_pct": 99.17,
+        "observation": "For N=1 single execution, optimizer CPU overhead (~0.0028 Wh) exceeds single input token savings (~0.0002 Wh)."
+      },
+      "production_amortized_10k": {
+        "total_gross_energy_saved_wh": 460.92,
+        "total_net_energy_saved_wh": 460.241,
+        "net_carbon_debt_count": 159,
+        "total_carbon_abated_gco2": 177.19,
+        "total_water_saved_liters": 0.83,
+        "observation": "Amortized across standard 10,000 monthly inferences, input token reductions yield massive net positive savings exceeding overhead by up to 600x."
+      },
+      "notes": "Calculated strictly from measured input token reductions. Zero downstream output delta assumed."
+    },
+    "scenario_b_modeled_predicted_output": {
+      "accounting_status": "EXPLORATORY_MODELED",
+      "epistemic_level": "Downstream generative estimate modeled via HybridPredictor with zero-diff guard",
+      "zero_diff_guard_applied_count": 156,
+      "total_gross_energy_saved_wh": 4.1604,
+      "mean_gross_saved_wh": 0.017335,
+      "total_optimizer_overhead_wh": 0.678954,
+      "mean_optimizer_overhead_wh": 0.002829,
+      "total_net_energy_saved_wh": 3.4815,
+      "mean_net_saved_wh": 0.014506,
+      "prompts_with_net_savings_count": 84,
+      "prompts_with_net_savings_pct": 35.0,
+      "net_carbon_debt_count": 156,
+      "net_carbon_debt_rate_pct": 65.0,
+      "total_carbon_abated_gco2": 1.3404,
+      "total_water_saved_ml": 6.27,
+      "notes": "Combines measured input savings with HybridPredictor downstream output estimates. Zero-diff fix strictly applied to identical/rollback prompts."
+    },
+    "comparison": {
+      "audit_verified_net_energy_wh": 3.4815,
+      "audit_verified_debt_count": 156,
+      "audit_verification_status": "100% REPRODUCED MATCH TO BENCHMARK_V2_NUMERICAL_AUDIT.md"
+    }
+  },
+  "balanced": {
+    "mode": "balanced",
+    "total_prompts": 240,
+    "accepted_count": 236,
+    "acceptance_rate_pct": 98.33,
+    "rollback_count": 4,
+    "rollback_rate_pct": 1.67,
+    "safety_rejections": 4,
+    "preservation_violations_count": 4,
+    "zero_token_savings_count": 149,
+    "exact_text_identical_count": 146,
+    "latency_ms": {
+      "mean": 332.47,
+      "median": 303.52,
+      "std": 155.66,
+      "min": 175.56,
+      "max": 1421.19
+    },
+    "token_reduction_tokens": {
+      "mean": 0.75,
+      "median": 0.0,
+      "std": 1.28,
+      "min": 0,
+      "max": 10,
+      "total_tokens_saved": 181
+    },
+    "token_reduction_pct": {
+      "mean": 1.35,
+      "median": 0.0,
+      "std": 2.45,
+      "min": 0.0,
+      "max": 21.74
+    },
+    "semantic_similarity": {
+      "mean": 0.9959,
+      "median": 1.0,
+      "min": 0.9596,
+      "max": 1.0,
+      "std": 0.0076
+    },
+    "scenario_a_verified_input_only": {
+      "accounting_status": "VERIFIED_BASELINE",
+      "epistemic_level": "Directly verifiable from measured token reductions",
+      "single_inference_n1": {
+        "total_gross_energy_saved_wh": 0.049956,
+        "mean_gross_saved_wh": 0.000208,
+        "total_optimizer_overhead_wh": 0.775771,
+        "mean_optimizer_overhead_wh": 0.003232,
+        "total_net_energy_saved_wh": -0.725815,
+        "mean_net_saved_wh": -0.003024,
+        "prompts_with_net_savings_count": 1,
+        "net_carbon_debt_count": 239,
+        "net_carbon_debt_rate_pct": 99.58,
+        "observation": "For N=1 single execution, optimizer CPU overhead (~0.0028 Wh) exceeds single input token savings (~0.0002 Wh)."
+      },
+      "production_amortized_10k": {
+        "total_gross_energy_saved_wh": 499.56,
+        "total_net_energy_saved_wh": 498.7842,
+        "net_carbon_debt_count": 149,
+        "total_carbon_abated_gco2": 192.03,
+        "total_water_saved_liters": 0.9,
+        "observation": "Amortized across standard 10,000 monthly inferences, input token reductions yield massive net positive savings exceeding overhead by up to 600x."
+      },
+      "notes": "Calculated strictly from measured input token reductions. Zero downstream output delta assumed."
+    },
+    "scenario_b_modeled_predicted_output": {
+      "accounting_status": "EXPLORATORY_MODELED",
+      "epistemic_level": "Downstream generative estimate modeled via HybridPredictor with zero-diff guard",
+      "zero_diff_guard_applied_count": 146,
+      "total_gross_energy_saved_wh": 4.6489,
+      "mean_gross_saved_wh": 0.01937,
+      "total_optimizer_overhead_wh": 0.775771,
+      "mean_optimizer_overhead_wh": 0.003232,
+      "total_net_energy_saved_wh": 3.8731,
+      "mean_net_saved_wh": 0.016138,
+      "prompts_with_net_savings_count": 94,
+      "prompts_with_net_savings_pct": 39.17,
+      "net_carbon_debt_count": 146,
+      "net_carbon_debt_rate_pct": 60.83,
+      "total_carbon_abated_gco2": 1.4911,
+      "total_water_saved_ml": 6.97,
+      "notes": "Combines measured input savings with HybridPredictor downstream output estimates. Zero-diff fix strictly applied to identical/rollback prompts."
+    },
+    "comparison": {
+      "audit_verified_net_energy_wh": 3.8731,
+      "audit_verified_debt_count": 146,
+      "audit_verification_status": "100% REPRODUCED MATCH TO BENCHMARK_V2_NUMERICAL_AUDIT.md"
+    }
+  },
+  "aggressive": {
+    "mode": "aggressive",
+    "total_prompts": 240,
+    "accepted_count": 236,
+    "acceptance_rate_pct": 98.33,
+    "rollback_count": 4,
+    "rollback_rate_pct": 1.67,
+    "safety_rejections": 4,
+    "preservation_violations_count": 4,
+    "zero_token_savings_count": 13,
+    "exact_text_identical_count": 13,
+    "latency_ms": {
+      "mean": 337.24,
+      "median": 298.38,
+      "std": 152.03,
+      "min": 172.14,
+      "max": 1183.52
+    },
+    "token_reduction_tokens": {
+      "mean": 3.36,
+      "median": 3.0,
+      "std": 2.19,
+      "min": 0,
+      "max": 15,
+      "total_tokens_saved": 807
+    },
+    "token_reduction_pct": {
+      "mean": 6.11,
+      "median": 5.71,
+      "std": 4.07,
+      "min": 0.0,
+      "max": 32.61
+    },
+    "semantic_similarity": {
+      "mean": 0.9893,
+      "median": 0.9931,
+      "min": 0.9051,
+      "max": 1.0,
+      "std": 0.0124
+    },
+    "scenario_a_verified_input_only": {
+      "accounting_status": "VERIFIED_BASELINE",
+      "epistemic_level": "Directly verifiable from measured token reductions",
+      "single_inference_n1": {
+        "total_gross_energy_saved_wh": 0.222732,
+        "mean_gross_saved_wh": 0.000928,
+        "total_optimizer_overhead_wh": 0.786889,
+        "mean_optimizer_overhead_wh": 0.003279,
+        "total_net_energy_saved_wh": -0.564157,
+        "mean_net_saved_wh": -0.002351,
+        "prompts_with_net_savings_count": 3,
+        "net_carbon_debt_count": 237,
+        "net_carbon_debt_rate_pct": 98.75,
+        "observation": "For N=1 single execution, optimizer CPU overhead (~0.0028 Wh) exceeds single input token savings (~0.0002 Wh)."
+      },
+      "production_amortized_10k": {
+        "total_gross_energy_saved_wh": 2227.32,
+        "total_net_energy_saved_wh": 2226.5331,
+        "net_carbon_debt_count": 13,
+        "total_carbon_abated_gco2": 857.22,
+        "total_water_saved_liters": 4.01,
+        "observation": "Amortized across standard 10,000 monthly inferences, input token reductions yield massive net positive savings exceeding overhead by up to 600x."
+      },
+      "notes": "Calculated strictly from measured input token reductions. Zero downstream output delta assumed."
+    },
+    "scenario_b_modeled_predicted_output": {
+      "accounting_status": "EXPLORATORY_MODELED",
+      "epistemic_level": "Downstream generative estimate modeled via HybridPredictor with zero-diff guard",
+      "zero_diff_guard_applied_count": 13,
+      "total_gross_energy_saved_wh": 11.4071,
+      "mean_gross_saved_wh": 0.047529,
+      "total_optimizer_overhead_wh": 0.786889,
+      "mean_optimizer_overhead_wh": 0.003279,
+      "total_net_energy_saved_wh": 10.6202,
+      "mean_net_saved_wh": 0.044251,
+      "prompts_with_net_savings_count": 227,
+      "prompts_with_net_savings_pct": 94.58,
+      "net_carbon_debt_count": 13,
+      "net_carbon_debt_rate_pct": 5.42,
+      "total_carbon_abated_gco2": 4.0888,
+      "total_water_saved_ml": 19.12,
+      "notes": "Combines measured input savings with HybridPredictor downstream output estimates. Zero-diff fix strictly applied to identical/rollback prompts."
+    },
+    "comparison": {
+      "audit_verified_net_energy_wh": 10.6202,
+      "audit_verified_debt_count": 13,
+      "audit_verification_status": "100% REPRODUCED MATCH TO BENCHMARK_V2_NUMERICAL_AUDIT.md"
+    }
+  }
+}

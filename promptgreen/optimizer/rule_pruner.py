@@ -1,5 +1,4 @@
 import re
-import ast
 import json
 import unicodedata
 from dataclasses import dataclass, field
@@ -47,7 +46,7 @@ class RuleBasedPruner:
     Responsibility:
     1. Structural Identification & Immutable Masking:
        - Markdown fenced code blocks (Python, JavaScript, etc.)
-       - Python AST code snippets
+       - Code snippets and syntax patterns
        - JSON objects, arrays, and schemas
        - YAML configuration blocks
        - XML and HTML elements
@@ -70,7 +69,8 @@ class RuleBasedPruner:
 
     # Conversational opening greetings & filler prefixes (anchored to sentence / clause beginnings)
     POLITE_PREFIX_PATTERNS = [
-        (r"(?i)(?:^|(?<=[.!?\n]))\s*(?:hello|hi|hey|good\s+(?:morning|afternoon|evening)|greetings)\s*[,!.-]*\s*(?:dear\s+ai|ai\s+assistant|assistant|there)?\s*[,!.-]*\s*", "greeting"),
+        (r"(?i)(?:^|(?<=[.!?\n]))\s*(?:hello|hi|hey)\b\s*[,!.-]*\s*(?:dear\s+ai|ai\s+assistant|assistant|there|everyone|all|team)?\s*[,!.-]*\s*", "greeting"),
+        (r"(?i)(?:^|(?<=[.!?\n]))\s*(?:good\s+(?:morning|afternoon|evening)|greetings)\b\s*(?:[,!.-]+|\b(?:dear\s+ai|ai\s+assistant|assistant|there|everyone|all|team)\b\s*[,!.-]*|\s*(?=(?:please|can|could|would)\b)|\s*(?:\n+|$))\s*", "greeting_formal"),
         (r"(?i)(?:^|(?<=[.!?\n]))\s*(?:could|can|would)\s+you\s+(?:please\s+)?(?:kindly\s+)?(?:be\s+so\s+kind\s+as\s+to\s+)?", "polite_modal_request"),
         (r"(?i)(?:^|(?<=[.!?\n]))\s*i\s+(?:would\s+(?:really\s+)?appreciate\s+it\s+if\s+you\s+(?:could|can|would)|am\s+hoping\s+you\s+could|was\s+wondering\s+if\s+you\s+could)\s*", "polite_appreciation_start"),
         (r"(?i)(?:^|(?<=[.!?\n]))\s*if\s+(?:it\s+is\s+not\s+too\s+much\s+trouble|you\s+don't\s+mind)\s*[,]?\s*", "trouble_filler"),
@@ -86,8 +86,8 @@ class RuleBasedPruner:
 
     # Conversational polite sign-offs & closures
     POLITE_CLOSURE_PATTERNS = [
-        (r"(?i)\bthank\s+you(?:\s+(?:very\s+much|so\s+much|a\s+lot))?(?:\s+in\s+advance)?\s*[,!.-]*\s*$", "thank_you"),
-        (r"(?i)\bthanks(?:\s+(?:a\s+lot|again|very\s+much))?(?:\s+in\s+advance)?\s*[,!.-]*\s*$", "thanks"),
+        (r"(?i)\bthank\s+you(?:\s+(?:very\s+much|so\s+much|a\s+lot))?(?:\s+in\s+advance)?(?:\s+for\s+(?:all\s+)?(?:your\s+)?(?:kind\s+)?(?:help|assistance|time|support|input|response|answer))?\s*[,!.-]*\s*$", "thank_you"),
+        (r"(?i)\bthanks(?:\s+(?:a\s+lot|again|very\s+much|in\s+advance))?(?:\s+for\s+(?:all\s+)?(?:your\s+)?(?:kind\s+)?(?:help|assistance|time|support|input|response|answer))?\s*[,!.-]*\s*$", "thanks"),
         (r"(?i)\bhope\s+this\s+helps\s*[,!.-]*\s*$", "hope_helps"),
         (r"(?i)\bhave\s+a\s+(?:wonderful|great|nice)\s+day\s*[,!.-]*\s*$", "have_a_day"),
         (r"(?i)\blooking\s+forward\s+to\s+your\s+(?:reply|response|answer)\s*[,!.-]*\s*$", "looking_forward"),
@@ -437,7 +437,8 @@ class RuleBasedPruner:
         # 3. camelCase with lower followed by upper (e.g. parseDiff, getUserProfile)
         # 4. Method / property calls (e.g. model.predict, config.timeout)
         pattern = re.compile(
-            r"(?:\b[a-zA-Z_]\w*\.[a-zA-Z_]\w*(?:\(\))?\b"
+            r"(?:\b[a-zA-Z_]\w*\.[a-zA-Z_]\w*\(\)"
+            r"|\b[a-zA-Z_]\w*\.[a-zA-Z_]\w*\b"
             r"|\b[a-z]+[A-Z][a-zA-Z0-9]*\b"
             r"|\b[A-Z][A-Z0-9]*_[A-Z0-9_]+\b"
             r"|\b[a-z0-9]+_[a-z0-9_]+\b)"
@@ -615,6 +616,15 @@ class RuleBasedPruner:
         # 5. Fix sentence casing if an opening was removed (e.g. "explain how..." -> "Explain how...")
         if reconstructed and reconstructed[0].islower():
             reconstructed = reconstructed[0].upper() + reconstructed[1:]
+
+        # 6. Normalize punctuation if polite modal question prefix was pruned from an imperative statement
+        # Normalize command request verb 'give' (e.g. "give me ...") where interrogative '?' is dangling
+        imperatives = "give"
+        reconstructed = re.sub(
+            rf"(?i)(^|[.!?\n]\s*(?:(?:dear\s+)?(?:ai|assistant|chatbot)\s*[,!.-]*\s*)?)\b({imperatives})\b([^?!\n]*?)\?",
+            r"\1\2\3.",
+            reconstructed,
+        )
 
         return reconstructed, removed_phrases
 

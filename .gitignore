@@ -71,6 +71,17 @@ venv.bak/
 *.sqlite3
 prompt_ledger.db
 
+# Runtime logs and process locks
+logs/
+*.log
+*.pid
+
+# Temporary test artifacts
+tmp_test_metrics/
+
+# Disposable scratch and development workspace
+scratch/
+
 # Spyder project settings
 .spyderproject
 .spyproject

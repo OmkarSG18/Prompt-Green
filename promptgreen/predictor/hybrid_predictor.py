@@ -96,6 +96,20 @@ class HybridPredictor:
 
     def predict(self, old_prompt: str, new_prompt: str) -> PredictionResult:
         """Generates hybrid output token delta prediction combining Rule + ML layers."""
+        # Physical consistency: When prompts are identical, output token delta is strictly 0.0
+        if old_prompt.strip() == new_prompt.strip():
+            rule_old_out = self.predict_rule_based(old_prompt)
+            return PredictionResult(
+                predicted_old_output_tokens=round(rule_old_out, 1),
+                predicted_new_output_tokens=round(rule_old_out, 1),
+                predicted_output_token_delta=0.0,
+                rule_output_delta=0.0,
+                ml_output_delta=0.0,
+                blend_weight=self.blend_weight,
+                inflation_percentage=0.0,
+                direction="UNCHANGED"
+            )
+
         features = self.analyzer.analyze_prompts(old_prompt, new_prompt)
 
         # Layer 1: Rule-Based Estimation

@@ -1,0 +1,880 @@
+{
+  "metadata": {
+    "timestamp": "2026-11-24T01:41:43Z",
+    "model_name": "microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank",
+    "device": "cpu",
+    "eval_corpus_size": 10
+  },
+  "records": [
+    {
+      "id": "PROMPT_01_INSTRUCTION_SIMPLE",
+      "category": "instruction",
+      "mode": "conservative",
+      "original_tokens": 34,
+      "deterministic": {
+        "compressed_tokens": 32,
+        "reduction_pct": 5.88,
+        "latency_ms": 56.06,
+        "preserved": true,
+        "peak_ram_kb": 179.54
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 25,
+        "reduction_pct": 26.47,
+        "latency_ms": 588.75,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 39.87
+      },
+      "full_pipeline": {
+        "final_tokens": 22,
+        "reduction_pct": 35.29,
+        "latency_ms": 1180.91,
+        "semantic_score": 0.9259,
+        "rollback_occurred": false,
+        "rollback_stage": "none"
+      }
+    },
+    {
+      "id": "PROMPT_01_INSTRUCTION_SIMPLE",
+      "category": "instruction",
+      "mode": "balanced",
+      "original_tokens": 34,
+      "deterministic": {
+        "compressed_tokens": 32,
+        "reduction_pct": 5.88,
+        "latency_ms": 78.86,
+        "preserved": true,
+        "peak_ram_kb": 157.25
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 18,
+        "reduction_pct": 47.06,
+        "latency_ms": 841.73,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 23.16
+      },
+      "full_pipeline": {
+        "final_tokens": 34,
+        "reduction_pct": 0.0,
+        "latency_ms": 1831.1,
+        "semantic_score": 0.9259,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_01_INSTRUCTION_SIMPLE",
+      "category": "instruction",
+      "mode": "aggressive",
+      "original_tokens": 34,
+      "deterministic": {
+        "compressed_tokens": 30,
+        "reduction_pct": 11.76,
+        "latency_ms": 75.75,
+        "preserved": true,
+        "peak_ram_kb": 157.25
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 13,
+        "reduction_pct": 61.76,
+        "latency_ms": 672.13,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 22.89
+      },
+      "full_pipeline": {
+        "final_tokens": 34,
+        "reduction_pct": 0.0,
+        "latency_ms": 1696.89,
+        "semantic_score": 0.9259,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_02_INSTRUCTION_DETAILED",
+      "category": "instruction",
+      "mode": "conservative",
+      "original_tokens": 60,
+      "deterministic": {
+        "compressed_tokens": 55,
+        "reduction_pct": 8.33,
+        "latency_ms": 86.46,
+        "preserved": true,
+        "peak_ram_kb": 157.25
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 44,
+        "reduction_pct": 26.67,
+        "latency_ms": 664.18,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 28.88
+      },
+      "full_pipeline": {
+        "final_tokens": 43,
+        "reduction_pct": 28.33,
+        "latency_ms": 1212.9,
+        "semantic_score": 0.9341,
+        "rollback_occurred": false,
+        "rollback_stage": "none"
+      }
+    },
+    {
+      "id": "PROMPT_02_INSTRUCTION_DETAILED",
+      "category": "instruction",
+      "mode": "balanced",
+      "original_tokens": 60,
+      "deterministic": {
+        "compressed_tokens": 55,
+        "reduction_pct": 8.33,
+        "latency_ms": 76.74,
+        "preserved": true,
+        "peak_ram_kb": 157.25
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 31,
+        "reduction_pct": 48.33,
+        "latency_ms": 637.98,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 28.92
+      },
+      "full_pipeline": {
+        "final_tokens": 60,
+        "reduction_pct": 0.0,
+        "latency_ms": 1830.33,
+        "semantic_score": 0.9341,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_02_INSTRUCTION_DETAILED",
+      "category": "instruction",
+      "mode": "aggressive",
+      "original_tokens": 60,
+      "deterministic": {
+        "compressed_tokens": 53,
+        "reduction_pct": 11.67,
+        "latency_ms": 15.74,
+        "preserved": true,
+        "peak_ram_kb": 22.37
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 21,
+        "reduction_pct": 65.0,
+        "latency_ms": 670.08,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 28.78
+      },
+      "full_pipeline": {
+        "final_tokens": 60,
+        "reduction_pct": 0.0,
+        "latency_ms": 1721.66,
+        "semantic_score": 0.9341,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_03_CODE_PYTHON",
+      "category": "code",
+      "mode": "conservative",
+      "original_tokens": 87,
+      "deterministic": {
+        "compressed_tokens": 87,
+        "reduction_pct": 0.0,
+        "latency_ms": 21.33,
+        "preserved": true,
+        "peak_ram_kb": 15.84
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 76,
+        "reduction_pct": 12.64,
+        "latency_ms": 703.51,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 24.75
+      },
+      "full_pipeline": {
+        "final_tokens": 76,
+        "reduction_pct": 12.64,
+        "latency_ms": 1606.85,
+        "semantic_score": 0.9654,
+        "rollback_occurred": false,
+        "rollback_stage": "none"
+      }
+    },
+    {
+      "id": "PROMPT_03_CODE_PYTHON",
+      "category": "code",
+      "mode": "balanced",
+      "original_tokens": 87,
+      "deterministic": {
+        "compressed_tokens": 87,
+        "reduction_pct": 0.0,
+        "latency_ms": 77.02,
+        "preserved": true,
+        "peak_ram_kb": 159.13
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 67,
+        "reduction_pct": 22.99,
+        "latency_ms": 566.55,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 24.77
+      },
+      "full_pipeline": {
+        "final_tokens": 66,
+        "reduction_pct": 24.14,
+        "latency_ms": 1708.7,
+        "semantic_score": 0.9528,
+        "rollback_occurred": false,
+        "rollback_stage": "none"
+      }
+    },
+    {
+      "id": "PROMPT_03_CODE_PYTHON",
+      "category": "code",
+      "mode": "aggressive",
+      "original_tokens": 87,
+      "deterministic": {
+        "compressed_tokens": 85,
+        "reduction_pct": 2.3,
+        "latency_ms": 73.96,
+        "preserved": true,
+        "peak_ram_kb": 168.11
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 60,
+        "reduction_pct": 31.03,
+        "latency_ms": 606.57,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 24.66
+      },
+      "full_pipeline": {
+        "final_tokens": 76,
+        "reduction_pct": 12.64,
+        "latency_ms": 2557.46,
+        "semantic_score": 0.9654,
+        "rollback_occurred": false,
+        "rollback_stage": "none"
+      }
+    },
+    {
+      "id": "PROMPT_04_JSON_API",
+      "category": "structured_data",
+      "mode": "conservative",
+      "original_tokens": 86,
+      "deterministic": {
+        "compressed_tokens": 86,
+        "reduction_pct": 0.0,
+        "latency_ms": 76.15,
+        "preserved": true,
+        "peak_ram_kb": 158.84
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 76,
+        "reduction_pct": 11.63,
+        "latency_ms": 684.62,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 21.91
+      },
+      "full_pipeline": {
+        "final_tokens": 86,
+        "reduction_pct": 0.0,
+        "latency_ms": 2296.09,
+        "semantic_score": 0.9677,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_04_JSON_API",
+      "category": "structured_data",
+      "mode": "balanced",
+      "original_tokens": 86,
+      "deterministic": {
+        "compressed_tokens": 86,
+        "reduction_pct": 0.0,
+        "latency_ms": 75.21,
+        "preserved": true,
+        "peak_ram_kb": 158.78
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 68,
+        "reduction_pct": 20.93,
+        "latency_ms": 622.86,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 21.92
+      },
+      "full_pipeline": {
+        "final_tokens": 86,
+        "reduction_pct": 0.0,
+        "latency_ms": 2284.28,
+        "semantic_score": 0.9677,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_04_JSON_API",
+      "category": "structured_data",
+      "mode": "aggressive",
+      "original_tokens": 86,
+      "deterministic": {
+        "compressed_tokens": 85,
+        "reduction_pct": 1.16,
+        "latency_ms": 72.88,
+        "preserved": true,
+        "peak_ram_kb": 158.78
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 64,
+        "reduction_pct": 25.58,
+        "latency_ms": 675.1,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 21.89
+      },
+      "full_pipeline": {
+        "final_tokens": 86,
+        "reduction_pct": 0.0,
+        "latency_ms": 2202.49,
+        "semantic_score": 0.9677,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_05_NEGATIVE_CONSTRAINT",
+      "category": "constraints",
+      "mode": "conservative",
+      "original_tokens": 37,
+      "deterministic": {
+        "compressed_tokens": 37,
+        "reduction_pct": 0.0,
+        "latency_ms": 89.89,
+        "preserved": true,
+        "peak_ram_kb": 158.73
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 25,
+        "reduction_pct": 32.43,
+        "latency_ms": 710.15,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 23.52
+      },
+      "full_pipeline": {
+        "final_tokens": 37,
+        "reduction_pct": 0.0,
+        "latency_ms": 1791.99,
+        "semantic_score": 0.8865,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_05_NEGATIVE_CONSTRAINT",
+      "category": "constraints",
+      "mode": "balanced",
+      "original_tokens": 37,
+      "deterministic": {
+        "compressed_tokens": 37,
+        "reduction_pct": 0.0,
+        "latency_ms": 75.77,
+        "preserved": true,
+        "peak_ram_kb": 158.73
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 16,
+        "reduction_pct": 56.76,
+        "latency_ms": 657.42,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 23.2
+      },
+      "full_pipeline": {
+        "final_tokens": 37,
+        "reduction_pct": 0.0,
+        "latency_ms": 1764.5,
+        "semantic_score": 0.8865,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_05_NEGATIVE_CONSTRAINT",
+      "category": "constraints",
+      "mode": "aggressive",
+      "original_tokens": 37,
+      "deterministic": {
+        "compressed_tokens": 35,
+        "reduction_pct": 5.41,
+        "latency_ms": 77.74,
+        "preserved": true,
+        "peak_ram_kb": 158.73
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 16,
+        "reduction_pct": 56.76,
+        "latency_ms": 649.5,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 23.46
+      },
+      "full_pipeline": {
+        "final_tokens": 37,
+        "reduction_pct": 0.0,
+        "latency_ms": 1768.69,
+        "semantic_score": 0.8865,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_06_URL_AND_IDENTIFIERS",
+      "category": "technical",
+      "mode": "conservative",
+      "original_tokens": 47,
+      "deterministic": {
+        "compressed_tokens": 47,
+        "reduction_pct": 0.0,
+        "latency_ms": 88.94,
+        "preserved": true,
+        "peak_ram_kb": 159.06
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 36,
+        "reduction_pct": 23.4,
+        "latency_ms": 615.18,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 25.1
+      },
+      "full_pipeline": {
+        "final_tokens": 47,
+        "reduction_pct": 0.0,
+        "latency_ms": 1832.02,
+        "semantic_score": 0.9733,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_06_URL_AND_IDENTIFIERS",
+      "category": "technical",
+      "mode": "balanced",
+      "original_tokens": 47,
+      "deterministic": {
+        "compressed_tokens": 47,
+        "reduction_pct": 0.0,
+        "latency_ms": 81.52,
+        "preserved": true,
+        "peak_ram_kb": 159.06
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 26,
+        "reduction_pct": 44.68,
+        "latency_ms": 602.33,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 25.09
+      },
+      "full_pipeline": {
+        "final_tokens": 47,
+        "reduction_pct": 0.0,
+        "latency_ms": 1937.22,
+        "semantic_score": 0.9733,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_06_URL_AND_IDENTIFIERS",
+      "category": "technical",
+      "mode": "aggressive",
+      "original_tokens": 47,
+      "deterministic": {
+        "compressed_tokens": 45,
+        "reduction_pct": 4.26,
+        "latency_ms": 72.84,
+        "preserved": true,
+        "peak_ram_kb": 159.06
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 19,
+        "reduction_pct": 59.57,
+        "latency_ms": 598.35,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 25.0
+      },
+      "full_pipeline": {
+        "final_tokens": 47,
+        "reduction_pct": 0.0,
+        "latency_ms": 1767.04,
+        "semantic_score": 0.9733,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_07_LONG_DOCUMENT",
+      "category": "document",
+      "mode": "conservative",
+      "original_tokens": 147,
+      "deterministic": {
+        "compressed_tokens": 145,
+        "reduction_pct": 1.36,
+        "latency_ms": 94.61,
+        "preserved": true,
+        "peak_ram_kb": 157.25
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 113,
+        "reduction_pct": 23.13,
+        "latency_ms": 619.21,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 65.62
+      },
+      "full_pipeline": {
+        "final_tokens": 147,
+        "reduction_pct": 0.0,
+        "latency_ms": 2242.57,
+        "semantic_score": 0.9437,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_07_LONG_DOCUMENT",
+      "category": "document",
+      "mode": "balanced",
+      "original_tokens": 147,
+      "deterministic": {
+        "compressed_tokens": 145,
+        "reduction_pct": 1.36,
+        "latency_ms": 28.02,
+        "preserved": true,
+        "peak_ram_kb": 34.58
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 78,
+        "reduction_pct": 46.94,
+        "latency_ms": 683.37,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 65.09
+      },
+      "full_pipeline": {
+        "final_tokens": 147,
+        "reduction_pct": 0.0,
+        "latency_ms": 2185.63,
+        "semantic_score": 0.9437,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_07_LONG_DOCUMENT",
+      "category": "document",
+      "mode": "aggressive",
+      "original_tokens": 147,
+      "deterministic": {
+        "compressed_tokens": 139,
+        "reduction_pct": 5.44,
+        "latency_ms": 24.21,
+        "preserved": true,
+        "peak_ram_kb": 34.4
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 52,
+        "reduction_pct": 64.63,
+        "latency_ms": 649.2,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 64.81
+      },
+      "full_pipeline": {
+        "final_tokens": 147,
+        "reduction_pct": 0.0,
+        "latency_ms": 2036.53,
+        "semantic_score": 0.9437,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_08_DISCOURSE_PADDING",
+      "category": "padding",
+      "mode": "conservative",
+      "original_tokens": 49,
+      "deterministic": {
+        "compressed_tokens": 28,
+        "reduction_pct": 42.86,
+        "latency_ms": 14.26,
+        "preserved": true,
+        "peak_ram_kb": 17.91
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 37,
+        "reduction_pct": 24.49,
+        "latency_ms": 693.79,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 25.79
+      },
+      "full_pipeline": {
+        "final_tokens": 37,
+        "reduction_pct": 24.49,
+        "latency_ms": 971.87,
+        "semantic_score": 0.9807,
+        "rollback_occurred": false,
+        "rollback_stage": "none"
+      }
+    },
+    {
+      "id": "PROMPT_08_DISCOURSE_PADDING",
+      "category": "padding",
+      "mode": "balanced",
+      "original_tokens": 49,
+      "deterministic": {
+        "compressed_tokens": 28,
+        "reduction_pct": 42.86,
+        "latency_ms": 74.49,
+        "preserved": true,
+        "peak_ram_kb": 157.25
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 24,
+        "reduction_pct": 51.02,
+        "latency_ms": 623.43,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 25.6
+      },
+      "full_pipeline": {
+        "final_tokens": 37,
+        "reduction_pct": 24.49,
+        "latency_ms": 1943.17,
+        "semantic_score": 0.9807,
+        "rollback_occurred": false,
+        "rollback_stage": "none"
+      }
+    },
+    {
+      "id": "PROMPT_08_DISCOURSE_PADDING",
+      "category": "padding",
+      "mode": "aggressive",
+      "original_tokens": 49,
+      "deterministic": {
+        "compressed_tokens": 27,
+        "reduction_pct": 44.9,
+        "latency_ms": 18.15,
+        "preserved": true,
+        "peak_ram_kb": 16.52
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 17,
+        "reduction_pct": 65.31,
+        "latency_ms": 621.67,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 25.93
+      },
+      "full_pipeline": {
+        "final_tokens": 37,
+        "reduction_pct": 24.49,
+        "latency_ms": 1860.34,
+        "semantic_score": 0.9807,
+        "rollback_occurred": false,
+        "rollback_stage": "none"
+      }
+    },
+    {
+      "id": "PROMPT_09_FORMAT_REQUIREMENT",
+      "category": "formatting",
+      "mode": "conservative",
+      "original_tokens": 39,
+      "deterministic": {
+        "compressed_tokens": 39,
+        "reduction_pct": 0.0,
+        "latency_ms": 16.33,
+        "preserved": true,
+        "peak_ram_kb": 18.75
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 26,
+        "reduction_pct": 33.33,
+        "latency_ms": 682.37,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 25.27
+      },
+      "full_pipeline": {
+        "final_tokens": 39,
+        "reduction_pct": 0.0,
+        "latency_ms": 1760.49,
+        "semantic_score": 0.8929,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_09_FORMAT_REQUIREMENT",
+      "category": "formatting",
+      "mode": "balanced",
+      "original_tokens": 39,
+      "deterministic": {
+        "compressed_tokens": 39,
+        "reduction_pct": 0.0,
+        "latency_ms": 75.58,
+        "preserved": true,
+        "peak_ram_kb": 159.97
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 17,
+        "reduction_pct": 56.41,
+        "latency_ms": 611.72,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 25.15
+      },
+      "full_pipeline": {
+        "final_tokens": 39,
+        "reduction_pct": 0.0,
+        "latency_ms": 1818.02,
+        "semantic_score": 0.8929,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_09_FORMAT_REQUIREMENT",
+      "category": "formatting",
+      "mode": "aggressive",
+      "original_tokens": 39,
+      "deterministic": {
+        "compressed_tokens": 37,
+        "reduction_pct": 5.13,
+        "latency_ms": 82.79,
+        "preserved": true,
+        "peak_ram_kb": 159.97
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 9,
+        "reduction_pct": 76.92,
+        "latency_ms": 652.34,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 25.27
+      },
+      "full_pipeline": {
+        "final_tokens": 39,
+        "reduction_pct": 0.0,
+        "latency_ms": 1845.67,
+        "semantic_score": 0.8929,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_10_NUMERICAL_CONSTRAINTS",
+      "category": "constraints",
+      "mode": "conservative",
+      "original_tokens": 49,
+      "deterministic": {
+        "compressed_tokens": 49,
+        "reduction_pct": 0.0,
+        "latency_ms": 84.18,
+        "preserved": true,
+        "peak_ram_kb": 158.81
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 33,
+        "reduction_pct": 32.65,
+        "latency_ms": 674.12,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 26.95
+      },
+      "full_pipeline": {
+        "final_tokens": 33,
+        "reduction_pct": 32.65,
+        "latency_ms": 1083.02,
+        "semantic_score": 0.943,
+        "rollback_occurred": false,
+        "rollback_stage": "none"
+      }
+    },
+    {
+      "id": "PROMPT_10_NUMERICAL_CONSTRAINTS",
+      "category": "constraints",
+      "mode": "balanced",
+      "original_tokens": 49,
+      "deterministic": {
+        "compressed_tokens": 49,
+        "reduction_pct": 0.0,
+        "latency_ms": 92.98,
+        "preserved": true,
+        "peak_ram_kb": 158.8
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 19,
+        "reduction_pct": 61.22,
+        "latency_ms": 747.98,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 26.89
+      },
+      "full_pipeline": {
+        "final_tokens": 49,
+        "reduction_pct": 0.0,
+        "latency_ms": 2075.48,
+        "semantic_score": 0.943,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    },
+    {
+      "id": "PROMPT_10_NUMERICAL_CONSTRAINTS",
+      "category": "constraints",
+      "mode": "aggressive",
+      "original_tokens": 49,
+      "deterministic": {
+        "compressed_tokens": 45,
+        "reduction_pct": 8.16,
+        "latency_ms": 103.41,
+        "preserved": true,
+        "peak_ram_kb": 158.8
+      },
+      "neural_llmlingua2": {
+        "compressed_tokens": 15,
+        "reduction_pct": 69.39,
+        "latency_ms": 754.65,
+        "preserved": true,
+        "method": "llmlingua-2",
+        "peak_ram_kb": 27.07
+      },
+      "full_pipeline": {
+        "final_tokens": 49,
+        "reduction_pct": 0.0,
+        "latency_ms": 1817.86,
+        "semantic_score": 0.943,
+        "rollback_occurred": true,
+        "rollback_stage": "original"
+      }
+    }
+  ]
+}

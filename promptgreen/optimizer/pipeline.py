@@ -39,6 +39,7 @@ from promptgreen.optimizer.compressor import (
     CompressionResult,
     CompressorConfig,
     LLMLinguaCompressor,
+    RETENTION_MODES,
 )
 from promptgreen.optimizer.output_shaper import (
     OutputDirectiveShaper,
@@ -169,6 +170,20 @@ class PipelineResult:
     stage_executions: Dict[str, StageExecution] = field(default_factory=dict)
     warnings: List[str] = field(default_factory=list)
     failure_reasons: List[str] = field(default_factory=list)
+
+    # Academic semantic compliance & fallback tracking (Chapter 6, Section 6.3.2)
+    fallback_type: str = "none"  # "none", "stage_2_compressed", "stage_1", "original"
+    active_retention_rate: Optional[float] = None  # Compressor target retention rate (e.g. 0.40, 0.60, 0.80)
+    compressor_retention_rate: Optional[float] = None  # Explicit compressor retention rate
+    final_token_retention_ratio: Optional[float] = None  # Final prompt tokens / original tokens
+    accepted_compressor_retention_rate: Optional[float] = None  # Rate of accepted compressor candidate (None if fallback/rollback/bypassed)
+    last_compressor_attempt_retention_rate: Optional[float] = None  # Target rate of last compressor attempt (e.g. 0.40, 0.60, 0.80)
+    core_similarity: Optional[float] = None
+
+    @property
+    def actual_retention_rate(self) -> Optional[float]:
+        """Backward-compatible alias for final_token_retention_ratio."""
+        return self.final_token_retention_ratio
 
 
 # Alias for backward compatibility with v2 architecture plan
@@ -310,6 +325,13 @@ class PromptGreenPipeline:
                 stage_executions={},
                 warnings=[],
                 failure_reasons=[],
+                fallback_type="none",
+                active_retention_rate=None,
+                compressor_retention_rate=None,
+                final_token_retention_ratio=1.0,
+                accepted_compressor_retention_rate=None,
+                last_compressor_attempt_retention_rate=None,
+                core_similarity=None,
             )
 
         # Baseline original prompt token count
@@ -408,6 +430,7 @@ class PromptGreenPipeline:
                     warnings=comp_res.warnings,
                     details={
                         "target_retention_rate": comp_res.retention_rate,
+                        "compressor_retention_rate": comp_res.retention_rate,
                         "fallback_used": comp_res.fallback_used,
                         "model_available": comp_res.model_available,
                     },
@@ -521,6 +544,11 @@ class PromptGreenPipeline:
         chunk_sims: List[float] = []
         chunk_cov: List[float] = []
         preservation_violations: List[str] = []
+        fallback_type: str = "none"
+        active_retention_rate: Optional[float] = None
+        last_comp_rate: Optional[float] = None
+        accepted_comp_rate: Optional[float] = None
+        core_similarity: Optional[float] = None
 
         if do_s4:
             t0 = time.perf_counter()
@@ -535,16 +563,24 @@ class PromptGreenPipeline:
                 if do_s3:
                     intermediate_stages["stage_3"] = s3_output
 
-            # Adaptive relaxation callback: regenerates from Stage 2 with relaxed retention mode
+            # Adaptive relaxation callback: regenerates from Stage 2 with academic retention sequence
+            # Section 6.3.2: tau = 0.40 -> 0.60 -> 0.80
             def pipeline_retry_callback(relaxed_mode: str, iteration: int) -> str:
                 nonlocal current_mode, retry_count
                 current_mode = relaxed_mode
                 retry_count = iteration
 
-                # Re-run Stage 2 with relaxed mode
+                # Map academic retention sequence tau: 0.40 -> 0.60 -> 0.80
+                target_tau = RETENTION_MODES.get(relaxed_mode, 0.80)
+
+                # Re-run Stage 2 with relaxed mode and explicit target retention rate
                 t_retry_start = time.perf_counter()
                 if do_s2:
-                    retry_comp = self.compressor.compress(s1_output, mode=relaxed_mode)
+                    retry_comp = self.compressor.compress(
+                        s1_output,
+                        mode=relaxed_mode,
+                        target_retention_rate=target_tau,
+                    )
                     relaxed_s2 = retry_comp.compressed_prompt
                 else:
                     relaxed_s2 = s1_output
@@ -561,6 +597,7 @@ class PromptGreenPipeline:
                 retry_history.append({
                     "iteration": iteration,
                     "relaxed_mode": relaxed_mode,
+                    "retention_rate": target_tau,
                     "candidate_tokens": cand_tok,
                     "latency_ms": round(retry_lat, 2),
                 })
@@ -588,6 +625,17 @@ class PromptGreenPipeline:
                 failure_reasons.extend(guard_res.failure_reasons)
                 current_mode = guard_res.final_mode or current_mode
                 retry_count = guard_res.retry_count
+                fallback_type = getattr(guard_res, "fallback_type", "none")
+                core_similarity = getattr(guard_res, "core_similarity", None)
+                active_retention_rate = getattr(guard_res, "active_retention_rate", None)
+                if do_s2:
+                    last_comp_rate = getattr(guard_res, "last_compressor_attempt_retention_rate", active_retention_rate)
+                    accepted_comp_rate = getattr(guard_res, "accepted_compressor_retention_rate", None)
+                    if rollback_stage in ("stage_1", "original") or not accepted:
+                        accepted_comp_rate = None
+                else:
+                    last_comp_rate = None
+                    accepted_comp_rate = None
 
                 if not accepted:
                     rollback_reason = "; ".join(guard_res.failure_reasons) or "Semantic similarity or preservation check failed."
@@ -610,6 +658,13 @@ class PromptGreenPipeline:
                         "preservation_violations": preservation_violations,
                         "chunk_similarities": chunk_sims,
                         "chunk_coverage": chunk_cov,
+                        "fallback_type": fallback_type,
+                        "core_similarity": core_similarity,
+                        "active_retention_rate": last_comp_rate,
+                        "compressor_retention_rate": accepted_comp_rate,
+                        "accepted_compressor_retention_rate": accepted_comp_rate,
+                        "last_compressor_attempt_retention_rate": last_comp_rate,
+                        "final_token_retention_ratio": round(self._count_tokens(final_prompt)[0] / orig_tokens, 4) if orig_tokens > 0 else 1.0,
                     },
                 )
             except Exception as s4_exc:
@@ -619,6 +674,7 @@ class PromptGreenPipeline:
                 accepted = False
                 rollback_occurred = True
                 rollback_stage = "original"
+                fallback_type = "original"
                 err_msg = f"Stage 4 execution error ({type(s4_exc).__name__}: {s4_exc}); safely rolling back to original prompt."
                 rollback_reason = err_msg
                 failure_reasons.append(err_msg)
@@ -664,6 +720,32 @@ class PromptGreenPipeline:
         net_reduction = orig_tokens - final_tokens
         net_reduction_pct = (net_reduction / orig_tokens * 100.0) if orig_tokens > 0 else 0.0
 
+        # =====================================================================
+        # OPTIMIZATION USEFULNESS GUARD: Prevent Token Expansion
+        # =====================================================================
+        # A candidate that expands token count fails the primary optimization goal.
+        # Safely roll back to original prompt and record the accurate rollback reason.
+        if accepted and net_reduction < 0:
+            logger.warning(
+                f"Optimization candidate increased token count from {orig_tokens} to {final_tokens} "
+                f"(delta: {net_reduction}); rolling back to original prompt."
+            )
+            candidate_expanded_tokens = final_tokens
+            final_prompt = prompt
+            final_tokens = orig_tokens
+            net_reduction = 0
+            net_reduction_pct = 0.0
+            accepted = False
+            rollback_occurred = True
+            rollback_stage = "original"
+            err_msg = (
+                f"Optimization candidate increased token count from {orig_tokens} to "
+                f"{candidate_expanded_tokens} (net delta: {orig_tokens - candidate_expanded_tokens}); "
+                f"safety rollback to original prompt executed."
+            )
+            rollback_reason = err_msg
+            failure_reasons.append(err_msg)
+
         total_pipeline_latency_ms = (time.perf_counter() - pipeline_start_time) * 1000.0
 
         return PipelineResult(
@@ -700,6 +782,13 @@ class PromptGreenPipeline:
             stage_executions=stage_executions,
             warnings=warnings,
             failure_reasons=failure_reasons,
+            fallback_type=fallback_type,
+            active_retention_rate=last_comp_rate,
+            compressor_retention_rate=accepted_comp_rate,
+            accepted_compressor_retention_rate=accepted_comp_rate,
+            last_compressor_attempt_retention_rate=last_comp_rate,
+            final_token_retention_ratio=round(final_tokens / orig_tokens, 4) if orig_tokens > 0 else 1.0,
+            core_similarity=core_similarity,
         )
 
 

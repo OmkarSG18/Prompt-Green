@@ -838,10 +838,11 @@ def test_51_chunked_embedding_empty_and_whitespace_chunks() -> None:
 # GROUP H: STAGE 3 SHORT-PROMPT DIRECTIVE DISAMBIGUATION (TASK 4)
 # =============================================================================
 
-def test_52_stage3_short_prompt_harmless_directive_addition_accepted() -> None:
+def test_52_stage3_short_prompt_directive_dilution_rejected_under_strict_policy() -> None:
     """
-    On short prompts where Stage 3 adds formatting directives, core prompt similarity
-    satisfies the 0.92 threshold, and harmless directives do not cause false rejection.
+    STRICT ACADEMIC COMPLIANCE: When Stage 3 formatting directives dilute full prompt
+    similarity below 0.92, the candidate must be rejected, even if core task similarity >= 0.92.
+    Directive disambiguation telemetries are recorded, but full similarity governs acceptance.
     """
     embedder = LocalMiniLMEmbedder()
     if not embedder.initialize():
@@ -852,11 +853,15 @@ def test_52_stage3_short_prompt_harmless_directive_addition_accepted() -> None:
     cand = "Explain database indexing. Use clear, simple language. Organize the explanation into short sections."
 
     res = guard.evaluate(orig, cand)
-    assert res.passed is True
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert res.final_prompt == orig
     assert res.directive_disambiguation_applied is True
     assert res.core_similarity is not None
     assert res.core_similarity >= 0.92
-    assert res.rollback_occurred is False
+    assert res.full_prompt_similarity is not None
+    assert res.full_prompt_similarity < 0.92
+    assert res.similarity_score == res.full_prompt_similarity
 
 
 def test_53_stage3_short_prompt_harmful_task_change_rejected() -> None:
@@ -893,7 +898,8 @@ def test_54_stage3_intermediate_stage_eval_and_directive_separation() -> None:
     cand = "Explain database indexing. Use clear, simple language. Organize the explanation into short sections."
 
     res = guard.evaluate(orig, cand, intermediate_stages=intermediate)
-    assert res.passed is True
+    assert res.passed is False
+    assert res.rollback_occurred is True
     assert "stage_1" in res.stage_similarities
     assert "stage_2" in res.stage_similarities
     assert res.stage_similarities["stage_2"] >= 0.92
@@ -1168,17 +1174,19 @@ def test_64_legitimate_adjacent_chunk_merge_accepted() -> None:
 
     orig = sec_a + "\n\n" + sec_b
 
-    # Legitimate compression merging the two sections into candidate sentences
+    # Legitimate compression merging the two sections into candidate sentences with high fidelity
     cand = (
-        "Replicate database transactions across secondary replicas with synchronous zero data loss guarantees, routing read queries to local replicas. "
-        "Network encryption requires TLS 1.3 protocol negotiation with cipher whitelisting, mutual certificate authentication for gRPC endpoints, and immediate revocation of expired tokens."
+        "Database replication distributes transactional mutations across secondary replicas to safeguard data durability, where synchronous write replication provides zero data loss guarantees. "
+        "Read queries can be directed to local replicas to alleviate connection saturation on primary cluster nodes. "
+        "Network transport encryption requires TLS 1.3 protocol negotiation with strict cipher suite whitelisting, while mutual certificate verification authenticates microservice endpoints before establishing bidirectional gRPC channels. "
+        "All expired session tokens must be immediately revoked across edge gateway proxies."
     )
 
     res = guard.evaluate(orig, cand)
     assert res.passed is True
     assert res.rollback_occurred is False
     assert res.similarity_score is not None
-    assert res.similarity_score >= 0.82
+    assert res.similarity_score >= 0.92
 
 
 def test_65_legitimate_boundary_shift_accepted() -> None:
@@ -1324,3 +1332,515 @@ def test_70_legitimate_sentence_merge_and_split_accepted() -> None:
     assert res.rollback_occurred is False
     assert res.similarity_score is not None
     assert res.similarity_score >= 0.92
+
+
+# =============================================================================
+# GROUP K: STRICT ACADEMIC COMPLIANCE VERIFICATION TESTS (TASK 5)
+# =============================================================================
+
+# A. Similarity Boundaries
+def test_71_boundary_0_9199_rejected() -> None:
+    """Candidate with similarity 0.9199 is strictly below 0.92 quality floor and rejected."""
+    mock_emb = create_deterministic_mock_embedder({"cand_9199": 0.9199})
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    orig = "Analyze database query performance and execution plans."
+    cand = "Analyze database query performance (cand_9199)."
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert res.final_prompt == orig
+    assert res.similarity_score == 0.9199
+    assert res.fallback_type == "original"
+
+
+def test_72_boundary_0_9200_accepted() -> None:
+    """Candidate with similarity exactly 0.9200 meets universal quality floor and is accepted."""
+    mock_emb = create_deterministic_mock_embedder({"cand_9200": 0.9200})
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    orig = "Analyze database query performance and execution plans."
+    cand = "Analyze database query performance (cand_9200)."
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is True
+    assert res.rollback_occurred is False
+    assert res.final_prompt == cand
+    assert res.similarity_score == 0.9200
+
+
+def test_73_boundary_0_9201_accepted() -> None:
+    """Candidate with similarity 0.9201 strictly exceeds universal quality floor and is accepted."""
+    mock_emb = create_deterministic_mock_embedder({"cand_9201": 0.9201})
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    orig = "Analyze database query performance and execution plans."
+    cand = "Analyze database query performance (cand_9201)."
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is True
+    assert res.rollback_occurred is False
+    assert res.final_prompt == cand
+    assert res.similarity_score == 0.9201
+
+
+# B. Aggressive Mode Quality Floor
+def test_74_aggressive_mode_0_88_rejected() -> None:
+    """Aggressive mode must never lower the quality floor: candidate at 0.88 is rejected."""
+    mock_emb = create_deterministic_mock_embedder({"cand_88": 0.88})
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="aggressive"), embedder=mock_emb)
+    orig = "Analyze database query performance and execution plans."
+    cand = "Analyze database query performance (cand_88)."
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.active_threshold == 0.92
+    assert res.rollback_occurred is True
+    assert res.final_prompt == orig
+    assert res.similarity_score == 0.88
+
+
+def test_75_aggressive_mode_retry_0_93_accepted() -> None:
+    """Aggressive mode initial candidate at 0.88 rejected, retry at 0.93 accepted."""
+    mock_emb = create_deterministic_mock_embedder({
+        "fail_initial": 0.88,
+        "cand_retry_93": 0.93,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="aggressive", max_retries=2), embedder=mock_emb)
+    orig = "Analyze database query performance and execution plans."
+    cand_init = "Analyze query performance (fail_initial)."
+
+    def retry_gen(relaxed_mode: str, iteration: int) -> str:
+        return f"Analyze database query performance plans (cand_retry_93)."
+
+    res = guard.evaluate(orig, cand_init, retry_callback=retry_gen)
+    assert res.passed is True
+    assert res.retry_count == 1
+    assert res.similarity_score == 0.93
+    assert res.rollback_occurred is False
+    assert "cand_retry_93" in res.final_prompt
+    assert res.fallback_type == "stage_2_compressed"
+
+
+# C. Retention Progression Sequence
+def test_76_academic_retention_progression_sequence() -> None:
+    """Adaptive Fallback Controller follows tau = 0.40 -> 0.60 -> 0.80 progression."""
+    recorded_modes: List[str] = []
+    mock_emb = create_deterministic_mock_embedder({
+        "cand_40": 0.70,
+        "cand_60": 0.82,
+        "cand_80": 0.94,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="aggressive", max_retries=2), embedder=mock_emb)
+    orig = "Software architecture requires clean separation of concerns and disciplined layering."
+    cand_init = "Architecture separation concerns (cand_40)."
+
+    def tracking_retry(relaxed_mode: str, iteration: int) -> str:
+        recorded_modes.append(relaxed_mode)
+        if iteration == 1:
+            return "Software architecture requires clean separation of concerns (cand_60)."
+        return "Software architecture requires clean separation of concerns and disciplined layering (cand_80)."
+
+    res = guard.evaluate(orig, cand_init, retry_callback=tracking_retry)
+    assert recorded_modes == ["balanced", "conservative"]
+    assert res.passed is True
+    assert res.retry_count == 2
+    assert res.similarity_score == 0.94
+    assert res.active_retention_rate == 0.80
+    assert res.fallback_type == "stage_2_compressed"
+
+
+# D. Stage 1 Rescue Fallback
+def test_77_stage_1_fallback_rescue_accepted() -> None:
+    """When compression attempts fail but Stage 1 output has similarity >= 0.92, Stage 1 is accepted."""
+    mock_emb = create_deterministic_mock_embedder({
+        "s2_fail": 0.75,
+        "s1_pruned": 0.988,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    orig = "Hello, please kindly analyze the database execution plans in detail. Thank you very much."
+    s1_pruned = "Analyze the database execution plans (s1_pruned)."
+    s2_compressed = "Plans execution (s2_fail)."
+
+    intermediate = {
+        "stage_1": s1_pruned,
+        "stage_2": s2_compressed,
+    }
+
+    res = guard.evaluate(orig, s2_compressed, intermediate_stages=intermediate)
+    assert res.passed is True
+    assert res.rollback_occurred is False
+    assert res.rollback_stage == "stage_1"
+    assert res.fallback_type == "stage_1"
+    assert res.final_prompt == s1_pruned
+    assert res.similarity_score == 0.988
+
+
+def test_78_stage_1_fallback_fails_original_rollback() -> None:
+    """When Stage 1 also fails quality threshold (< 0.92), system rolls back to raw original prompt."""
+    mock_emb = create_deterministic_mock_embedder({
+        "s2_fail": 0.72,
+        "s1_bad": 0.85,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    orig = "Analyze database query performance and execution plans."
+    s1_bad = "Query plans (s1_bad)."
+    s2_compressed = "Plans (s2_fail)."
+
+    intermediate = {
+        "stage_1": s1_bad,
+        "stage_2": s2_compressed,
+    }
+
+    res = guard.evaluate(orig, s2_compressed, intermediate_stages=intermediate)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert res.rollback_stage == "original"
+    assert res.fallback_type == "original"
+    assert res.final_prompt == orig
+
+
+# E. Directive Override Removal & Preservation Gate
+def test_79_directive_override_full_0_84_core_0_95_rejected() -> None:
+    """Full prompt similarity (0.84) governs acceptance; high core similarity (0.95) does not bypass."""
+    mock_emb = create_deterministic_mock_embedder({
+        "full_candidate": 0.84,
+        "core_stage2": 0.95,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    orig = "Explain database indexing in simple terms."
+    cand = "Explain database indexing (full_candidate). Use clear language. Format as markdown list."
+    intermediate = {
+        "stage_2": "Explain database indexing (core_stage2).",
+    }
+
+    res = guard.evaluate(orig, cand, intermediate_stages=intermediate)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert res.final_prompt == orig
+    assert res.core_similarity == 0.95
+    assert res.full_prompt_similarity == 0.84
+    assert res.similarity_score == 0.84
+
+
+def test_80_directive_override_full_0_94_preservation_failure_rejected() -> None:
+    """Candidate with full similarity 0.94 is rejected when structural preservation is violated."""
+    mock_emb = create_deterministic_mock_embedder({"cand_pres_fail": 0.94})
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    orig = "Execute query with timeout 100ms and batch size 32. Verify memory limit 4GB."
+    cand = "Execute query with timeout 100ms and batch size 32 (cand_pres_fail)."  # Dropped 4GB
+
+    res = guard.evaluate(orig, cand)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert res.final_prompt == orig
+    assert len(res.preservation_violations) > 0
+    assert any("4GB" in v for v in res.preservation_violations)
+
+
+# F. Telemetry Integrity
+def test_81_telemetry_full_similarity_never_overwritten_by_core() -> None:
+    """GuardrailResult.similarity_score must always reflect full prompt similarity, never core similarity."""
+    mock_emb = create_deterministic_mock_embedder({
+        "full_text": 0.87,
+        "core_text": 0.96,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    orig = "Analyze PostgreSQL indexing structures."
+    cand = "Analyze PostgreSQL indexing (full_text). Organize output into concise bullet points."
+    intermediate = {
+        "stage_2": "Analyze PostgreSQL indexing (core_text).",
+    }
+
+    res = guard.evaluate(orig, cand, intermediate_stages=intermediate)
+    assert res.full_prompt_similarity == 0.87
+    assert res.similarity_score == 0.87
+    assert res.core_similarity == 0.96
+    assert res.similarity_score != res.core_similarity
+
+
+def test_82_telemetry_fallback_types_and_audit_trail() -> None:
+    """Verify fallback_type accurately captures 'none', 'stage_2_compressed', 'stage_1', 'original'."""
+    # Scenario 1: Clean pass without retries -> "none"
+    mock_emb = create_deterministic_mock_embedder({"clean_cand": 0.95})
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    res_none = guard.evaluate("Explain indexing.", "Explain indexing (clean_cand).")
+    assert res_none.fallback_type == "none"
+
+    # Scenario 2: Rollback to original -> "original"
+    mock_emb_fail = create_deterministic_mock_embedder({"bad_cand": 0.60})
+    guard_fail = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb_fail)
+    res_orig = guard_fail.evaluate("Explain indexing.", "Explain indexing (bad_cand).")
+    assert res_orig.fallback_type == "original"
+    assert res_orig.rollback_stage == "original"
+
+
+# =============================================================================
+# GROUP L: STAGE A.1 STRICT ACADEMIC CLOSURE VERIFICATION TESTS
+# =============================================================================
+
+# Section 2: Universal 0.92 floor enforcement across custom configurations
+def test_83_explicit_threshold_0_88_balanced_enforces_0_92_floor() -> None:
+    """Balanced mode with explicit threshold 0.88 must still enforce the universal 0.92 floor."""
+    mock_emb = create_deterministic_mock_embedder({
+        "cand_9199": 0.9199,
+        "cand_9200": 0.9200,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced", threshold=0.88), embedder=mock_emb)
+    orig = "Analyze database query performance and execution plans."
+
+    # 0.9199 candidate must be rejected despite threshold=0.88
+    res_fail = guard.evaluate(orig, "Analyze query plans (cand_9199).")
+    assert res_fail.active_threshold == 0.92
+    assert res_fail.passed is False
+    assert res_fail.rollback_occurred is True
+
+    # 0.9200 candidate must pass the universal floor
+    res_pass = guard.evaluate(orig, "Analyze query plans (cand_9200).")
+    assert res_pass.active_threshold == 0.92
+    assert res_pass.passed is True
+    assert res_pass.rollback_occurred is False
+
+
+def test_84_explicit_threshold_0_90_conservative_enforces_0_92_floor() -> None:
+    """Conservative mode with explicit threshold 0.90 must enforce the universal 0.92 floor."""
+    mock_emb = create_deterministic_mock_embedder({
+        "cand_9199": 0.9199,
+        "cand_9200": 0.9200,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="conservative", threshold=0.90), embedder=mock_emb)
+    orig = "Analyze database query performance and execution plans."
+
+    res_fail = guard.evaluate(orig, "Analyze query plans (cand_9199).")
+    assert res_fail.active_threshold == 0.92
+    assert res_fail.passed is False
+    assert res_fail.rollback_occurred is True
+
+    res_pass = guard.evaluate(orig, "Analyze query plans (cand_9200).")
+    assert res_pass.active_threshold == 0.92
+    assert res_pass.passed is True
+    assert res_pass.rollback_occurred is False
+
+
+def test_85_explicit_threshold_0_86_aggressive_enforces_0_92_floor() -> None:
+    """Aggressive mode with explicit threshold 0.86 must enforce the universal 0.92 floor."""
+    mock_emb = create_deterministic_mock_embedder({
+        "cand_9199": 0.9199,
+        "cand_9200": 0.9200,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="aggressive", threshold=0.86), embedder=mock_emb)
+    orig = "Analyze database query performance and execution plans."
+
+    res_fail = guard.evaluate(orig, "Analyze query plans (cand_9199).")
+    assert res_fail.active_threshold == 0.92
+    assert res_fail.passed is False
+    assert res_fail.rollback_occurred is True
+
+    res_pass = guard.evaluate(orig, "Analyze query plans (cand_9200).")
+    assert res_pass.active_threshold == 0.92
+    assert res_pass.passed is True
+    assert res_pass.rollback_occurred is False
+
+
+def test_86_explicit_threshold_above_default_remains_stricter() -> None:
+    """A deliberately configured threshold above mode default (e.g. 0.98) remains stricter."""
+    mock_emb = create_deterministic_mock_embedder({
+        "cand_97": 0.97,
+        "cand_98": 0.98,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="conservative", threshold=0.98), embedder=mock_emb)
+    orig = "Analyze database query performance and execution plans."
+
+    # 0.97 is rejected under threshold=0.98
+    res_fail = guard.evaluate(orig, "Analyze query plans (cand_97).")
+    assert res_fail.active_threshold == 0.98
+    assert res_fail.passed is False
+    assert res_fail.rollback_occurred is True
+
+    # 0.98 passes
+    res_pass = guard.evaluate(orig, "Analyze query plans (cand_98).")
+    assert res_pass.active_threshold == 0.98
+    assert res_pass.passed is True
+    assert res_pass.rollback_occurred is False
+
+
+# Section 3 & 5: Stage 1 Fallback Completeness & Conservative Operating Threshold
+def test_87_stage1_fails_structural_preservation_triggers_original_rollback() -> None:
+    """Stage 1 output with high similarity (0.95) but missing a code block fails and rolls back to original."""
+    mock_emb = create_deterministic_mock_embedder({
+        "s2_fail": 0.70,
+        "s1_no_code": 0.95,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    orig = "Review this implementation:\n```python\nprint('hello')\n```\nEnsure correctness."
+    s1_bad = "Review this implementation. Ensure correctness (s1_no_code)."  # dropped code block
+    s2_fail = "Review implementation (s2_fail)."
+
+    intermediate = {"stage_1": s1_bad, "stage_2": s2_fail}
+    res = guard.evaluate(orig, s2_fail, intermediate_stages=intermediate)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert res.rollback_stage == "original"
+    assert res.fallback_type == "original"
+    assert res.final_prompt == orig
+
+
+def test_88_stage1_fails_chunk_validation_triggers_original_rollback() -> None:
+    """Stage 1 output failing chunk-level coverage (< chunk_threshold) rolls back to original prompt."""
+    mock_emb = create_deterministic_mock_embedder({"s2_fail": 0.70})
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced", enable_chunk_validation=True), embedder=mock_emb)
+    orig = (
+        "Database replication distributes transactional mutations across secondary replicas to safeguard data durability. "
+        "Synchronous write replication provides zero data loss guarantees at the cost of higher round-trip commit latency. "
+        "Read queries can be directed to local replicas to alleviate connection saturation on primary cluster nodes.\n\n"
+        "Network transport encryption requires TLS 1.3 protocol negotiation with strict cipher suite whitelisting. "
+        "Mutual certificate verification authenticates microservice endpoints before establishing bidirectional gRPC channels. "
+        "All expired session tokens must be immediately revoked across edge gateway proxies."
+    )
+    # Stage 1 candidate that drops the entire second section (chunk coverage failure)
+    s1_dropped_section = "Database replication distributes transactional mutations across secondary replicas to safeguard data durability."
+    s2_fail = "Replication distributes mutations (s2_fail)."
+
+    intermediate = {"stage_1": s1_dropped_section, "stage_2": s2_fail}
+    res = guard.evaluate(orig, s2_fail, intermediate_stages=intermediate)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert res.rollback_stage == "original"
+    assert res.fallback_type == "original"
+    assert res.final_prompt == orig
+
+
+def test_89_stage1_fails_sentence_coverage_triggers_original_rollback() -> None:
+    """Stage 1 candidate that abandons an instruction sentence fails sentence coverage and rolls back."""
+    mock_emb = create_deterministic_mock_embedder({"s2_fail": 0.70, "tourists": 0.10, "wildlife": 0.10})
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced", enable_chunk_validation=True), embedder=mock_emb)
+    prefix = "System performance metrics must be monitored continuously across all distributed compute clusters. "
+    s_orig = "The engineering staff will convene weekly to examine structural latency bottlenecks."
+    s_abandoned = "The tourists traveled along the scenic mountain trail to photograph local wildlife."
+    suffix = " Ensure that memory utilization thresholds are enforced at all times."
+    orig = prefix + s_orig + suffix
+    s1_bad = prefix + s_abandoned + suffix
+    s2_fail = "System performance monitored (s2_fail)."
+
+    intermediate = {"stage_1": s1_bad, "stage_2": s2_fail}
+    res = guard.evaluate(orig, s2_fail, intermediate_stages=intermediate)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert res.rollback_stage == "original"
+    assert res.fallback_type == "original"
+    assert res.final_prompt == orig
+
+
+def test_90_stage1_zero_token_reduction_triggers_original_rollback() -> None:
+    """When Stage 1 provides zero token reduction (identical text), it is rejected as an optimization."""
+    mock_emb = create_deterministic_mock_embedder({"s2_fail": 0.70})
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="balanced"), embedder=mock_emb)
+    orig = "Explain the fundamentals of database query optimization and execution plans."
+    s1_identical = orig  # Zero token reduction
+    s2_fail = "Explain query optimization (s2_fail)."
+
+    intermediate = {"stage_1": s1_identical, "stage_2": s2_fail}
+    res = guard.evaluate(orig, s2_fail, intermediate_stages=intermediate)
+    assert res.passed is False
+    assert res.rollback_occurred is True
+    assert res.rollback_stage == "original"
+    assert res.fallback_type == "original"
+    assert res.final_prompt == orig
+
+
+def test_91_conservative_mode_stage1_fallback_enforces_0_96_operating_threshold() -> None:
+    """Conservative mode operating threshold (0.96) is enforced on Stage 1 rescue: 0.93 fails, 0.97 passes."""
+    mock_emb_fail = create_deterministic_mock_embedder({
+        "s2_fail": 0.70,
+        "s1_93": 0.93,
+    })
+    guard_cons = SemanticFidelityGuard(config=GuardrailConfig(mode="conservative"), embedder=mock_emb_fail)
+    orig = "Hello, please explain database query optimization and execution plans. Thank you."
+    s1_93 = "Explain database query optimization execution plans (s1_93)."
+    s2_fail = "Query plans (s2_fail)."
+
+    intermediate_fail = {"stage_1": s1_93, "stage_2": s2_fail}
+    res_fail = guard_cons.evaluate(orig, s2_fail, intermediate_stages=intermediate_fail)
+    assert res_fail.active_threshold == 0.96
+    assert res_fail.passed is False
+    assert res_fail.rollback_occurred is True
+    assert res_fail.fallback_type == "original"
+
+    # Stage 1 with 0.97 meets conservative operating threshold (0.96)
+    mock_emb_pass = create_deterministic_mock_embedder({
+        "s2_fail": 0.70,
+        "s1_97": 0.97,
+    })
+    guard_cons_pass = SemanticFidelityGuard(config=GuardrailConfig(mode="conservative"), embedder=mock_emb_pass)
+    s1_97 = "Explain database query optimization execution plans (s1_97)."
+    intermediate_pass = {"stage_1": s1_97, "stage_2": s2_fail}
+    res_pass = guard_cons_pass.evaluate(orig, s2_fail, intermediate_stages=intermediate_pass)
+    assert res_pass.active_threshold == 0.96
+    assert res_pass.passed is True
+    assert res_pass.rollback_stage == "stage_1"
+    assert res_pass.fallback_type == "stage_1"
+    assert res_pass.final_prompt == s1_97
+
+
+# Section 4: Verification of actual retention-rate argument passed to compressor
+def test_92_retry_compressor_receives_exact_target_retention_rates() -> None:
+    """Verify that PromptGreenPipeline and LLMLinguaCompressor apply the exact retention sequence (0.40 -> 0.60 -> 0.80)."""
+    from unittest.mock import MagicMock
+    from promptgreen.optimizer.pipeline import PromptGreenPipeline, PipelineConfig
+    from promptgreen.optimizer.compressor import LLMLinguaCompressor
+
+    mock_llm = MagicMock()
+    call_records: List[Dict[str, Any]] = []
+
+    def mock_compress_prompt(context, rate, force_tokens):
+        call_records.append({
+            "rate": rate,
+            "force_tokens": force_tokens,
+        })
+        if rate == 0.40 or len(call_records) == 1:
+            text = "Architecture distributed (cand_fail_40)."
+        elif rate == 0.60 or len(call_records) == 2:
+            text = "Architecture modular interfaces distributed (cand_fail_60)."
+        else:
+            text = "Software architecture modular interfaces across systems (cand_pass_80)."
+        return {"compressed_prompt": text, "origin_tokens": 35, "compressed_tokens": 10}
+
+    mock_llm.compress_prompt.side_effect = mock_compress_prompt
+
+    comp = LLMLinguaCompressor(llm_lingua_instance=mock_llm)
+    mock_emb = create_deterministic_mock_embedder({
+        "cand_fail_40": 0.70,
+        "cand_fail_60": 0.82,
+        "cand_pass_80": 0.95,
+    })
+    guard = SemanticFidelityGuard(config=GuardrailConfig(mode="aggressive", max_retries=2), embedder=mock_emb)
+    pipeline = PromptGreenPipeline(
+        config=PipelineConfig(mode="aggressive", max_retries=2),
+        compressor=comp,
+        guardrail=guard,
+    )
+
+    prompt = (
+        "Software architecture requires clean separation of concerns across all distributed compute "
+        "clusters in enterprise cloud environments. All telemetry spans must be recorded with high "
+        "fidelity and dispatched to the centralized logging queue to ensure complete observability."
+    )
+
+    res = pipeline.optimize(prompt, mode="aggressive")
+    assert res.accepted is True
+    assert res.retry_count == 2
+    assert len(call_records) == 3
+
+    # Initial call (Attempt 0): aggressive mode resolves to 0.40 at the engine point
+    assert call_records[0]["rate"] == 0.40
+
+    # Retry 1 (Attempt 1): balanced mode explicit target resolves to 0.60
+    assert call_records[1]["rate"] == 0.60
+
+    # Retry 2 (Attempt 2): conservative mode explicit target resolves to 0.80
+    assert call_records[2]["rate"] == 0.80
+
+    # Verify pipeline telemetry agrees with effective applied rates
+    assert len(res.retry_history) == 2
+    assert res.retry_history[0]["retention_rate"] == 0.60
+    assert res.retry_history[1]["retention_rate"] == 0.80
+
+

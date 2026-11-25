@@ -1,3 +1,89 @@
-from .carbon_engine import CarbonEngine, ModelEnergyProfile, CarbonImpactResult
+from promptgreen.engine.carbon_engine import (
+    CarbonEngine,
+    ModelEnergyProfile,
+    CarbonImpactResult,
+    MODEL_ENERGY_PROFILES,
+    CACHED_REGIONAL_CI,
+)
+from promptgreen.engine.model_profiles import (
+    ModelTierProfile,
+    HardwareProfile,
+    GridIntensityScenario,
+    ModelProfileRegistry,
+    DEFAULT_PROFILE_REGISTRY,
+    STANDARD_MODEL_TIERS,
+    STANDARD_HARDWARE_PROFILES,
+    STANDARD_GRID_SCENARIOS,
+    UNAVAILABLE_REGIONAL_PLACEHOLDERS,
+    THESIS_PROVENANCE_WARNING,
+    GRID_PROVENANCE_ILLUSTRATIVE_385,
+    GRID_PROVENANCE_THESIS_367,
+    GRID_PROVENANCE_US_ILLUSTRATIVE,
+    GRID_PROVENANCE_THESIS_GLOBAL,
+    WATER_COEFFICIENT_WARNING,
+    CPU_POWER_ESTIMATE_WARNING,
+)
+from promptgreen.engine.thermodynamics import (
+    EnergyCarbonResult,
+    calculate_inference_energy_wh,
+    estimate_optimizer_overhead_wh,
+    calculate_net_energy_wh,
+    calculate_net_carbon_g,
+    calculate_water_impact_ml,
+    calculate_thermodynamic_impact,
+)
+from promptgreen.engine.model_router import (
+    GreenModelRouter,
+    RoutingOutcome,
+    TaskCategory,
+    TaskComplexity,
+    RoutingConfidence,
+    TaskContext,
+    TierEnergyComparison,
+    TierCarbonComparison,
+    ModelRoutingRecommendation,
+)
 
-__all__ = ["CarbonEngine", "ModelEnergyProfile", "CarbonImpactResult"]
+__all__ = [
+    # Legacy V1 Exports (preserves full backward compatibility)
+    "CarbonEngine",
+    "ModelEnergyProfile",
+    "CarbonImpactResult",
+    "MODEL_ENERGY_PROFILES",
+    "CACHED_REGIONAL_CI",
+    # V2 Profiles & Scenarios
+    "ModelTierProfile",
+    "HardwareProfile",
+    "GridIntensityScenario",
+    "ModelProfileRegistry",
+    "DEFAULT_PROFILE_REGISTRY",
+    "STANDARD_MODEL_TIERS",
+    "STANDARD_HARDWARE_PROFILES",
+    "STANDARD_GRID_SCENARIOS",
+    "UNAVAILABLE_REGIONAL_PLACEHOLDERS",
+    "THESIS_PROVENANCE_WARNING",
+    "GRID_PROVENANCE_ILLUSTRATIVE_385",
+    "GRID_PROVENANCE_THESIS_367",
+    "GRID_PROVENANCE_US_ILLUSTRATIVE",
+    "GRID_PROVENANCE_THESIS_GLOBAL",
+    "WATER_COEFFICIENT_WARNING",
+    "CPU_POWER_ESTIMATE_WARNING",
+    # V2 Thermodynamic Engine
+    "EnergyCarbonResult",
+    "calculate_inference_energy_wh",
+    "estimate_optimizer_overhead_wh",
+    "calculate_net_energy_wh",
+    "calculate_net_carbon_g",
+    "calculate_water_impact_ml",
+    "calculate_thermodynamic_impact",
+    # V2 Green Model Router
+    "GreenModelRouter",
+    "RoutingOutcome",
+    "TaskCategory",
+    "TaskComplexity",
+    "RoutingConfidence",
+    "TaskContext",
+    "TierEnergyComparison",
+    "TierCarbonComparison",
+    "ModelRoutingRecommendation",
+]

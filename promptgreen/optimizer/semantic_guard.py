@@ -20,7 +20,9 @@ import json
 import logging
 import os
 import re
+import threading
 import time
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
@@ -31,18 +33,28 @@ from promptgreen.optimizer.rule_pruner import RuleBasedPruner
 
 logger = logging.getLogger("promptgreen.optimizer.semantic_guard")
 
+# Universal academic baseline quality floor (Phase-I Report, Chapter 1 & Chapter 6)
+UNIVERSAL_MIN_SIMILARITY: float = 0.92
+
 # Default production thresholds and target reductions per mode
 MODE_THRESHOLDS: Dict[str, float] = {
     "conservative": 0.96,
     "balanced": 0.92,
-    "aggressive": 0.86,
+    "aggressive": 0.92,  # Strict academic compliance: aggressive mode target is compression, not lowering quality floor
 }
 
 # Default calibrated chunk-level thresholds per mode (multi-chunk localized safety gate)
 MODE_CHUNK_THRESHOLDS: Dict[str, float] = {
     "conservative": 0.82,
     "balanced": 0.75,
-    "aggressive": 0.65,
+    "aggressive": 0.75,
+}
+
+# Academic retention rate targets per mode (Chapter 6, Section 6.3.2)
+RETENTION_MODES: Dict[str, float] = {
+    "conservative": 0.80,
+    "balanced": 0.60,
+    "aggressive": 0.40,
 }
 
 TARGET_REDUCTIONS: Dict[str, float] = {
@@ -130,6 +142,7 @@ class GuardrailConfig:
     strict_preservation: bool = True
     device: str = "cpu"
     local_files_only: bool = True
+    batch_size: int = 16
 
     def __post_init__(self) -> None:
         valid_modes = {"conservative", "balanced", "aggressive"}
@@ -184,6 +197,86 @@ class GuardrailResult:
     chunk_coverage: List[float] = field(default_factory=list)
     directive_disambiguation_applied: bool = False
     core_similarity: Optional[float] = None
+    cache_stats: Optional[Dict[str, Any]] = None
+    full_prompt_similarity: Optional[float] = None
+    active_retention_rate: Optional[float] = None  # Compressor retention target (e.g. 0.40, 0.60, 0.80)
+    compressor_retention_rate: Optional[float] = None  # Explicit compressor retention rate
+    final_token_retention_ratio: Optional[float] = None  # Final prompt tokens / original tokens
+    accepted_compressor_retention_rate: Optional[float] = None  # Accepted compressor candidate rate (None if fallback/rollback/bypassed)
+    last_compressor_attempt_retention_rate: Optional[float] = None  # Target rate of last compressor attempt (e.g. 0.40, 0.60, 0.80)
+    fallback_type: str = "none"  # "none", "stage_2_compressed", "stage_1", "original"
+    directive_dilution_detected: bool = False
+
+    @property
+    def actual_retention_rate(self) -> Optional[float]:
+        """Backward-compatible alias for final_token_retention_ratio."""
+        return self.final_token_retention_ratio
+
+
+@dataclass
+class _RequestEmbeddingCache:
+    """
+    Ephemeral in-memory cache scoped strictly to a single evaluate() call
+    or pipeline request execution.
+
+    Provides thread-isolated memoization of text and chunk embeddings to eliminate
+    redundant neural forward passes across multi-chunk windows and sentence coverage checks.
+    All cached arrays are stored with write protection and returned as defensive copies.
+    """
+    chunk_cache: Dict[str, Tuple[np.ndarray, float]] = field(default_factory=dict)
+    text_cache: Dict[str, np.ndarray] = field(default_factory=dict)
+    chunk_hits: int = 0
+    chunk_misses: int = 0
+    text_hits: int = 0
+    text_misses: int = 0
+
+    @property
+    def total_hits(self) -> int:
+        return self.chunk_hits + self.text_hits
+
+    @property
+    def total_misses(self) -> int:
+        return self.chunk_misses + self.text_misses
+
+    @property
+    def total_lookups(self) -> int:
+        return self.total_hits + self.total_misses
+
+    @property
+    def hit_rate(self) -> float:
+        total = self.total_lookups
+        return (self.total_hits / total) if total > 0 else 0.0
+
+    @property
+    def hits(self) -> int:
+        return self.total_hits
+
+    @property
+    def misses(self) -> int:
+        return self.total_misses
+
+    def stats(self) -> Dict[str, Any]:
+        return {
+            "chunk_hits": self.chunk_hits,
+            "chunk_misses": self.chunk_misses,
+            "text_hits": self.text_hits,
+            "text_misses": self.text_misses,
+            "total_hits": self.total_hits,
+            "total_misses": self.total_misses,
+            "total_lookups": self.total_lookups,
+            "hit_rate": round(self.hit_rate, 4),
+            "forward_passes_executed": self.chunk_misses,
+            "chunk_cached_items": len(self.chunk_cache),
+            "text_cached_items": len(self.text_cache),
+        }
+
+    def clear(self) -> None:
+        self.chunk_cache.clear()
+        self.text_cache.clear()
+        self.chunk_hits = 0
+        self.chunk_misses = 0
+        self.text_hits = 0
+        self.text_misses = 0
 
 
 def compute_cosine_similarity(vec_a: Any, vec_b: Any) -> float:
@@ -242,17 +335,99 @@ class LocalMiniLMEmbedder:
     2. Direct PyTorch + safetensors + tokenizers loader if cached snapshot is present on disk.
     3. Injected custom mock / client callable for deterministic unit tests.
     4. Deterministic sentence-aware chunked embedding for inputs exceeding 128 tokens.
+    5. Process-level pre-warming and model instance sharing to avoid duplicate memory overhead.
     """
+
+    # Class-level shared model cache to prevent duplicate initializations across requests
+    _shared_st_model: Optional[Any] = None
+    _shared_pytorch_model: Optional[Any] = None
+    _shared_tokenizer: Optional[Any] = None
+    _shared_is_available: Optional[bool] = None
+    _shared_status_message: str = "uninitialized"
+    _shared_init_latency_ms: Optional[float] = None
+    _shared_model_name: Optional[str] = None
+
+    @classmethod
+    def reset_shared_cache(cls) -> None:
+        """Reset the process-level model cache (used for testing cold-starts and fallbacks)."""
+        cls._shared_st_model = None
+        cls._shared_pytorch_model = None
+        cls._shared_tokenizer = None
+        cls._shared_is_available = None
+        cls._shared_status_message = "uninitialized"
+        cls._shared_init_latency_ms = None
+        cls._shared_model_name = None
+
+    @classmethod
+    def get_prewarm_status(cls) -> Dict[str, Any]:
+        """Return diagnostic dictionary of the current shared model pre-warming state."""
+        return {
+            "is_prewarmed": bool(cls._shared_is_available is True and (cls._shared_st_model is not None or cls._shared_pytorch_model is not None)),
+            "init_latency_ms": cls._shared_init_latency_ms,
+            "status_message": cls._shared_status_message,
+            "model_name": cls._shared_model_name or "sentence-transformers/all-MiniLM-L6-v2",
+        }
+
+    @classmethod
+    def prewarm(
+        cls,
+        model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
+        cache_dir: Optional[str] = None,
+    ) -> Tuple[bool, float, str]:
+        """
+        Pre-warm the cached MiniLM embedding model during application startup.
+        Loads only from existing local cache without downloading weights.
+        Returns (success: bool, latency_ms: float, status_message: str).
+        """
+        if cls._shared_is_available is True and (cls._shared_st_model is not None or cls._shared_pytorch_model is not None):
+            return True, cls._shared_init_latency_ms or 0.0, "Already pre-warmed in memory"
+
+        t0 = time.perf_counter()
+        instance = cls(model_name=model_name, cache_dir=cache_dir)
+        ok = instance.initialize()
+        lat_ms = (time.perf_counter() - t0) * 1000.0
+
+        if ok:
+            cls._shared_st_model = instance._st_model
+            cls._shared_pytorch_model = instance._pytorch_model
+            cls._shared_tokenizer = instance._tokenizer
+            cls._shared_is_available = True
+            cls._shared_status_message = instance._status_message
+            cls._shared_init_latency_ms = round(lat_ms, 2)
+            cls._shared_model_name = model_name
+
+            # Perform a micro forward-pass warmup so PyTorch graph/kernels are loaded
+            try:
+                instance.embed("PromptGreen prewarming text")
+            except Exception as w_exc:
+                logger.debug(f"Prewarm forward pass micro-check note: {w_exc}")
+
+            # Prewarm Stage 2 LLMLingua-2 model if available
+            try:
+                from promptgreen.optimizer.compressor import LLMLinguaCompressor
+                LLMLinguaCompressor.prewarm()
+            except Exception as comp_w:
+                logger.debug(f"Compressor prewarm note: {comp_w}")
+
+            return True, round(lat_ms, 2), instance._status_message
+        else:
+            cls._shared_is_available = False
+            cls._shared_status_message = instance._status_message
+            cls._shared_init_latency_ms = round(lat_ms, 2)
+            cls._shared_model_name = model_name
+            return False, round(lat_ms, 2), instance._status_message
 
     def __init__(
         self,
         model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
         cache_dir: Optional[str] = None,
         custom_client: Optional[Any] = None,
+        batch_size: int = 16,
     ) -> None:
         self.model_name = model_name
         self.cache_dir = cache_dir
         self.custom_client = custom_client
+        self.batch_size = max(1, batch_size)
         self._st_model: Optional[Any] = None
         self._pytorch_model: Optional[Any] = None
         self._tokenizer: Optional[Any] = None
@@ -260,6 +435,31 @@ class LocalMiniLMEmbedder:
         self._status_message: str = "uninitialized"
         self._snapshot_dir: Optional[str] = None
         self.last_chunk_count: int = 1
+        self._local: threading.local = threading.local()
+
+    @property
+    def active_cache(self) -> Optional[_RequestEmbeddingCache]:
+        """Return the active thread-local request cache, or None if inactive."""
+        return getattr(self._local, "cache", None)
+
+    @contextmanager
+    def request_cache(self):
+        """
+        Context manager establishing an ephemeral request-scoped embedding cache
+        isolated to the current thread. Automatically discarded and wiped upon exit.
+        """
+        prev_cache = getattr(self._local, "cache", None)
+        if prev_cache is not None:
+            yield prev_cache
+            return
+
+        new_cache = _RequestEmbeddingCache()
+        self._local.cache = new_cache
+        try:
+            yield new_cache
+        finally:
+            new_cache.clear()
+            self._local.cache = prev_cache
 
     def _locate_cache_snapshot(self) -> Optional[str]:
         """Check the local Hugging Face hub cache for all-MiniLM-L6-v2."""
@@ -275,10 +475,11 @@ class LocalMiniLMEmbedder:
         home = Path.home()
         search_dirs.append(home / ".cache" / "huggingface" / "hub")
 
+        target_folder_name = "models--" + self.model_name.replace("/", "--")
         for sdir in search_dirs:
             if not sdir.exists():
                 continue
-            model_folder = sdir / "models--sentence-transformers--all-MiniLM-L6-v2"
+            model_folder = sdir / target_folder_name
             if model_folder.exists():
                 snapshots = list((model_folder / "snapshots").glob("*"))
                 if snapshots:
@@ -299,6 +500,19 @@ class LocalMiniLMEmbedder:
             self._status_message = "initialized with custom client"
             return True
 
+        # Check if process-level shared pre-warmed model is already available
+        if (
+            self.__class__._shared_is_available is True
+            and self.__class__._shared_model_name == self.model_name
+            and (self.__class__._shared_st_model is not None or self.__class__._shared_pytorch_model is not None)
+        ):
+            self._st_model = self.__class__._shared_st_model
+            self._pytorch_model = self.__class__._shared_pytorch_model
+            self._tokenizer = self.__class__._shared_tokenizer
+            self._is_available = True
+            self._status_message = f"reused shared model: {self.__class__._shared_status_message}"
+            return True
+
         snapshot_path = self._locate_cache_snapshot()
         self._snapshot_dir = snapshot_path
 
@@ -313,6 +527,11 @@ class LocalMiniLMEmbedder:
             )
             self._is_available = True
             self._status_message = "loaded via sentence_transformers (offline)"
+            # Cache to shared class level
+            self.__class__._shared_st_model = self._st_model
+            self.__class__._shared_is_available = True
+            self.__class__._shared_status_message = self._status_message
+            self.__class__._shared_model_name = self.model_name
             return True
         except ImportError:
             pass
@@ -340,6 +559,11 @@ class LocalMiniLMEmbedder:
                     self._pytorch_model = _build_minilm_pytorch_module(cfg, weights)
                     self._is_available = True
                     self._status_message = "loaded via direct PyTorch + safetensors (offline)"
+                    self.__class__._shared_pytorch_model = self._pytorch_model
+                    self.__class__._shared_tokenizer = self._tokenizer
+                    self.__class__._shared_is_available = True
+                    self.__class__._shared_status_message = self._status_message
+                    self.__class__._shared_model_name = self.model_name
                     return True
             except Exception as exc:
                 self._status_message = f"Direct PyTorch model load failed: {exc}"
@@ -436,6 +660,13 @@ class LocalMiniLMEmbedder:
         if not chunk or not chunk.strip():
             return np.zeros(384, dtype=np.float32), 0.0
 
+        key = chunk.strip()
+        cache = self.active_cache
+        if cache is not None and key in cache.chunk_cache:
+            cache.chunk_hits += 1
+            cached_arr, cached_weight = cache.chunk_cache[key]
+            return cached_arr.copy(), cached_weight
+
         # Custom mock client
         if self.custom_client is not None:
             res = self.custom_client(chunk)
@@ -443,13 +674,25 @@ class LocalMiniLMEmbedder:
             norm = float(np.linalg.norm(arr))
             if norm > 0 and np.isfinite(norm):
                 arr = arr / norm
-            return arr, float(max(1, len(chunk.split())))
+            weight = float(max(1, len(chunk.split())))
+            if cache is not None and np.all(np.isfinite(arr)):
+                cache.chunk_misses += 1
+                ro_arr = arr.copy()
+                ro_arr.setflags(write=False)
+                cache.chunk_cache[key] = (ro_arr, weight)
+            return arr.copy(), weight
 
         # sentence_transformers library
         if self._st_model is not None:
             vec = self._st_model.encode(chunk, convert_to_numpy=True, normalize_embeddings=True)
             arr = np.asarray(vec, dtype=np.float32).flatten()
-            return arr, float(max(1, len(chunk.split())))
+            weight = float(max(1, len(chunk.split())))
+            if cache is not None and np.all(np.isfinite(arr)):
+                cache.chunk_misses += 1
+                ro_arr = arr.copy()
+                ro_arr.setflags(write=False)
+                cache.chunk_cache[key] = (ro_arr, weight)
+            return arr.copy(), weight
 
         # Direct PyTorch forward pass
         if self._pytorch_model is not None and self._tokenizer is not None:
@@ -460,10 +703,173 @@ class LocalMiniLMEmbedder:
                 attention_mask = torch.tensor([enc.attention_mask], dtype=torch.float32)
                 vec = self._pytorch_model(input_ids, attention_mask)
                 arr = vec.cpu().numpy().flatten()
-                weight = float(sum(enc.attention_mask))
-                return arr, max(weight, 1.0)
+                weight = max(float(sum(enc.attention_mask)), 1.0)
+                if cache is not None and np.all(np.isfinite(arr)):
+                    cache.chunk_misses += 1
+                    ro_arr = arr.copy()
+                    ro_arr.setflags(write=False)
+                    cache.chunk_cache[key] = (ro_arr, weight)
+                return arr.copy(), weight
 
         raise RuntimeError("Embedding engine encountered an uninitialized execution branch.")
+
+    def _encode_chunk_batch(
+        self, chunks: List[str], batch_size: Optional[int] = None
+    ) -> List[Tuple[np.ndarray, float]]:
+        """
+        Encode a list of text chunks in vectorized batches of size `batch_size`.
+        Preserves thread-local P1 memoization by querying and populating `active_cache`.
+        Returns list of (unit_vector, token_weight) corresponding to each chunk.
+        """
+        if not chunks:
+            return []
+
+        bs = max(1, batch_size if batch_size is not None else self.batch_size)
+        results: List[Optional[Tuple[np.ndarray, float]]] = [None] * len(chunks)
+        uncached_indices: List[int] = []
+        uncached_chunks: List[str] = []
+        pending_within_batch: Dict[str, List[int]] = {}
+
+        cache = self.active_cache
+        for idx, chunk in enumerate(chunks):
+            if not chunk or not chunk.strip():
+                results[idx] = (np.zeros(384, dtype=np.float32), 0.0)
+                continue
+            key = chunk.strip()
+            if cache is not None and key in cache.chunk_cache:
+                cache.chunk_hits += 1
+                cached_arr, cached_weight = cache.chunk_cache[key]
+                results[idx] = (cached_arr.copy(), cached_weight)
+            elif key in pending_within_batch:
+                # Repeated within this same request batch: link index for population
+                pending_within_batch[key].append(idx)
+            else:
+                pending_within_batch[key] = [idx]
+                uncached_indices.append(idx)
+                uncached_chunks.append(chunk)
+
+        # Check cross-request Redis / In-Memory embedding cache
+        if uncached_chunks:
+            try:
+                from promptgreen.cache.redis_cache import get_embedding_cache
+                ext_cache = get_embedding_cache()
+                ext_mapping = ext_cache.get_many(uncached_chunks)
+
+                remaining_indices = []
+                remaining_chunks = []
+                for b_idx, chunk in zip(uncached_indices, uncached_chunks):
+                    cached_vec = ext_mapping.get(chunk)
+                    if cached_vec is not None:
+                        if self._tokenizer is not None:
+                            try:
+                                weight = max(float(sum(self._tokenizer.encode(chunk).attention_mask)), 1.0)
+                            except Exception:
+                                weight = float(max(1, len(chunk.split())))
+                        else:
+                            weight = float(max(1, len(chunk.split())))
+                        if cache is not None:
+                            ro_arr = cached_vec.copy()
+                            ro_arr.setflags(write=False)
+                            cache.chunk_cache[chunk.strip()] = (ro_arr, weight)
+                        for dup_idx in pending_within_batch.get(chunk.strip(), [b_idx]):
+                            results[dup_idx] = (cached_vec.copy(), weight)
+                    else:
+                        remaining_indices.append(b_idx)
+                        remaining_chunks.append(chunk)
+                uncached_indices = remaining_indices
+                uncached_chunks = remaining_chunks
+            except Exception:
+                pass
+
+        if not uncached_chunks:
+            return [r for r in results if r is not None]
+
+        # Iterate over uncached unique chunks in batches
+        for b_start in range(0, len(uncached_chunks), bs):
+            b_chunks = uncached_chunks[b_start : b_start + bs]
+            b_indices = uncached_indices[b_start : b_start + bs]
+
+            # 1. Custom mock client branch
+            if self.custom_client is not None:
+                for b_idx, chunk in zip(b_indices, b_chunks):
+                    res = self.custom_client(chunk)
+                    arr = np.asarray(res, dtype=np.float32).flatten()
+                    norm = float(np.linalg.norm(arr))
+                    if norm > 0 and np.isfinite(norm):
+                        arr = arr / norm
+                    weight = float(max(1, len(chunk.split())))
+                    if cache is not None and np.all(np.isfinite(arr)):
+                        cache.chunk_misses += 1
+                        ro_arr = arr.copy()
+                        ro_arr.setflags(write=False)
+                        cache.chunk_cache[chunk.strip()] = (ro_arr, weight)
+                    for dup_idx in pending_within_batch.get(chunk.strip(), [b_idx]):
+                        results[dup_idx] = (arr.copy(), weight)
+                        if dup_idx != b_idx and cache is not None:
+                            cache.chunk_hits += 1
+                continue
+
+            # 2. sentence_transformers library branch
+            if self._st_model is not None:
+                vecs = self._st_model.encode(
+                    b_chunks,
+                    batch_size=len(b_chunks),
+                    convert_to_numpy=True,
+                    normalize_embeddings=True,
+                )
+                try:
+                    from promptgreen.cache.redis_cache import get_embedding_cache
+                    get_embedding_cache().set_many({c: v for c, v in zip(b_chunks, vecs)})
+                except Exception:
+                    pass
+                for b_idx, chunk, vec in zip(b_indices, b_chunks, vecs):
+                    arr = np.asarray(vec, dtype=np.float32).flatten()
+                    weight = float(max(1, len(chunk.split())))
+                    if cache is not None and np.all(np.isfinite(arr)):
+                        cache.chunk_misses += 1
+                        ro_arr = arr.copy()
+                        ro_arr.setflags(write=False)
+                        cache.chunk_cache[chunk.strip()] = (ro_arr, weight)
+                    for dup_idx in pending_within_batch.get(chunk.strip(), [b_idx]):
+                        results[dup_idx] = (arr.copy(), weight)
+                        if dup_idx != b_idx and cache is not None:
+                            cache.chunk_hits += 1
+                continue
+
+            # 3. Direct PyTorch + Safetensors branch
+            if self._pytorch_model is not None and self._tokenizer is not None:
+                import torch
+
+                encs = self._tokenizer.encode_batch(b_chunks)
+                max_len = max(len(e.ids) for e in encs)
+                padded_ids = [e.ids + [0] * (max_len - len(e.ids)) for e in encs]
+                padded_masks = [e.attention_mask + [0] * (max_len - len(e.attention_mask)) for e in encs]
+                input_ids = torch.tensor(padded_ids, dtype=torch.long)
+                attention_mask = torch.tensor(padded_masks, dtype=torch.float32)
+                with torch.no_grad():
+                    b_vecs = self._pytorch_model(input_ids, attention_mask).cpu().numpy()
+                try:
+                    from promptgreen.cache.redis_cache import get_embedding_cache
+                    get_embedding_cache().set_many({c: v for c, v in zip(b_chunks, b_vecs)})
+                except Exception:
+                    pass
+
+                for b_idx, chunk, enc, arr in zip(b_indices, b_chunks, encs, b_vecs):
+                    weight = max(float(sum(enc.attention_mask)), 1.0)
+                    if cache is not None and np.all(np.isfinite(arr)):
+                        cache.chunk_misses += 1
+                        ro_arr = arr.copy()
+                        ro_arr.setflags(write=False)
+                        cache.chunk_cache[chunk.strip()] = (ro_arr, weight)
+                    for dup_idx in pending_within_batch.get(chunk.strip(), [b_idx]):
+                        results[dup_idx] = (arr.copy(), weight)
+                        if dup_idx != b_idx and cache is not None:
+                            cache.chunk_hits += 1
+                continue
+
+            raise RuntimeError("Embedding engine encountered an uninitialized execution branch.")
+
+        return [r for r in results if r is not None]
 
     def embed(self, text: str) -> np.ndarray:
         """
@@ -479,6 +885,15 @@ class LocalMiniLMEmbedder:
             self.last_chunk_count = 0
             return np.zeros(384, dtype=np.float32)
 
+        key = text.strip()
+        cache = self.active_cache
+        if cache is not None and key in cache.text_cache:
+            cache.text_hits += 1
+            return cache.text_cache[key].copy()
+
+        if cache is not None:
+            cache.text_misses += 1
+
         chunks = self.chunk_text(text)
         if not chunks:
             self.last_chunk_count = 0
@@ -492,16 +907,16 @@ class LocalMiniLMEmbedder:
             norm = float(np.linalg.norm(vec))
             if norm > 0 and np.isfinite(norm):
                 vec = vec / norm
-            return vec
+            if cache is not None and np.all(np.isfinite(vec)):
+                ro_vec = vec.copy()
+                ro_vec.setflags(write=False)
+                cache.text_cache[key] = ro_vec
+            return vec.copy()
 
-        # Multi-chunk token-weighted mean aggregation
-        chunk_vecs: List[np.ndarray] = []
-        chunk_weights: List[float] = []
-
-        for c in chunks:
-            cv, cw = self._encode_single_chunk(c)
-            chunk_vecs.append(cv)
-            chunk_weights.append(cw)
+        # Multi-chunk token-weighted mean aggregation using vectorized batching
+        chunk_tuples = self._encode_chunk_batch(chunks, batch_size=self.batch_size)
+        chunk_vecs = [ct[0] for ct in chunk_tuples]
+        chunk_weights = [ct[1] for ct in chunk_tuples]
 
         total_weight = sum(chunk_weights)
         if total_weight <= 0.0:
@@ -517,16 +932,23 @@ class LocalMiniLMEmbedder:
         else:
             agg = np.zeros(384, dtype=np.float32)
 
-        return agg
+        if cache is not None and np.all(np.isfinite(agg)):
+            ro_agg = agg.copy()
+            ro_agg.setflags(write=False)
+            cache.text_cache[key] = ro_agg
+
+        return agg.copy()
 
     def embed_chunks(self, text: str) -> List[Tuple[np.ndarray, str]]:
         """Return list of (chunk_vector, chunk_text) for localized chunk diagnostics."""
         if not self.is_available:
             raise RuntimeError(f"Embedding model unavailable: {self._status_message}")
         chunks = self.chunk_text(text)
+        if not chunks:
+            return []
+        chunk_tuples = self._encode_chunk_batch(chunks, batch_size=self.batch_size)
         results: List[Tuple[np.ndarray, str]] = []
-        for c in chunks:
-            v, _ = self._encode_single_chunk(c)
+        for (v, _), c in zip(chunk_tuples, chunks):
             norm = float(np.linalg.norm(v))
             if norm > 0 and np.isfinite(norm):
                 v = v / norm
@@ -628,10 +1050,17 @@ class SemanticFidelityGuard:
         embedder: Optional[LocalMiniLMEmbedder] = None,
     ) -> None:
         self.config = config or GuardrailConfig()
-        self.embedder = embedder or LocalMiniLMEmbedder(
-            model_name=self.config.model_name,
-            cache_dir=self.config.cache_dir
-        )
+        self.pruner = RuleBasedPruner()
+        if embedder is None:
+            self.embedder = LocalMiniLMEmbedder(
+                model_name=self.config.model_name,
+                cache_dir=self.config.cache_dir,
+                batch_size=self.config.batch_size,
+            )
+        else:
+            self.embedder = embedder
+            if hasattr(self.embedder, "batch_size"):
+                self.embedder.batch_size = self.config.batch_size
 
     # -------------------------------------------------------------------------
     # Core Prompt & Directive Disambiguation (Task 4)
@@ -929,7 +1358,10 @@ class SemanticFidelityGuard:
         """
         start_time = time.perf_counter()
         failure_reasons: List[str] = []
-        active_threshold = self.config.threshold or MODE_THRESHOLDS[self.config.mode]
+        configured_thresh = float(self.config.threshold) if self.config.threshold is not None else MODE_THRESHOLDS.get(self.config.mode, UNIVERSAL_MIN_SIMILARITY)
+        # Universal academic floor (0.92) is inviolable across all modes and custom configurations.
+        # Conservative mode defaults to 0.96; deliberately configured thresholds > default remain stricter.
+        active_threshold = max(configured_thresh, UNIVERSAL_MIN_SIMILARITY)
         current_mode = self.config.mode
 
         # Handle empty original prompt
@@ -980,419 +1412,505 @@ class SemanticFidelityGuard:
                 model_status=self.embedder.status_message,
             )
 
-        # Generate original prompt embedding (supports chunking)
-        try:
-            orig_emb = self.embedder.embed(original_prompt)
-            # Ensure finite
-            if not np.all(np.isfinite(orig_emb)):
-                raise ValueError("Original embedding contains NaN or Inf.")
-        except Exception as exc:
-            emb_latency_ms = (time.perf_counter() - emb_start) * 1000.0
-            failure_reasons.append(f"Embedding generation error on original prompt: {exc}")
-            total_latency = (time.perf_counter() - start_time) * 1000.0
-            return GuardrailResult(
-                original_prompt=original_prompt,
-                candidate_prompt=candidate_prompt,
-                final_prompt=original_prompt,
-                passed=False,
-                similarity_score=None,
-                active_threshold=active_threshold,
-                selected_mode=self.config.mode,
-                final_mode=current_mode,
-                retry_count=0,
-                rollback_occurred=True,
-                rollback_stage="original",
-                failure_reasons=failure_reasons,
-                embedding_latency_ms=round(emb_latency_ms, 2),
-                guardrail_latency_ms=round(total_latency, 2),
-                model_available=True,
-                model_status=f"error: {exc}",
-            )
-
-        # Intermediate stage comparisons if provided
-        stage_sims: Dict[str, float] = {}
-        if intermediate_stages:
-            for sname, sprompt in intermediate_stages.items():
-                if sprompt and sprompt.strip():
-                    try:
-                        s_emb = self.embedder.embed(sprompt)
-                        sim_val = compute_cosine_similarity(orig_emb, s_emb)
-                        stage_sims[sname] = round(float(sim_val), 4)
-                    except Exception:
-                        pass
-
-        # Step 2: Evaluation and Bounded Retry Loop
-        current_candidate = candidate_prompt
-        retries_used = 0
-        accepted = False
-        similarity_score: Optional[float] = None
-        core_similarity: Optional[float] = None
-        disambiguation_applied = False
-        preservation_violations: List[str] = []
-        chunk_sims: List[float] = []
-
-        mode_relaxation_chain = {
-            "aggressive": "balanced",
-            "balanced": "conservative",
-            "conservative": None,
-        }
-
-        while True:
-            # 1. Structural & Instruction Preservation
-            p_ok, p_violations = self.verify_preservation(original_prompt, current_candidate)
-            preservation_violations = p_violations
-
-            # 2. Candidate Embedding & Cosine Similarity
-            t_cand_start = time.perf_counter()
+        with self.embedder.request_cache() as req_cache:
+            # Generate original prompt embedding (supports chunking)
             try:
-                cand_emb = self.embedder.embed(current_candidate)
-                if not np.all(np.isfinite(cand_emb)):
-                    raise ValueError("Candidate embedding contains NaN or Inf.")
-                sim = compute_cosine_similarity(orig_emb, cand_emb)
-                sim_finite = float(sim) if np.isfinite(sim) else 0.0
-                similarity_score = round(sim_finite, 4)
-                emb_latency_ms += (time.perf_counter() - t_cand_start) * 1000.0
+                orig_emb = self.embedder.embed(original_prompt)
+                # Ensure finite
+                if not np.all(np.isfinite(orig_emb)):
+                    raise ValueError("Original embedding contains NaN or Inf.")
             except Exception as exc:
-                emb_latency_ms += (time.perf_counter() - t_cand_start) * 1000.0
-                failure_reasons.append(f"Embedding error on candidate prompt: {exc}")
-                similarity_score = 0.0
-                p_ok = False
-
-            # Multi-chunk diagnostic tracking & localized safety gating
-            chunk_sims = []
-            chunk_cov: List[float] = []
-            cand_rel: List[float] = []
-            cand_core, directives_found = self._extract_core_and_directives(current_candidate)
-
-            orig_chunk_texts = self.embedder.chunk_text(original_prompt)
-            cand_chunk_texts = self.embedder.chunk_text(current_candidate)
-            is_multi_chunk = len(orig_chunk_texts) > 1 or len(cand_chunk_texts) > 1
-            chunk_alignment_violations: List[str] = []
-
-            if is_multi_chunk:
-                try:
-                    orig_chunks = self.embedder.embed_chunks(original_prompt)
-                    cand_chunks = self.embedder.embed_chunks(current_candidate)
-
-                    # Build candidate windows: single chunks + adjacent chunk pairs
-                    # Record window start and end chunk indices: (text, start_idx, end_idx)
-                    cand_windows = []
-                    for idx, c_text in enumerate(cand_chunk_texts):
-                        cand_windows.append((c_text, idx, idx))
-                    for idx in range(len(cand_chunk_texts) - 1):
-                        cand_windows.append((cand_chunk_texts[idx] + " " + cand_chunk_texts[idx + 1], idx, idx + 1))
-
-                    # Include candidate sentences and pairs to support legitimate adjacent chunk merging
-                    cand_raw_s = [
-                        s.strip() for s in re.split(r"(?<=[.!?])\s+|\n+", current_candidate)
-                        if len(s.strip().split()) >= 3
-                    ]
-                    for s_idx, cs in enumerate(cand_raw_s):
-                        c_idx = 0
-                        for idx, c_text in enumerate(cand_chunk_texts):
-                            if cs in c_text:
-                                c_idx = idx
-                                break
-                        cand_windows.append((cs, c_idx, c_idx))
-                        if s_idx < len(cand_raw_s) - 1:
-                            cs_next = cand_raw_s[s_idx + 1]
-                            c_idx_next = c_idx
-                            for idx in range(c_idx, len(cand_chunk_texts)):
-                                if cs_next in cand_chunk_texts[idx]:
-                                    c_idx_next = idx
-                                    break
-                            cand_windows.append((cs + " " + cs_next, c_idx, c_idx_next))
-
-                    cand_windows_vecs = [self.embedder.embed(w[0]) for w in cand_windows]
-
-                    # Coverage of original chunks across candidate windows & record best candidate span
-                    orig_best_spans = []
-                    cand_count = max(len(cand_chunk_texts), 1)
-                    orig_count = max(len(orig_chunk_texts), 1)
-
-                    for i, (ov, _) in enumerate(orig_chunks):
-                        best_sim = -1.0
-                        best_start = 0
-                        best_end = 0
-                        best_dist = 999.0
-                        q_pos = i / orig_count
-                        for (w_text, w_start, w_end), wv in zip(cand_windows, cand_windows_vecs):
-                            sim = float(compute_cosine_similarity(ov, wv))
-                            w_pos = w_start / cand_count
-                            dist = abs(w_pos - q_pos)
-                            if sim > best_sim + 0.015:
-                                best_sim = sim
-                                best_start = w_start
-                                best_end = w_end
-                                best_dist = dist
-                            elif abs(sim - best_sim) <= 0.015:
-                                if dist < best_dist:
-                                    best_sim = sim
-                                    best_start = w_start
-                                    best_end = w_end
-                                    best_dist = dist
-                        chunk_cov.append(round(float(best_sim), 4))
-                        orig_best_spans.append((float(best_sim), best_start, best_end))
-
-                    # Build original windows: single chunks + adjacent chunk pairs
-                    orig_windows = []
-                    for idx, o_text in enumerate(orig_chunk_texts):
-                        orig_windows.append((o_text, idx, idx))
-                    for idx in range(len(orig_chunk_texts) - 1):
-                        orig_windows.append((orig_chunk_texts[idx] + " " + orig_chunk_texts[idx + 1], idx, idx + 1))
-
-                    orig_windows_vecs = [self.embedder.embed(w[0]) for w in orig_windows]
-
-                    # Relevance of candidate chunks to original prompt & record best original span
-                    cand_best_spans = []
-                    for j, (c_text, (cv, _)) in enumerate(zip(cand_chunk_texts, cand_chunks)):
-                        is_dir = bool(directives_found and any(
-                            re.search(pat, c_text.strip(), re.IGNORECASE) for pat in STAGE3_DIRECTIVE_PATTERNS
-                        ))
-                        best_sim = -1.0
-                        best_start = 0
-                        best_end = 0
-                        best_dist = 999.0
-                        q_pos = j / cand_count
-                        for (w_text, w_start, w_end), wv in zip(orig_windows, orig_windows_vecs):
-                            sim = float(compute_cosine_similarity(cv, wv))
-                            w_pos = w_start / orig_count
-                            dist = abs(w_pos - q_pos)
-                            if sim > best_sim + 0.015:
-                                best_sim = sim
-                                best_start = w_start
-                                best_end = w_end
-                                best_dist = dist
-                            elif abs(sim - best_sim) <= 0.015:
-                                if dist < best_dist:
-                                    best_sim = sim
-                                    best_start = w_start
-                                    best_end = w_end
-                                    best_dist = dist
-                        if not is_dir:
-                            cand_rel.append(round(float(best_sim), 4))
-                        cand_best_spans.append((float(best_sim), best_start, best_end, is_dir))
-
-                    # Positional similarities if chunk counts match
-                    if len(orig_chunks) == len(cand_chunks):
-                        for (ov, _), (cv, _) in zip(orig_chunks, cand_chunks):
-                            chunk_sims.append(round(compute_cosine_similarity(ov, cv), 4))
-                    else:
-                        chunk_sims = list(chunk_cov)
-
-                    # =========================================================================
-                    # MAJOR-01: Monotonic Sequence Alignment Checks
-                    # =========================================================================
-                    # 1. Original-to-Candidate Order:
-                    for i1 in range(len(orig_best_spans)):
-                        for i2 in range(i1 + 1, len(orig_best_spans)):
-                            sim1, s1, e1 = orig_best_spans[i1]
-                            sim2, s2, e2 = orig_best_spans[i2]
-                            if sim1 >= 0.50 and sim2 >= 0.50:
-                                if e2 < s1:
-                                    chunk_alignment_violations.append(
-                                        f"Localized sequence disruption: original sections {i1} and {i2} appear reordered in candidate (candidate chunks {s2}-{e2} precede {s1}-{e1})."
-                                    )
-
-                    # 2. Candidate-to-Original Order:
-                    non_dir_cand = [(j, sp) for j, sp in enumerate(cand_best_spans) if not sp[3]]
-                    for idx1 in range(len(non_dir_cand)):
-                        for idx2 in range(idx1 + 1, len(non_dir_cand)):
-                            j1, (rel1, os1, oe1, _) = non_dir_cand[idx1]
-                            j2, (rel2, os2, oe2, _) = non_dir_cand[idx2]
-                            if rel1 >= 0.50 and rel2 >= 0.50:
-                                if oe2 < os1:
-                                    chunk_alignment_violations.append(
-                                        f"Localized sequence disruption: candidate chunks {j1} and {j2} violate monotonic ordering relative to original prompt (mapped original sections {os2}-{oe2} precede {os1}-{oe1})."
-                                    )
-
-                    # =========================================================================
-                    # MAJOR-02: Candidate Duplication Checks
-                    # =========================================================================
-                    orig_to_cands: Dict[int, List[int]] = {}
-                    for j, (rel_j, os_j, oe_j, is_d) in enumerate(cand_best_spans):
-                        if not is_d and rel_j >= 0.60:
-                            orig_to_cands.setdefault(os_j, []).append(j)
-
-                    for o_idx, matched_cands in orig_to_cands.items():
-                        if len(matched_cands) > 1:
-                            is_contiguous = all(
-                                matched_cands[k + 1] == matched_cands[k] + 1
-                                for k in range(len(matched_cands) - 1)
-                            )
-                            if not is_contiguous:
-                                chunk_alignment_violations.append(
-                                    f"Duplicate candidate section detected: original section {o_idx} matched non-contiguously across candidate chunks {matched_cands}."
-                                )
-                            else:
-                                is_dup_pair = False
-                                for k1 in range(len(matched_cands)):
-                                    for k2 in range(k1 + 1, len(matched_cands)):
-                                        cj1_idx = matched_cands[k1]
-                                        cj2_idx = matched_cands[k2]
-                                        c_sim = compute_cosine_similarity(
-                                            cand_chunks[cj1_idx][0],
-                                            cand_chunks[cj2_idx][0]
-                                        )
-                                        if c_sim >= 0.88:
-                                            is_dup_pair = True
-                                            break
-                                    if is_dup_pair:
-                                        break
-
-                                combined_cand_words = sum(
-                                    len(cand_chunk_texts[cj].split())
-                                    for cj in matched_cands
-                                )
-                                orig_words = len(orig_chunk_texts[o_idx].split())
-                                word_expansion = combined_cand_words > 1.35 * orig_words and (combined_cand_words - orig_words) >= 15
-
-                                if is_dup_pair or (word_expansion and len(matched_cands) > 1):
-                                    chunk_alignment_violations.append(
-                                        f"Spurious candidate section duplication: duplicate candidate chunks {matched_cands} detected for original section {o_idx}."
-                                    )
-
-                except Exception as chunk_exc:
-                    logger.debug(f"Chunk-level evaluation diagnostic warning: {chunk_exc}")
-
-            # 3. Decision Gate: Passes threshold AND preserves all instructions
-            passed_threshold = (
-                similarity_score is not None and similarity_score >= active_threshold
-            )
-
-            # TASK 4: Directive Disambiguation for Short Prompts
-            # If candidate raw similarity is below threshold, check if added Stage 3 directives
-            # caused dilution of a short prompt while the core prompt task remains preserved.
-            if not passed_threshold and p_ok and similarity_score is not None:
-                if directives_found and cand_core and cand_core != current_candidate:
-                    try:
-                        core_emb = self.embedder.embed(cand_core)
-                        sim_c = compute_cosine_similarity(orig_emb, core_emb)
-                        sim_c_finite = float(sim_c) if np.isfinite(sim_c) else 0.0
-                        core_similarity = round(sim_c_finite, 4)
-
-                        # Core task must strictly satisfy threshold (e.g. >= 0.92)
-                        # and raw prompt must have non-trivial correlation (>= 0.70)
-                        if core_similarity >= active_threshold and similarity_score >= 0.70:
-                            passed_threshold = True
-                            disambiguation_applied = True
-                            similarity_score = core_similarity
-                    except Exception as disc_exc:
-                        logger.debug(f"Directive disambiguation calculation error: {disc_exc}")
-
-            # STAGE 5: Multi-chunk localized semantic safety gate
-            # Ensure localized tail divergence or omitted sections cannot pass via aggregate dilution
-            if passed_threshold and self.config.enable_chunk_validation and is_multi_chunk:
-                active_chunk_threshold = (
-                    self.config.chunk_threshold
-                    if self.config.chunk_threshold is not None
-                    else MODE_CHUNK_THRESHOLDS.get(current_mode, 0.75)
+                emb_latency_ms = (time.perf_counter() - emb_start) * 1000.0
+                failure_reasons.append(f"Embedding generation error on original prompt: {exc}")
+                total_latency = (time.perf_counter() - start_time) * 1000.0
+                return GuardrailResult(
+                    original_prompt=original_prompt,
+                    candidate_prompt=candidate_prompt,
+                    final_prompt=original_prompt,
+                    passed=False,
+                    similarity_score=None,
+                    active_threshold=active_threshold,
+                    selected_mode=self.config.mode,
+                    final_mode=current_mode,
+                    retry_count=0,
+                    rollback_occurred=True,
+                    rollback_stage="original",
+                    failure_reasons=failure_reasons,
+                    embedding_latency_ms=round(emb_latency_ms, 2),
+                    guardrail_latency_ms=round(total_latency, 2),
+                    model_available=True,
+                    model_status=f"error: {exc}",
+                cache_stats=req_cache.stats() if req_cache is not None else None,
                 )
 
-                min_cov = min(chunk_cov) if chunk_cov else 1.0
-                min_rel = min(cand_rel) if cand_rel else 1.0
+            # Intermediate stage comparisons if provided
+            stage_sims: Dict[str, float] = {}
+            if intermediate_stages:
+                for sname, sprompt in intermediate_stages.items():
+                    if sprompt and sprompt.strip():
+                        try:
+                            s_emb = self.embedder.embed(sprompt)
+                            sim_val = compute_cosine_similarity(orig_emb, s_emb)
+                            stage_sims[sname] = round(float(sim_val), 4)
+                        except Exception:
+                            pass
 
-                if min_cov < active_chunk_threshold:
-                    passed_threshold = False
+            # Step 2: Evaluation and Bounded Retry Loop
+            current_candidate = candidate_prompt
+            retries_used = 0
+            accepted = False
+            similarity_score: Optional[float] = None
+            core_similarity: Optional[float] = None
+            disambiguation_applied = False
+            preservation_violations: List[str] = []
+            chunk_sims: List[float] = []
+
+            mode_relaxation_chain = {
+                "aggressive": "balanced",
+                "balanced": "conservative",
+                "conservative": None,
+            }
+
+            while True:
+                # 1. Structural & Instruction Preservation
+                p_ok, p_violations = self.verify_preservation(original_prompt, current_candidate)
+                preservation_violations = p_violations
+
+                # 2. Candidate Embedding & Cosine Similarity
+                t_cand_start = time.perf_counter()
+                try:
+                    cand_emb = self.embedder.embed(current_candidate)
+                    if not np.all(np.isfinite(cand_emb)):
+                        raise ValueError("Candidate embedding contains NaN or Inf.")
+                    sim = compute_cosine_similarity(orig_emb, cand_emb)
+                    sim_finite = float(sim) if np.isfinite(sim) else 0.0
+                    similarity_score = round(sim_finite, 4)
+                    emb_latency_ms += (time.perf_counter() - t_cand_start) * 1000.0
+                except Exception as exc:
+                    emb_latency_ms += (time.perf_counter() - t_cand_start) * 1000.0
+                    failure_reasons.append(f"Embedding error on candidate prompt: {exc}")
+                    similarity_score = 0.0
                     p_ok = False
-                    failure_reasons.append(
-                        f"Localized semantic change: original section coverage ({min_cov:.4f}) below chunk threshold ({active_chunk_threshold:.2f})."
+
+                # Multi-chunk diagnostic tracking & localized safety gating
+                chunk_sims = []
+                chunk_cov: List[float] = []
+                cand_rel: List[float] = []
+                cand_core, directives_found = self._extract_core_and_directives(current_candidate)
+
+                orig_chunk_texts = self.embedder.chunk_text(original_prompt)
+                cand_chunk_texts = self.embedder.chunk_text(current_candidate)
+                is_multi_chunk = len(orig_chunk_texts) > 1 or len(cand_chunk_texts) > 1
+                chunk_alignment_violations: List[str] = []
+
+                if is_multi_chunk:
+                    try:
+                        orig_chunks = self.embedder.embed_chunks(original_prompt)
+                        cand_chunks = self.embedder.embed_chunks(current_candidate)
+
+                        # Build candidate windows: single chunks + adjacent chunk pairs
+                        # Record window start and end chunk indices: (text, start_idx, end_idx)
+                        cand_windows = []
+                        for idx, c_text in enumerate(cand_chunk_texts):
+                            cand_windows.append((c_text, idx, idx))
+                        for idx in range(len(cand_chunk_texts) - 1):
+                            cand_windows.append((cand_chunk_texts[idx] + " " + cand_chunk_texts[idx + 1], idx, idx + 1))
+
+                        # Include candidate sentences and pairs to support legitimate adjacent chunk merging
+                        cand_raw_s = [
+                            s.strip() for s in re.split(r"(?<=[.!?])\s+|\n+", current_candidate)
+                            if len(s.strip().split()) >= 3
+                        ]
+                        for s_idx, cs in enumerate(cand_raw_s):
+                            c_idx = 0
+                            for idx, c_text in enumerate(cand_chunk_texts):
+                                if cs in c_text:
+                                    c_idx = idx
+                                    break
+                            cand_windows.append((cs, c_idx, c_idx))
+                            if s_idx < len(cand_raw_s) - 1:
+                                cs_next = cand_raw_s[s_idx + 1]
+                                c_idx_next = c_idx
+                                for idx in range(c_idx, len(cand_chunk_texts)):
+                                    if cs_next in cand_chunk_texts[idx]:
+                                        c_idx_next = idx
+                                        break
+                                cand_windows.append((cs + " " + cs_next, c_idx, c_idx_next))
+
+                        cand_windows_vecs = [self.embedder.embed(w[0]) for w in cand_windows]
+
+                        # Coverage of original chunks across candidate windows & record best candidate span
+                        orig_best_spans = []
+                        cand_count = max(len(cand_chunk_texts), 1)
+                        orig_count = max(len(orig_chunk_texts), 1)
+
+                        for i, (ov, _) in enumerate(orig_chunks):
+                            best_sim = -1.0
+                            best_start = 0
+                            best_end = 0
+                            best_dist = 999.0
+                            q_pos = i / orig_count
+                            for (w_text, w_start, w_end), wv in zip(cand_windows, cand_windows_vecs):
+                                sim = float(compute_cosine_similarity(ov, wv))
+                                w_pos = w_start / cand_count
+                                dist = abs(w_pos - q_pos)
+                                if sim > best_sim + 0.015:
+                                    best_sim = sim
+                                    best_start = w_start
+                                    best_end = w_end
+                                    best_dist = dist
+                                elif abs(sim - best_sim) <= 0.015:
+                                    if dist < best_dist:
+                                        best_sim = sim
+                                        best_start = w_start
+                                        best_end = w_end
+                                        best_dist = dist
+                            chunk_cov.append(round(float(best_sim), 4))
+                            orig_best_spans.append((float(best_sim), best_start, best_end))
+
+                        # Build original windows: single chunks + adjacent chunk pairs
+                        orig_windows = []
+                        for idx, o_text in enumerate(orig_chunk_texts):
+                            orig_windows.append((o_text, idx, idx))
+                        for idx in range(len(orig_chunk_texts) - 1):
+                            orig_windows.append((orig_chunk_texts[idx] + " " + orig_chunk_texts[idx + 1], idx, idx + 1))
+
+                        orig_windows_vecs = [self.embedder.embed(w[0]) for w in orig_windows]
+
+                        # Relevance of candidate chunks to original prompt & record best original span
+                        cand_best_spans = []
+                        for j, (c_text, (cv, _)) in enumerate(zip(cand_chunk_texts, cand_chunks)):
+                            is_dir = bool(directives_found and any(
+                                re.search(pat, c_text.strip(), re.IGNORECASE) for pat in STAGE3_DIRECTIVE_PATTERNS
+                            ))
+                            best_sim = -1.0
+                            best_start = 0
+                            best_end = 0
+                            best_dist = 999.0
+                            q_pos = j / cand_count
+                            for (w_text, w_start, w_end), wv in zip(orig_windows, orig_windows_vecs):
+                                sim = float(compute_cosine_similarity(cv, wv))
+                                w_pos = w_start / orig_count
+                                dist = abs(w_pos - q_pos)
+                                if sim > best_sim + 0.015:
+                                    best_sim = sim
+                                    best_start = w_start
+                                    best_end = w_end
+                                    best_dist = dist
+                                elif abs(sim - best_sim) <= 0.015:
+                                    if dist < best_dist:
+                                        best_sim = sim
+                                        best_start = w_start
+                                        best_end = w_end
+                                        best_dist = dist
+                            if not is_dir:
+                                cand_rel.append(round(float(best_sim), 4))
+                            cand_best_spans.append((float(best_sim), best_start, best_end, is_dir))
+
+                        # Positional similarities if chunk counts match
+                        if len(orig_chunks) == len(cand_chunks):
+                            for (ov, _), (cv, _) in zip(orig_chunks, cand_chunks):
+                                chunk_sims.append(round(compute_cosine_similarity(ov, cv), 4))
+                        else:
+                            chunk_sims = list(chunk_cov)
+
+                        # =========================================================================
+                        # MAJOR-01: Monotonic Sequence Alignment Checks
+                        # =========================================================================
+                        # 1. Original-to-Candidate Order:
+                        for i1 in range(len(orig_best_spans)):
+                            for i2 in range(i1 + 1, len(orig_best_spans)):
+                                sim1, s1, e1 = orig_best_spans[i1]
+                                sim2, s2, e2 = orig_best_spans[i2]
+                                if sim1 >= 0.50 and sim2 >= 0.50:
+                                    if e2 < s1:
+                                        chunk_alignment_violations.append(
+                                            f"Localized sequence disruption: original sections {i1} and {i2} appear reordered in candidate (candidate chunks {s2}-{e2} precede {s1}-{e1})."
+                                        )
+
+                        # 2. Candidate-to-Original Order:
+                        non_dir_cand = [(j, sp) for j, sp in enumerate(cand_best_spans) if not sp[3]]
+                        for idx1 in range(len(non_dir_cand)):
+                            for idx2 in range(idx1 + 1, len(non_dir_cand)):
+                                j1, (rel1, os1, oe1, _) = non_dir_cand[idx1]
+                                j2, (rel2, os2, oe2, _) = non_dir_cand[idx2]
+                                if rel1 >= 0.50 and rel2 >= 0.50:
+                                    if oe2 < os1:
+                                        chunk_alignment_violations.append(
+                                            f"Localized sequence disruption: candidate chunks {j1} and {j2} violate monotonic ordering relative to original prompt (mapped original sections {os2}-{oe2} precede {os1}-{oe1})."
+                                        )
+
+                        # =========================================================================
+                        # MAJOR-02: Candidate Duplication Checks
+                        # =========================================================================
+                        orig_to_cands: Dict[int, List[int]] = {}
+                        for j, (rel_j, os_j, oe_j, is_d) in enumerate(cand_best_spans):
+                            if not is_d and rel_j >= 0.60:
+                                orig_to_cands.setdefault(os_j, []).append(j)
+
+                        for o_idx, matched_cands in orig_to_cands.items():
+                            if len(matched_cands) > 1:
+                                is_contiguous = all(
+                                    matched_cands[k + 1] == matched_cands[k] + 1
+                                    for k in range(len(matched_cands) - 1)
+                                )
+                                if not is_contiguous:
+                                    chunk_alignment_violations.append(
+                                        f"Duplicate candidate section detected: original section {o_idx} matched non-contiguously across candidate chunks {matched_cands}."
+                                    )
+                                else:
+                                    is_dup_pair = False
+                                    for k1 in range(len(matched_cands)):
+                                        for k2 in range(k1 + 1, len(matched_cands)):
+                                            cj1_idx = matched_cands[k1]
+                                            cj2_idx = matched_cands[k2]
+                                            c_sim = compute_cosine_similarity(
+                                                cand_chunks[cj1_idx][0],
+                                                cand_chunks[cj2_idx][0]
+                                            )
+                                            if c_sim >= 0.88:
+                                                is_dup_pair = True
+                                                break
+                                        if is_dup_pair:
+                                            break
+
+                                    combined_cand_words = sum(
+                                        len(cand_chunk_texts[cj].split())
+                                        for cj in matched_cands
+                                    )
+                                    orig_words = len(orig_chunk_texts[o_idx].split())
+                                    word_expansion = combined_cand_words > 1.35 * orig_words and (combined_cand_words - orig_words) >= 15
+
+                                    if is_dup_pair or (word_expansion and len(matched_cands) > 1):
+                                        chunk_alignment_violations.append(
+                                            f"Spurious candidate section duplication: duplicate candidate chunks {matched_cands} detected for original section {o_idx}."
+                                        )
+
+                    except Exception as chunk_exc:
+                        logger.debug(f"Chunk-level evaluation diagnostic warning: {chunk_exc}")
+
+                # 3. Decision Gate: Passes threshold AND preserves all instructions
+                passed_threshold = (
+                    similarity_score is not None and similarity_score >= active_threshold
+                )
+
+                # TASK 4: Directive Disambiguation Diagnostic Analysis
+                # If candidate raw similarity is below threshold, calculate core prompt similarity
+                # strictly for diagnostic telemetry. Under Strict Academic Compliance, full-prompt
+                # similarity remains the mandatory acceptance gate and is NEVER overwritten.
+                if not passed_threshold and p_ok and similarity_score is not None:
+                    if intermediate_stages and "stage_2" in intermediate_stages:
+                        core_similarity = stage_sims.get("stage_2")
+                        if core_similarity is not None and core_similarity >= active_threshold and similarity_score >= 0.70:
+                            disambiguation_applied = True
+                    elif directives_found and cand_core and cand_core != current_candidate:
+                        try:
+                            core_emb = self.embedder.embed(cand_core)
+                            sim_c = compute_cosine_similarity(orig_emb, core_emb)
+                            sim_c_finite = float(sim_c) if np.isfinite(sim_c) else 0.0
+                            core_similarity = round(sim_c_finite, 4)
+
+                            # Diagnostic recording: core task meets quality floor, but candidate full prompt was diluted
+                            if core_similarity >= active_threshold and similarity_score >= 0.70:
+                                disambiguation_applied = True
+                        except Exception as disc_exc:
+                            logger.debug(f"Directive disambiguation calculation error: {disc_exc}")
+
+                # STAGE 5: Multi-chunk localized semantic safety gate
+                # Ensure localized tail divergence or omitted sections cannot pass via aggregate dilution
+                if passed_threshold and self.config.enable_chunk_validation and is_multi_chunk:
+                    active_chunk_threshold = (
+                        self.config.chunk_threshold
+                        if self.config.chunk_threshold is not None
+                        else MODE_CHUNK_THRESHOLDS.get(current_mode, 0.75)
                     )
-                elif min_rel < active_chunk_threshold:
-                    passed_threshold = False
-                    p_ok = False
-                    failure_reasons.append(
-                        f"Ungrounded candidate section: candidate section relevance ({min_rel:.4f}) below chunk threshold ({active_chunk_threshold:.2f})."
-                    )
-                elif chunk_alignment_violations:
-                    passed_threshold = False
-                    p_ok = False
-                    failure_reasons.extend(chunk_alignment_violations)
-                elif len(orig_chunk_texts) == len(cand_chunk_texts) and chunk_sims:
-                    min_pos = min(chunk_sims)
-                    if min_pos < 0.50 and min_cov < active_chunk_threshold:
+
+                    min_cov = min(chunk_cov) if chunk_cov else 1.0
+                    min_rel = min(cand_rel) if cand_rel else 1.0
+
+                    if min_cov < active_chunk_threshold:
                         passed_threshold = False
                         p_ok = False
                         failure_reasons.append(
-                            f"Localized tail divergence: positional chunk similarity ({min_pos:.4f}) below threshold."
+                            f"Localized semantic change: original section coverage ({min_cov:.4f}) below chunk threshold ({active_chunk_threshold:.2f})."
                         )
-
-            # STAGE 5: Intra-chunk sentence dilution check
-            if passed_threshold and self.config.enable_chunk_validation:
-                try:
-                    sent_ok, sent_violations = self._evaluate_sentence_coverage(
-                        original_prompt, current_candidate
-                    )
-                    if not sent_ok:
+                    elif min_rel < active_chunk_threshold:
                         passed_threshold = False
                         p_ok = False
-                        failure_reasons.extend(sent_violations)
-                except Exception as sent_exc:
-                    logger.debug(f"Sentence-level evaluation diagnostic warning: {sent_exc}")
+                        failure_reasons.append(
+                            f"Ungrounded candidate section: candidate section relevance ({min_rel:.4f}) below chunk threshold ({active_chunk_threshold:.2f})."
+                        )
+                    elif chunk_alignment_violations:
+                        passed_threshold = False
+                        p_ok = False
+                        failure_reasons.extend(chunk_alignment_violations)
+                    elif len(orig_chunk_texts) == len(cand_chunk_texts) and chunk_sims:
+                        min_pos = min(chunk_sims)
+                        if min_pos < 0.50 and min_cov < active_chunk_threshold:
+                            passed_threshold = False
+                            p_ok = False
+                            failure_reasons.append(
+                                f"Localized tail divergence: positional chunk similarity ({min_pos:.4f}) below threshold."
+                            )
 
-            accepted = p_ok and passed_threshold
+                # STAGE 5: Intra-chunk sentence dilution check
+                if passed_threshold and self.config.enable_chunk_validation:
+                    try:
+                        sent_ok, sent_violations = self._evaluate_sentence_coverage(
+                            original_prompt, current_candidate
+                        )
+                        if not sent_ok:
+                            passed_threshold = False
+                            p_ok = False
+                            failure_reasons.extend(sent_violations)
+                    except Exception as sent_exc:
+                        logger.debug(f"Sentence-level evaluation diagnostic warning: {sent_exc}")
 
-            if accepted:
+                accepted = p_ok and passed_threshold
+
+                if accepted:
+                    break
+
+                # If not accepted, record failure reason for this candidate
+                if not p_ok:
+                    failure_reasons.extend(p_violations)
+                if similarity_score is not None and similarity_score < active_threshold:
+                    failure_reasons.append(
+                        f"Cosine similarity ({similarity_score:.4f}) below active threshold ({active_threshold:.2f})."
+                    )
+
+                # Check if retry is possible
+                if retry_callback is not None and retries_used < self.config.max_retries:
+                    next_mode = mode_relaxation_chain.get(current_mode)
+                    if next_mode is not None:
+                        retries_used += 1
+                        current_mode = next_mode
+                        # Maintain minimum academic threshold floor of 0.92 during retries
+                        if self.config.mode != "conservative":
+                            active_threshold = UNIVERSAL_MIN_SIMILARITY
+                        else:
+                            active_threshold = MODE_THRESHOLDS["conservative"]
+                        try:
+                            current_candidate = retry_callback(current_mode, retries_used)
+                            continue
+                        except Exception as retry_exc:
+                            failure_reasons.append(f"Retry callback execution failed: {retry_exc}")
+                            break
+                # Retries exhausted or no callback available
                 break
 
-            # If not accepted, record failure reason for this candidate
-            if not p_ok:
-                failure_reasons.extend(p_violations)
-            if similarity_score is not None and similarity_score < active_threshold:
-                failure_reasons.append(
-                    f"Cosine similarity ({similarity_score:.4f}) below active threshold ({active_threshold:.2f})."
-                )
+            # Step 3: Final prompt determination & Stage 1 Fallback (Academic Specification Section 6.3.2)
+            fallback_type = "none"
+            stage_1_rescued = False
+            full_prompt_similarity = similarity_score
 
-            # Check if retry is possible
-            if retry_callback is not None and retries_used < self.config.max_retries:
-                next_mode = mode_relaxation_chain.get(current_mode)
-                if next_mode is not None:
-                    retries_used += 1
-                    current_mode = next_mode
-                    active_threshold = MODE_THRESHOLDS[current_mode]
-                    try:
-                        current_candidate = retry_callback(current_mode, retries_used)
-                        continue
-                    except Exception as retry_exc:
-                        failure_reasons.append(f"Retry callback execution failed: {retry_exc}")
-                        break
-            # Retries exhausted or no callback available
-            break
+            if accepted:
+                final_prompt = current_candidate
+                rollback_occurred = False
+                rollback_stage = "none"
+                fallback_type = "stage_2_compressed" if retries_used > 0 else "none"
+            else:
+                # Compression attempts failed. Evaluate Stage 1 rule-pruned output prior to original rollback.
+                if intermediate_stages and "stage_1" in intermediate_stages:
+                    s1_prompt = intermediate_stages["stage_1"]
+                    if s1_prompt and s1_prompt.strip() and s1_prompt.strip() != original_prompt.strip():
+                        # 0. Optimization benefit validation: Stage 1 must provide actual token reduction
+                        orig_tok_cnt, _ = self.pruner.count_tokens(original_prompt)
+                        s1_tok_cnt, _ = self.pruner.count_tokens(s1_prompt)
+                        has_token_reduction = (s1_tok_cnt < orig_tok_cnt)
 
-        # Step 3: Final prompt determination & Rollback
-        if accepted:
-            final_prompt = current_candidate
-            rollback_occurred = False
-            rollback_stage = "none"
-        else:
-            final_prompt = original_prompt
-            rollback_occurred = True
-            rollback_stage = "original"
-            failure_reasons.append("Semantic fidelity guard rejected candidate; safely rolled back to original prompt.")
+                        if has_token_reduction:
+                            # 1. Independent structural preservation check
+                            s1_p_ok, s1_p_violations = self.verify_preservation(original_prompt, s1_prompt)
+                            if s1_p_ok:
+                                try:
+                                    # 2. Independent full-prompt cosine similarity check
+                                    s1_emb = self.embedder.embed(s1_prompt)
+                                    s1_sim = compute_cosine_similarity(orig_emb, s1_emb)
+                                    s1_sim_finite = float(s1_sim) if np.isfinite(s1_sim) else 0.0
+                                    s1_similarity = round(s1_sim_finite, 4)
 
-        total_latency_ms = (time.perf_counter() - start_time) * 1000.0
+                                    # 3. Must satisfy required mode threshold (conservative 0.96, or universal 0.92 floor)
+                                    s1_required_threshold = max(active_threshold, UNIVERSAL_MIN_SIMILARITY)
+                                    if s1_similarity >= s1_required_threshold:
+                                        # 4. Chunk validation if multi-chunk
+                                        s1_chunk_ok = True
+                                        if self.config.enable_chunk_validation:
+                                            s1_chunks = self.embedder.chunk_text(s1_prompt)
+                                            if len(orig_chunk_texts) > 1 or len(s1_chunks) > 1:
+                                                s1_cov, s1_rel = self._evaluate_chunk_level(orig_chunk_texts, s1_chunks)
+                                                min_cov_s1 = min(s1_cov) if s1_cov else 1.0
+                                                min_rel_s1 = min(s1_rel) if s1_rel else 1.0
+                                                chunk_fl = MODE_CHUNK_THRESHOLDS.get(self.config.mode, 0.75)
+                                                if min_cov_s1 < chunk_fl or min_rel_s1 < chunk_fl:
+                                                    s1_chunk_ok = False
 
-        return GuardrailResult(
-            original_prompt=original_prompt,
-            candidate_prompt=candidate_prompt,
-            final_prompt=final_prompt,
-            passed=accepted,
-            similarity_score=similarity_score,
-            active_threshold=active_threshold,
-            selected_mode=self.config.mode,
-            final_mode=current_mode,
-            retry_count=retries_used,
-            rollback_occurred=rollback_occurred,
-            rollback_stage=rollback_stage,
-            failure_reasons=failure_reasons,
-            preservation_violations=preservation_violations,
-            embedding_latency_ms=round(emb_latency_ms, 2),
-            guardrail_latency_ms=round(total_latency_ms, 2),
-            model_available=True,
-            model_status="ready",
-            stage_similarities=stage_sims,
-            chunk_similarities=chunk_sims,
-            chunk_coverage=chunk_cov,
-            directive_disambiguation_applied=disambiguation_applied,
-            core_similarity=core_similarity,
-        )
+                                        # 5. Intra-chunk sentence coverage validation if enabled
+                                        if s1_chunk_ok and self.config.enable_chunk_validation:
+                                            try:
+                                                sent_ok, _ = self._evaluate_sentence_coverage(
+                                                    original_prompt, s1_prompt
+                                                )
+                                                if not sent_ok:
+                                                    s1_chunk_ok = False
+                                            except Exception as sent_exc:
+                                                logger.debug(f"Stage 1 sentence coverage warning: {sent_exc}")
+
+                                        if s1_chunk_ok:
+                                            stage_1_rescued = True
+                                            final_prompt = s1_prompt
+                                            accepted = True
+                                            similarity_score = s1_similarity
+                                            full_prompt_similarity = s1_similarity
+                                            rollback_occurred = False
+                                            rollback_stage = "stage_1"
+                                            fallback_type = "stage_1"
+                                except Exception as s1_exc:
+                                    logger.debug(f"Stage 1 fallback evaluation error: {s1_exc}")
+
+                if not stage_1_rescued:
+                    final_prompt = original_prompt
+                    accepted = False
+                    similarity_score = similarity_score if similarity_score is not None else 1.0
+                    full_prompt_similarity = similarity_score
+                    rollback_occurred = True
+                    rollback_stage = "original"
+                    fallback_type = "original"
+                    failure_reasons.append("Semantic fidelity guard rejected candidate; safely rolled back to original prompt.")
+
+            total_latency_ms = (time.perf_counter() - start_time) * 1000.0
+            last_attempt_rate = RETENTION_MODES.get(current_mode, 0.60)
+            accepted_comp_rate = last_attempt_rate if (accepted and rollback_stage == "none") else None
+
+            return GuardrailResult(
+                original_prompt=original_prompt,
+                candidate_prompt=candidate_prompt,
+                final_prompt=final_prompt,
+                passed=accepted,
+                similarity_score=similarity_score,
+                active_threshold=active_threshold,
+                selected_mode=self.config.mode,
+                final_mode=current_mode,
+                retry_count=retries_used,
+                rollback_occurred=rollback_occurred,
+                rollback_stage=rollback_stage,
+                failure_reasons=failure_reasons,
+                preservation_violations=preservation_violations,
+                embedding_latency_ms=round(emb_latency_ms, 2),
+                guardrail_latency_ms=round(total_latency_ms, 2),
+                model_available=True,
+                model_status="ready",
+                stage_similarities=stage_sims,
+                chunk_similarities=chunk_sims,
+                chunk_coverage=chunk_cov,
+                directive_disambiguation_applied=disambiguation_applied,
+                core_similarity=core_similarity,
+                cache_stats=req_cache.stats() if req_cache is not None else None,
+                full_prompt_similarity=full_prompt_similarity,
+                active_retention_rate=last_attempt_rate,
+                compressor_retention_rate=accepted_comp_rate,
+                accepted_compressor_retention_rate=accepted_comp_rate,
+                last_compressor_attempt_retention_rate=last_attempt_rate,
+                fallback_type=fallback_type,
+                directive_dilution_detected=disambiguation_applied,
+            )

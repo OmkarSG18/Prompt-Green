@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import socket
 import time
@@ -48,12 +49,27 @@ CONDITIONAL_WORDS: Set[str] = {
 @dataclass
 class ShaperConfig:
     """Configuration options for the Stage 3 output directive shaper."""
-    ollama_host: str = "http://localhost:11434"
+    ollama_host: str = "http://127.0.0.1:11434"
     model_name: str = "qwen2.5:0.5b"
     prefer_ollama: bool = True
-    timeout_seconds: float = 2.0
+    timeout_seconds: float = 5.0  # Default 5.0s for consumer CPU generation feasibility
     verify_preservation: bool = True
     temperature: float = 0.1
+
+    def __post_init__(self) -> None:
+        """Allow runtime override of timeout, host, and model via environment variables."""
+        env_timeout = os.environ.get("PROMPTGREEN_OLLAMA_TIMEOUT")
+        if env_timeout is not None:
+            try:
+                self.timeout_seconds = float(env_timeout)
+            except ValueError:
+                pass
+        env_host = os.environ.get("PROMPTGREEN_OLLAMA_HOST")
+        if env_host is not None and env_host.strip():
+            self.ollama_host = env_host.strip()
+        env_model = os.environ.get("PROMPTGREEN_OLLAMA_MODEL")
+        if env_model is not None and env_model.strip():
+            self.model_name = env_model.strip()
 
 
 @dataclass
@@ -72,6 +88,7 @@ class ShapingResult:
     integrity_preserved: bool
     warnings: List[str] = field(default_factory=list)
     success: bool = True
+    ollama_latency_ms: float = 0.0
 
 
 class OutputDirectiveShaper:
@@ -175,16 +192,29 @@ class OutputDirectiveShaper:
         shaping_method = "none"
         used_model_name: Optional[str] = None
         fallback_reason: Optional[str] = None
+        ollama_latency_ms: float = 0.0
 
         if self.config.prefer_ollama:
             ollama_ready = self.is_ollama_available()
             if ollama_ready:
+                t_ollama = time.perf_counter()
                 ollama_text, ollama_ok, err = self._shape_with_ollama(masked_prompt, placeholder_map)
+                ollama_latency_ms = (time.perf_counter() - t_ollama) * 1000.0
                 if ollama_ok:
-                    shaped_masked = ollama_text
-                    shaping_applied = (shaped_masked.strip() != masked_prompt.strip())
-                    shaping_method = "ollama" if shaping_applied else "none"
-                    used_model_name = self.config.model_name
+                    cand_tokens, _ = self.pruner.count_tokens(ollama_text)
+                    orig_tokens_m, _ = self.pruner.count_tokens(masked_prompt)
+                    # Reject neural output if it significantly expands prompt size
+                    if cand_tokens > orig_tokens_m + 10:
+                        fallback_reason = (
+                            f"Ollama neural output expanded token size ({cand_tokens} > {orig_tokens_m}); "
+                            "rejected neural candidate to prevent token bloat."
+                        )
+                        warnings.append(fallback_reason)
+                    else:
+                        shaped_masked = ollama_text
+                        shaping_applied = (shaped_masked.strip() != masked_prompt.strip())
+                        shaping_method = "ollama" if shaping_applied else "none"
+                        used_model_name = self.config.model_name
                 else:
                     fallback_reason = f"Ollama execution failed: {err}"
                     warnings.append(fallback_reason)
@@ -237,6 +267,7 @@ class OutputDirectiveShaper:
             integrity_preserved=integrity_ok,
             warnings=warnings,
             success=True,
+            ollama_latency_ms=round(ollama_latency_ms, 2),
         )
 
     # -------------------------------------------------------------------------
@@ -342,13 +373,20 @@ class OutputDirectiveShaper:
         """
         system_prompt = (
             "You are PromptGreen Output Directive Shaper.\n"
-            "Your task is to clarify and sharpen the expected response format, structure, and output constraints.\n"
+            "Your task is to sharpen output format constraints (tables, JSON schemas, numbered lists, bullet points, code-only boundaries).\n"
             "STRICT RULES:\n"
-            "1. Do NOT change the user's underlying question, task, or intent.\n"
-            "2. Do NOT remove any facts, context, conditions, exceptions, or negative instructions.\n"
-            "3. Do NOT invent word limits or restrict length unless the user explicitly requested it.\n"
-            "4. Do NOT drop or alter protected placeholders such as __CODE_BLOCK_0__ or __URL_0__.\n"
-            "5. Return ONLY the refined prompt text with no intro, greetings, or commentary."
+            "1. Do NOT answer the prompt or write code to solve it. Return only the refined prompt text.\n"
+            "2. Do NOT change the user's underlying question, task, or intent.\n"
+            "3. Do NOT remove any facts, context, conditions, exceptions, or negative instructions.\n"
+            "4. Do NOT invent word limits or restrict length unless the user explicitly requested it.\n"
+            "5. Do NOT drop or alter protected placeholders such as __CODE_BLOCK_0__ or __URL_0__.\n"
+            "6. Return ONLY the refined prompt text with no intro, greetings, or commentary.\n\n"
+            "Example 1:\n"
+            "Input: Compare SQL and NoSQL in a table\n"
+            "Output: Compare SQL and NoSQL. Present the comparison in a table.\n"
+            "Example 2:\n"
+            "Input: Give 3 ways to optimize database queries\n"
+            "Output: Give 3 ways to optimize database queries as a clear numbered list."
         )
 
         payload = {
@@ -399,6 +437,12 @@ class OutputDirectiveShaper:
                         return masked_text, False, f"Model output failed validation: {'; '.join(warnings)}"
                     return response_text, True, None
                 return masked_text, False, f"Ollama HTTP error {resp.status}"
+        except (socket.timeout, TimeoutError):
+            return masked_text, False, f"timed out after {self.config.timeout_seconds:.1f}s"
+        except urllib.error.URLError as u_err:
+            if isinstance(u_err.reason, (socket.timeout, TimeoutError)) or "timed out" in str(u_err).lower():
+                return masked_text, False, f"timed out after {self.config.timeout_seconds:.1f}s"
+            return masked_text, False, str(u_err)
         except Exception as exc:
             return masked_text, False, str(exc)
 

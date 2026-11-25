@@ -1,3 +1,3 @@
-from .database import PromptLedger, LedgerRecord
+from .database import PromptLedger, LedgerRecord, OptimizationEvent
 
-__all__ = ["PromptLedger", "LedgerRecord"]
+__all__ = ["PromptLedger", "LedgerRecord", "OptimizationEvent"]

@@ -1,0 +1,288 @@
+{
+  "timestamp": "2026-11-24T02:21:00",
+  "model": "qwen2.5:0.5b",
+  "host": "http://127.0.0.1:11434",
+  "hardware": "Intel Core i7-10610U (CPU)",
+  "results": [
+    {
+      "id": "SLM-01",
+      "description": "Comparison request with implicit table",
+      "original_prompt": "Compare SQL relational databases and NoSQL document stores in a table.",
+      "input_tokens": 13,
+      "deterministic": {
+        "shaped_prompt": "Compare SQL relational databases and NoSQL document stores. Present the comparison in a table. Include the relevant comparison criteria.",
+        "shaping_applied": true,
+        "output_tokens": 23,
+        "token_difference": 10,
+        "latency_ms": 21.61,
+        "integrity_preserved": true
+      },
+      "slm_neural": {
+        "shaped_prompt": "Compare SQL relational databases and NoSQL document stores. Present the comparison in a table.",
+        "shaping_applied": true,
+        "shaping_method": "ollama",
+        "model_name": "qwen2.5:0.5b",
+        "output_tokens": 17,
+        "token_difference": 4,
+        "latency_ms": 2825.72,
+        "ollama_latency_ms": 2775.59,
+        "integrity_preserved": true,
+        "fallback_reason": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "SLM-02",
+      "description": "JSON extraction request with specific keys",
+      "original_prompt": "Extract user info with keys name, email and role from the logs.",
+      "input_tokens": 14,
+      "deterministic": {
+        "shaped_prompt": "Extract user info with keys name, email and role from the logs.",
+        "shaping_applied": false,
+        "output_tokens": 14,
+        "token_difference": 0,
+        "latency_ms": 3.8,
+        "integrity_preserved": true
+      },
+      "slm_neural": {
+        "shaped_prompt": "Extract user info with keys name, email and role from the logs.",
+        "shaping_applied": false,
+        "shaping_method": "none",
+        "model_name": "qwen2.5:0.5b",
+        "output_tokens": 14,
+        "token_difference": 0,
+        "latency_ms": 962.25,
+        "ollama_latency_ms": 866.29,
+        "integrity_preserved": true,
+        "fallback_reason": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "SLM-03",
+      "description": "Numbered steps procedural request",
+      "original_prompt": "List 3 key steps to deploy a containerized service with Docker.",
+      "input_tokens": 14,
+      "deterministic": {
+        "shaped_prompt": "List 3 key steps to deploy a containerized service with Docker. Present them as a clear numbered list.",
+        "shaping_applied": true,
+        "output_tokens": 22,
+        "token_difference": 8,
+        "latency_ms": 0.79,
+        "integrity_preserved": true
+      },
+      "slm_neural": {
+        "shaped_prompt": "List 3 key steps to deploy a containerized service with Docker. Present them as a clear numbered list.",
+        "shaping_applied": true,
+        "shaping_method": "deterministic",
+        "model_name": null,
+        "output_tokens": 22,
+        "token_difference": 8,
+        "latency_ms": 1636.97,
+        "ollama_latency_ms": 1553.51,
+        "integrity_preserved": true,
+        "fallback_reason": "Ollama neural output expanded token size (42 > 14); rejected neural candidate to prevent token bloat.",
+        "warnings": [
+          "Ollama neural output expanded token size (42 > 14); rejected neural candidate to prevent token bloat."
+        ]
+      }
+    },
+    {
+      "id": "SLM-04",
+      "description": "Bullet points summary request",
+      "original_prompt": "Summarize the advantages of microservices architecture in bullet points.",
+      "input_tokens": 13,
+      "deterministic": {
+        "shaped_prompt": "Summarize the advantages of microservices architecture. Present the key points as concise bullet points.",
+        "shaping_applied": true,
+        "output_tokens": 19,
+        "token_difference": 6,
+        "latency_ms": 1.23,
+        "integrity_preserved": true
+      },
+      "slm_neural": {
+        "shaped_prompt": "Summarize the advantages of microservices architecture. Present the key points as concise bullet points.",
+        "shaping_applied": true,
+        "shaping_method": "deterministic",
+        "model_name": null,
+        "output_tokens": 19,
+        "token_difference": 6,
+        "latency_ms": 3353.07,
+        "ollama_latency_ms": 3230.07,
+        "integrity_preserved": true,
+        "fallback_reason": "Ollama execution failed: Model output failed validation: Candidate length (522) out of acceptable bounds for original (72).",
+        "warnings": [
+          "Ollama execution failed: Model output failed validation: Candidate length (522) out of acceptable bounds for original (72)."
+        ]
+      }
+    },
+    {
+      "id": "SLM-05",
+      "description": "Code only request with negative boundary",
+      "original_prompt": "Write a Python function to compute fibonacci numbers. Return code only.",
+      "input_tokens": 13,
+      "deterministic": {
+        "shaped_prompt": "Write a Python function to compute fibonacci numbers. Return only the code implementation without additional conversational text.",
+        "shaping_applied": true,
+        "output_tokens": 20,
+        "token_difference": 7,
+        "latency_ms": 0.72,
+        "integrity_preserved": true
+      },
+      "slm_neural": {
+        "shaped_prompt": "Write a Python function to compute fibonacci numbers. Return only the code implementation without additional conversational text.",
+        "shaping_applied": true,
+        "shaping_method": "deterministic",
+        "model_name": null,
+        "output_tokens": 20,
+        "token_difference": 7,
+        "latency_ms": 2072.89,
+        "ollama_latency_ms": 1999.38,
+        "integrity_preserved": true,
+        "fallback_reason": "Ollama neural output expanded token size (59 > 13); rejected neural candidate to prevent token bloat.",
+        "warnings": [
+          "Ollama neural output expanded token size (59 > 13); rejected neural candidate to prevent token bloat."
+        ]
+      }
+    },
+    {
+      "id": "SLM-06",
+      "description": "Simple terms explanation request",
+      "original_prompt": "Explain database indexing in simple terms for junior engineers.",
+      "input_tokens": 11,
+      "deterministic": {
+        "shaped_prompt": "Explain database indexing. Use clear, simple language. Organize the explanation into short sections:\nfor junior engineers.",
+        "shaping_applied": true,
+        "output_tokens": 23,
+        "token_difference": 12,
+        "latency_ms": 0.61,
+        "integrity_preserved": true
+      },
+      "slm_neural": {
+        "shaped_prompt": "Explain database indexing. Use clear, simple language. Organize the explanation into short sections:\nfor junior engineers.",
+        "shaping_applied": true,
+        "shaping_method": "deterministic",
+        "model_name": "qwen2.5:0.5b",
+        "output_tokens": 23,
+        "token_difference": 12,
+        "latency_ms": 580.37,
+        "ollama_latency_ms": 510.87,
+        "integrity_preserved": true,
+        "fallback_reason": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "SLM-07",
+      "description": "Detailed explanation with example",
+      "original_prompt": "Provide a detailed explanation of gradient descent with an example.",
+      "input_tokens": 11,
+      "deterministic": {
+        "shaped_prompt": "Provide a detailed explanation of gradient descent and include a relevant example.",
+        "shaping_applied": true,
+        "output_tokens": 13,
+        "token_difference": 2,
+        "latency_ms": 0.4,
+        "integrity_preserved": true
+      },
+      "slm_neural": {
+        "shaped_prompt": "Provide a detailed explanation of gradient descent and include a relevant example.",
+        "shaping_applied": true,
+        "shaping_method": "deterministic",
+        "model_name": "qwen2.5:0.5b",
+        "output_tokens": 13,
+        "token_difference": 2,
+        "latency_ms": 604.3,
+        "ollama_latency_ms": 539.49,
+        "integrity_preserved": true,
+        "fallback_reason": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "SLM-08",
+      "description": "Strict word limit constraint",
+      "original_prompt": "Explain carbon emissions in cloud datacenters in under 50 words.",
+      "input_tokens": 14,
+      "deterministic": {
+        "shaped_prompt": "Explain carbon emissions in cloud datacenters. Keep the response under 50 words.",
+        "shaping_applied": true,
+        "output_tokens": 17,
+        "token_difference": 3,
+        "latency_ms": 1.06,
+        "integrity_preserved": true
+      },
+      "slm_neural": {
+        "shaped_prompt": "Explain carbon emissions in cloud datacenters. Keep the response under 50 words.",
+        "shaping_applied": true,
+        "shaping_method": "deterministic",
+        "model_name": null,
+        "output_tokens": 17,
+        "token_difference": 3,
+        "latency_ms": 729.79,
+        "ollama_latency_ms": 652.76,
+        "integrity_preserved": true,
+        "fallback_reason": "Ollama execution failed: Model output failed validation: Numerical constraint '50' present in original was removed.",
+        "warnings": [
+          "Ollama execution failed: Model output failed validation: Numerical constraint '50' present in original was removed."
+        ]
+      }
+    },
+    {
+      "id": "SLM-09",
+      "description": "Concise brief concept explanation",
+      "original_prompt": "Explain ACID properties in relational databases briefly.",
+      "input_tokens": 10,
+      "deterministic": {
+        "shaped_prompt": "Explain ACID properties in relational databases. Keep the explanation concise and focused on the core concept.",
+        "shaping_applied": true,
+        "output_tokens": 20,
+        "token_difference": 10,
+        "latency_ms": 0.56,
+        "integrity_preserved": true
+      },
+      "slm_neural": {
+        "shaped_prompt": "explain ACID properties in relational databases briefly.",
+        "shaping_applied": true,
+        "shaping_method": "ollama",
+        "model_name": "qwen2.5:0.5b",
+        "output_tokens": 9,
+        "token_difference": -1,
+        "latency_ms": 499.41,
+        "ollama_latency_ms": 429.48,
+        "integrity_preserved": true,
+        "fallback_reason": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "SLM-10",
+      "description": "Numbered list formatting request",
+      "original_prompt": "Provide the best practices for secure password hashing in a numbered list.",
+      "input_tokens": 13,
+      "deterministic": {
+        "shaped_prompt": "Provide the best practices for secure password hashing. Present the items as a clear numbered list.",
+        "shaping_applied": true,
+        "output_tokens": 18,
+        "token_difference": 5,
+        "latency_ms": 1.15,
+        "integrity_preserved": true
+      },
+      "slm_neural": {
+        "shaped_prompt": "Provide the best practices for secure password hashing. Present the items as a clear numbered list.",
+        "shaping_applied": true,
+        "shaping_method": "deterministic",
+        "model_name": null,
+        "output_tokens": 18,
+        "token_difference": 5,
+        "latency_ms": 2961.79,
+        "ollama_latency_ms": 2884.94,
+        "integrity_preserved": true,
+        "fallback_reason": "Ollama execution failed: Model output failed validation: Candidate length (397) out of acceptable bounds for original (74).",
+        "warnings": [
+          "Ollama execution failed: Model output failed validation: Candidate length (397) out of acceptable bounds for original (74)."
+        ]
+      }
+    }
+  ]
+}

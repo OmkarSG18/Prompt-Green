@@ -1,0 +1,57 @@
+{
+  "aggressive": {
+    "mode": "aggressive",
+    "total_prompts": 1000,
+    "accepted_count": 924,
+    "acceptance_rate_pct": 92.4,
+    "rollback_count": 76,
+    "rollback_rate_pct": 7.6,
+    "safety_rejections": 76,
+    "preservation_violations_count": 74,
+    "zero_token_savings_count": 99,
+    "negative_token_savings_count": 0,
+    "net_carbon_debt_count": 85,
+    "net_carbon_debt_rate_pct": 8.5,
+    "latency_ms": {
+      "mean": 1305.12,
+      "median": 424.16,
+      "std": 1624.71,
+      "min": 153.19,
+      "max": 9761.41,
+      "warm_mean": 1306.27
+    },
+    "token_reduction_tokens": {
+      "mean": 3.46,
+      "median": 3.0,
+      "std": 2.32,
+      "min": 0,
+      "max": 14,
+      "total_tokens_saved": 3455
+    },
+    "token_reduction_pct": {
+      "mean": 6.04,
+      "median": 5.13,
+      "std": 5.09,
+      "min": 0.0,
+      "max": 30.0
+    },
+    "semantic_similarity": {
+      "mean": 0.9834,
+      "median": 0.9887,
+      "min": 0.8715,
+      "max": 1.0,
+      "std": 0.0153
+    },
+    "energy_wh": {
+      "mean_gross_saved_wh": 0.044598,
+      "mean_optimizer_overhead_wh": 0.012689,
+      "mean_net_saved_wh": 0.031909,
+      "total_net_energy_saved_wh": 31.9089
+    },
+    "stage_fallbacks": {
+      "stage_2_deterministic_fallback_rate_pct": 100.0,
+      "stage_3_deterministic_fallback_rate_pct": 100.0,
+      "stage_3_ollama_fallback_reasons": {}
+    }
+  }
+}

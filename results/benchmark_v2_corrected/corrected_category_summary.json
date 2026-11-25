@@ -1,0 +1,464 @@
+{
+  "conservative": [
+    {
+      "category": "Code generation and debugging",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 1.97,
+      "mean_token_reduction_pct": 3.27,
+      "mean_latency_ms": 324.67,
+      "mean_semantic_similarity": 0.9932,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.07841,
+        "monthly_10k_net_energy_wh": 162.7453
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.956102,
+        "net_carbon_debt_count": 8,
+        "net_savings_count": 22
+      }
+    },
+    {
+      "category": "RAG and information retrieval",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 1.17,
+      "mean_token_reduction_pct": 2.15,
+      "mean_latency_ms": 265.9,
+      "mean_semantic_similarity": 0.9919,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.067894,
+        "monthly_10k_net_energy_wh": 96.5224
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.881558,
+        "net_carbon_debt_count": 11,
+        "net_savings_count": 19
+      }
+    },
+    {
+      "category": "Analytical reasoning",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 0.37,
+      "mean_token_reduction_pct": 0.7,
+      "mean_latency_ms": 248.38,
+      "mean_semantic_similarity": 0.9979,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.069409,
+        "monthly_10k_net_energy_wh": 30.2876
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.263862,
+        "net_carbon_debt_count": 23,
+        "net_savings_count": 7
+      }
+    },
+    {
+      "category": "Summarization and information extraction",
+      "total_prompts": 30,
+      "accepted_count": 28,
+      "acceptance_rate_pct": 93.33,
+      "mean_token_reduction": 0.67,
+      "mean_token_reduction_pct": 1.47,
+      "mean_latency_ms": 229.58,
+      "mean_semantic_similarity": 0.9944,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.061442,
+        "monthly_10k_net_energy_wh": 55.133
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.47708,
+        "net_carbon_debt_count": 20,
+        "net_savings_count": 10
+      }
+    },
+    {
+      "category": "CI/CD and developer workflows",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 0.3,
+      "mean_token_reduction_pct": 0.52,
+      "mean_latency_ms": 279.03,
+      "mean_semantic_similarity": 0.9979,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.078901,
+        "monthly_10k_net_energy_wh": 24.7586
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.201998,
+        "net_carbon_debt_count": 24,
+        "net_savings_count": 6
+      }
+    },
+    {
+      "category": "Data science and machine learning",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 0.33,
+      "mean_token_reduction_pct": 0.6,
+      "mean_latency_ms": 311.15,
+      "mean_semantic_similarity": 0.9985,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.087991,
+        "monthly_10k_net_energy_wh": 27.5092
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.193437,
+        "net_carbon_debt_count": 24,
+        "net_savings_count": 6
+      }
+    },
+    {
+      "category": "Structured output and formatting constraints",
+      "total_prompts": 30,
+      "accepted_count": 27,
+      "acceptance_rate_pct": 90.0,
+      "mean_token_reduction": 0.5,
+      "mean_token_reduction_pct": 0.75,
+      "mean_latency_ms": 301.26,
+      "mean_semantic_similarity": 0.9964,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.083727,
+        "monthly_10k_net_energy_wh": 41.3121
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.330374,
+        "net_carbon_debt_count": 22,
+        "net_savings_count": 8
+      }
+    },
+    {
+      "category": "General technical instructions",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 0.27,
+      "mean_token_reduction_pct": 0.48,
+      "mean_latency_ms": 367.87,
+      "mean_semantic_similarity": 0.9984,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.105088,
+        "monthly_10k_net_energy_wh": 21.9727
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.17708,
+        "net_carbon_debt_count": 24,
+        "net_savings_count": 6
+      }
+    }
+  ],
+  "balanced": [
+    {
+      "category": "Code generation and debugging",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 2,
+      "mean_token_reduction_pct": 3.34,
+      "mean_latency_ms": 423.51,
+      "mean_semantic_similarity": 0.9931,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.106965,
+        "monthly_10k_net_energy_wh": 165.4765
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.976638,
+        "net_carbon_debt_count": 7,
+        "net_savings_count": 23
+      }
+    },
+    {
+      "category": "RAG and information retrieval",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 1.33,
+      "mean_token_reduction_pct": 2.43,
+      "mean_latency_ms": 336.76,
+      "mean_semantic_similarity": 0.9917,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.087182,
+        "monthly_10k_net_energy_wh": 110.3018
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.911996,
+        "net_carbon_debt_count": 10,
+        "net_savings_count": 20
+      }
+    },
+    {
+      "category": "Analytical reasoning",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 0.4,
+      "mean_token_reduction_pct": 0.77,
+      "mean_latency_ms": 301.52,
+      "mean_semantic_similarity": 0.9974,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.084631,
+        "monthly_10k_net_energy_wh": 33.0321
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.297731,
+        "net_carbon_debt_count": 22,
+        "net_savings_count": 8
+      }
+    },
+    {
+      "category": "Summarization and information extraction",
+      "total_prompts": 30,
+      "accepted_count": 29,
+      "acceptance_rate_pct": 96.67,
+      "mean_token_reduction": 0.73,
+      "mean_token_reduction_pct": 1.64,
+      "mean_latency_ms": 290.6,
+      "mean_semantic_similarity": 0.9944,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.078687,
+        "monthly_10k_net_energy_wh": 60.6352
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.573041,
+        "net_carbon_debt_count": 18,
+        "net_savings_count": 12
+      }
+    },
+    {
+      "category": "CI/CD and developer workflows",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 0.3,
+      "mean_token_reduction_pct": 0.52,
+      "mean_latency_ms": 302.21,
+      "mean_semantic_similarity": 0.9979,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.085661,
+        "monthly_10k_net_energy_wh": 24.7519
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.195238,
+        "net_carbon_debt_count": 24,
+        "net_savings_count": 6
+      }
+    },
+    {
+      "category": "Data science and machine learning",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 0.43,
+      "mean_token_reduction_pct": 0.77,
+      "mean_latency_ms": 327.25,
+      "mean_semantic_similarity": 0.9981,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.09186,
+        "monthly_10k_net_energy_wh": 35.7846
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.331445,
+        "net_carbon_debt_count": 21,
+        "net_savings_count": 9
+      }
+    },
+    {
+      "category": "Structured output and formatting constraints",
+      "total_prompts": 30,
+      "accepted_count": 27,
+      "acceptance_rate_pct": 90.0,
+      "mean_token_reduction": 0.53,
+      "mean_token_reduction_pct": 0.82,
+      "mean_latency_ms": 317.16,
+      "mean_semantic_similarity": 0.9963,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.088088,
+        "monthly_10k_net_energy_wh": 44.0675
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.361139,
+        "net_carbon_debt_count": 21,
+        "net_savings_count": 9
+      }
+    },
+    {
+      "category": "General technical instructions",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 0.3,
+      "mean_token_reduction_pct": 0.53,
+      "mean_latency_ms": 360.77,
+      "mean_semantic_similarity": 0.9984,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.102742,
+        "monthly_10k_net_energy_wh": 24.7348
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 0.225872,
+        "net_carbon_debt_count": 23,
+        "net_savings_count": 7
+      }
+    }
+  ],
+  "aggressive": [
+    {
+      "category": "Code generation and debugging",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 5.27,
+      "mean_token_reduction_pct": 8.74,
+      "mean_latency_ms": 417.97,
+      "mean_semantic_similarity": 0.9849,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.078301,
+        "monthly_10k_net_energy_wh": 435.9581
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 1.330212,
+        "net_carbon_debt_count": 0,
+        "net_savings_count": 30
+      }
+    },
+    {
+      "category": "RAG and information retrieval",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 3.7,
+      "mean_token_reduction_pct": 6.56,
+      "mean_latency_ms": 332.41,
+      "mean_semantic_similarity": 0.9832,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.066316,
+        "monthly_10k_net_energy_wh": 306.263
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 1.2273,
+        "net_carbon_debt_count": 4,
+        "net_savings_count": 26
+      }
+    },
+    {
+      "category": "Analytical reasoning",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 3.67,
+      "mean_token_reduction_pct": 6.97,
+      "mean_latency_ms": 310.22,
+      "mean_semantic_similarity": 0.9913,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.060121,
+        "monthly_10k_net_energy_wh": 303.5095
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 1.249787,
+        "net_carbon_debt_count": 2,
+        "net_savings_count": 28
+      }
+    },
+    {
+      "category": "Summarization and information extraction",
+      "total_prompts": 30,
+      "accepted_count": 29,
+      "acceptance_rate_pct": 96.67,
+      "mean_token_reduction": 3.17,
+      "mean_token_reduction_pct": 7.23,
+      "mean_latency_ms": 287.88,
+      "mean_semantic_similarity": 0.9829,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.057745,
+        "monthly_10k_net_energy_wh": 262.116
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 1.491378,
+        "net_carbon_debt_count": 2,
+        "net_savings_count": 28
+      }
+    },
+    {
+      "category": "CI/CD and developer workflows",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 2.9,
+      "mean_token_reduction_pct": 5.32,
+      "mean_latency_ms": 308.9,
+      "mean_semantic_similarity": 0.9935,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.066084,
+        "monthly_10k_net_energy_wh": 240.0299
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 1.368986,
+        "net_carbon_debt_count": 0,
+        "net_savings_count": 30
+      }
+    },
+    {
+      "category": "Data science and machine learning",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 2.9,
+      "mean_token_reduction_pct": 5.01,
+      "mean_latency_ms": 326.26,
+      "mean_semantic_similarity": 0.9931,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.071146,
+        "monthly_10k_net_energy_wh": 240.0248
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 1.340122,
+        "net_carbon_debt_count": 1,
+        "net_savings_count": 29
+      }
+    },
+    {
+      "category": "Structured output and formatting constraints",
+      "total_prompts": 30,
+      "accepted_count": 27,
+      "acceptance_rate_pct": 90.0,
+      "mean_token_reduction": 2.73,
+      "mean_token_reduction_pct": 4.46,
+      "mean_latency_ms": 348.85,
+      "mean_semantic_similarity": 0.9907,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.079117,
+        "monthly_10k_net_energy_wh": 226.2183
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 1.298082,
+        "net_carbon_debt_count": 3,
+        "net_savings_count": 27
+      }
+    },
+    {
+      "category": "General technical instructions",
+      "total_prompts": 30,
+      "accepted_count": 30,
+      "acceptance_rate_pct": 100.0,
+      "mean_token_reduction": 2.57,
+      "mean_token_reduction_pct": 4.55,
+      "mean_latency_ms": 365.41,
+      "mean_semantic_similarity": 0.9945,
+      "scenario_a_input_only": {
+        "single_net_energy_wh": -0.085327,
+        "monthly_10k_net_energy_wh": 212.4134
+      },
+      "scenario_b_predicted_output": {
+        "total_net_energy_saved_wh": 1.314301,
+        "net_carbon_debt_count": 1,
+        "net_savings_count": 29
+      }
+    }
+  ]
+}

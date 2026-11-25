@@ -1,0 +1,1512 @@
+{
+  "aggressive": [
+    {
+      "prompt_id": "ige-0002",
+      "category": "Code generation and debugging",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could write a Go function using sync.Pool to reuse byte buffers in a high-throughput network proxy.",
+      "optimized_prompt": "I would appreciate it if you could write a Go function using sync.Pool to reuse byte buffers in a high-throughput network proxy.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9843,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003468,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0016",
+      "category": "Code generation and debugging",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could implement the Tarjan strongly connected components algorithm in Python. Include descriptive type annotations, comprehensive docstrings, and input sanitization. Adhere to principle of least privilege and enforce non-root execution boundaries. Ensure complete adherence to established technical guidelines.",
+      "optimized_prompt": "I would appreciate it if you could implement the Tarjan strongly connected components algorithm in Python. Include descriptive type annotations, comprehensive docstrings, and input sanitization. Adhere to principle of least privilege and enforce non-root execution boundaries. Ensure complete adherence to established technical guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9481,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9481) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.008017,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0026",
+      "category": "Code generation and debugging",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could implement the Hopcroft-Karp algorithm in Python to compute the maximum cardinality matching in an unweighted bipartite graph in O(E sqrt(V)) time.",
+      "optimized_prompt": "I would appreciate it if you could implement the Hopcroft-Karp algorithm in Python to compute the maximum cardinality matching in an unweighted bipartite graph in O(E sqrt(V)) time.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9781,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003549,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0036",
+      "category": "Code generation and debugging",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could write a Rust CLI application using clap that parses subcommands, flags, and environment variables. Validate that all output structures conform precisely to required format specifications. Ensure configurations persist reliably across system restarts and daemon reloads.",
+      "optimized_prompt": "I would appreciate it if you could write a Rust CLI application using clap that parses subcommands, flags, and environment variables. Validate that all output structures conform precisely to required format specifications. Ensure configurations persist reliably across system restarts and daemon reloads.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9716,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.007981,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0049",
+      "category": "Code generation and debugging",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could write a Bash script that inspects NTP time synchronization offsets across a cluster of servers using chronyc and alerts if jitter exceeds 5ms. Adhere strictly to established conventions and avoid deprecated or unverified methodologies. Adhere strictly to established conventions and avoid deprecated or unverified methodologies.",
+      "optimized_prompt": "I would appreciate it if you could write a Bash script that inspects NTP time synchronization offsets across a cluster of servers using chronyc and alerts if jitter exceeds 5ms. Adhere strictly to established conventions and avoid deprecated or unverified methodologies. Adhere strictly to established conventions and avoid deprecated or unverified methodologies.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9505,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9505) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.018776,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0058",
+      "category": "Code generation and debugging",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could implement a concurrent queue in Java using synchronized blocks and wait/notifyAll.\n\nComprehensive Architectural and Operational Requirements:\n1. Lock-Free Deques: Implement atomic compare-and-swap ring buffers with acquire-release ordering. Frame the solution around verifiable milestones, core deliverables, and organizational accountability.\n2. Validation & Safety Invariants: Handle queue wrap-around and concurrent pop races without ABA corruption. Verify that all preconditions, invariants, and input parameters are strictly validated to prevent state corruption.\n3. Operational Efficiency & Scaling: Avoid dynamic memory allocations in push operations via preallocated blocks. Ensure all quantitative metrics reflect standard industry conventions, formal units, and mathematical formulas.\n4. Automated Verification & Testing: Provide ThreadSanitizer-clean concurrent stress tests. Confirm that all output artifacts can be parsed and executed without manual human intervention or patching.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could implement a concurrent queue in Java using synchronized blocks and wait/notifyAll.\n\nComprehensive Architectural and Operational Requirements:\n1. Lock-Free Deques: Implement atomic compare-and-swap ring buffers with acquire-release ordering. Frame the solution around verifiable milestones, core deliverables, and organizational accountability.\n2. Validation & Safety Invariants: Handle queue wrap-around and concurrent pop races without ABA corruption. Verify that all preconditions, invariants, and input parameters are strictly validated to prevent state corruption.\n3. Operational Efficiency & Scaling: Avoid dynamic memory allocations in push operations via preallocated blocks. Ensure all quantitative metrics reflect standard industry conventions, formal units, and mathematical formulas.\n4. Automated Verification & Testing: Provide ThreadSanitizer-clean concurrent stress tests. Confirm that all output artifacts can be parsed and executed without manual human intervention or patching.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9629,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.080291,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0073",
+      "category": "Code generation and debugging",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could implement the Rabin-Karp substring search algorithm using rolling hash in Python. Isolate external dependencies and provide clear fallback degradation strategies. Ensure execution latencies remain strictly within expected production service-level bounds. Ensure complete adherence to established technical guidelines.",
+      "optimized_prompt": "I would appreciate it if you could implement the Rabin-Karp substring search algorithm using rolling hash in Python. Isolate external dependencies and provide clear fallback degradation strategies. Ensure execution latencies remain strictly within expected production service-level bounds. Ensure complete adherence to established technical guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9652,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.009539,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0078",
+      "category": "Code generation and debugging",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could implement an immutable persistent vector in Rust inspired by Clojure bit-partitioned tries.\n\nComprehensive Architectural and Operational Requirements:\n1. Bloom Filter Engine: Implement cache-partitioned Bloom filters using double-hashing schemes. Structure the primary deliverable to emphasize actionable findings, modular abstractions, and stakeholder priorities.\n2. Validation & Safety Invariants: Derive optimal bit array sizes based on target false positive probabilities. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Optimize hash computations using Murmur3 or HighwayHash algorithms. Highlight resource allocation trade-offs and memory footprint implications across operational tiers.\n4. Automated Verification & Testing: Verify theoretical versus empirical false positive rates with test scripts. Deliver an automated test suite matrix mapping identified edge cases directly to concrete test assertions.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria. Provide complete architectural documentation, formal verification proofs, and concrete sample execution payloads adhering to established enterprise quality criteria.",
+      "optimized_prompt": "I would appreciate it if you could implement an immutable persistent vector in Rust inspired by Clojure bit-partitioned tries.\n\nComprehensive Architectural and Operational Requirements:\n1. Bloom Filter Engine: Implement cache-partitioned Bloom filters using double-hashing schemes. Structure the primary deliverable to emphasize actionable findings, modular abstractions, and stakeholder priorities.\n2. Validation & Safety Invariants: Derive optimal bit array sizes based on target false positive probabilities. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Optimize hash computations using Murmur3 or HighwayHash algorithms. Highlight resource allocation trade-offs and memory footprint implications across operational tiers.\n4. Automated Verification & Testing: Verify theoretical versus empirical false positive rates with test scripts. Deliver an automated test suite matrix mapping identified edge cases directly to concrete test assertions.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria. Provide complete architectural documentation, formal verification proofs, and concrete sample execution payloads adhering to established enterprise quality criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9717,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.088,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0097",
+      "category": "RAG and information retrieval",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could retrieve and compare benchmark results for Llama-3-70B versus Mixtral-8x22B on MMLU from research papers. Follow M. E. Johnson's guidelines.",
+      "optimized_prompt": "I would appreciate it if you could retrieve and compare benchmark results for Llama-3-70B versus Mixtral-8x22B on MMLU from research papers. Follow M. E. Johnson's guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9839,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003426,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0118",
+      "category": "RAG and information retrieval",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could identify the exact notice requirements for terminating a commercial lease under New York State law. Implement structured logging hooks capturing execution metrics and contextual error traces. Ensure clean separation of concerns between business logic and external I/O routines. Ensure complete adherence to established technical guidelines.",
+      "optimized_prompt": "I would appreciate it if you could identify the exact notice requirements for terminating a commercial lease under New York State law. Implement structured logging hooks capturing execution metrics and contextual error traces. Ensure clean separation of concerns between business logic and external I/O routines. Ensure complete adherence to established technical guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9425,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9425) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.020219,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0121",
+      "category": "RAG and information retrieval",
+      "difficulty": "medium",
+      "original_prompt": "I need assistance to search customer reviews across 10 products to compile common complaints regarding battery degradation. Isolate external dependencies and provide clear fallback degradation strategies. Ensure execution latencies remain strictly within expected production service-level bounds. Ensure complete adherence to established technical guidelines.",
+      "optimized_prompt": "I need assistance to search customer reviews across 10 products to compile common complaints regarding battery degradation. Isolate external dependencies and provide clear fallback degradation strategies. Ensure execution latencies remain strictly within expected production service-level bounds. Ensure complete adherence to established technical guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": true,
+      "rollback_occurred": false,
+      "rollback_reason": null,
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003796,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0131",
+      "category": "RAG and information retrieval",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could search engineering documents to find the maximum allowed temperature rise for class H motor windings. Ensure robust error handling, boundary validation, and clear diagnostic messaging. Guard against unexpected null values, empty collections, and extreme boundary limits.",
+      "optimized_prompt": "I would appreciate it if you could search engineering documents to find the maximum allowed temperature rise for class H motor windings. Ensure robust error handling, boundary validation, and clear diagnostic messaging. Guard against unexpected null values, empty collections, and extreme boundary limits.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.972,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.008552,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0155",
+      "category": "RAG and information retrieval",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could search internal documentation for the disaster recovery RTO and RPO SLA commitments for tier-1 services. Guard against unexpected null values, empty collections, and extreme boundary limits. Maintain full compatibility with standard production runtime environments.",
+      "optimized_prompt": "I would appreciate it if you could search internal documentation for the disaster recovery RTO and RPO SLA commitments for tier-1 services. Guard against unexpected null values, empty collections, and extreme boundary limits. Maintain full compatibility with standard production runtime environments.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9833,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.008235,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0160",
+      "category": "RAG and information retrieval",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could retrieve the clinical trial protocol guidelines for monitoring QT prolongation in psychiatric drug development.\n\nComprehensive Architectural and Operational Requirements:\n1. Medical Device ISO 13485: Extract design control and risk management protocols from ISO 13485 audits. Organize implementation details under clear thematic headings corresponding to key functional domains.\n2. Validation & Safety Invariants: Detail failure mode and effects analysis (FMEA) risk priority numbers. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Highlight biocompatibility testing protocols and sterilization validations. Isolate high-impact variance drivers to facilitate targeted optimizations and prevent CPU contention.\n4. Automated Verification & Testing: Map quality procedures directly to ISO standard clauses. Ensure the final deliverable provides complete operational clarity for enterprise production deployment.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria. Provide complete architectural documentation, formal verification proofs, and concrete sample execution payloads adhering to established enterprise quality criteria.",
+      "optimized_prompt": "I would appreciate it if you could retrieve the clinical trial protocol guidelines for monitoring QT prolongation in psychiatric drug development.\n\nComprehensive Architectural and Operational Requirements:\n1. Medical Device ISO 13485: Extract design control and risk management protocols from ISO 13485 audits. Organize implementation details under clear thematic headings corresponding to key functional domains.\n2. Validation & Safety Invariants: Detail failure mode and effects analysis (FMEA) risk priority numbers. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Highlight biocompatibility testing protocols and sterilization validations. Isolate high-impact variance drivers to facilitate targeted optimizations and prevent CPU contention.\n4. Automated Verification & Testing: Map quality procedures directly to ISO standard clauses. Ensure the final deliverable provides complete operational clarity for enterprise production deployment.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria. Provide complete architectural documentation, formal verification proofs, and concrete sample execution payloads adhering to established enterprise quality criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.996,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.094903,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0179",
+      "category": "Analytical reasoning",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could calculate the expected value and variance of a portfolio comprising three assets with given covariance matrix.",
+      "optimized_prompt": "I would appreciate it if you could calculate the expected value and variance of a portfolio comprising three assets with given covariance matrix.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9422,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9422) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003586,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0193",
+      "category": "Analytical reasoning",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could determine the optimal pricing strategy for a monopolist practicing third-degree price discrimination between two markets. Provide practical verification steps and test assertions to confirm nominal behavior. Enforce deterministic resource cleanup to prevent file descriptor and memory leaks.",
+      "optimized_prompt": "I would appreciate it if you could determine the optimal pricing strategy for a monopolist practicing third-degree price discrimination between two markets. Provide practical verification steps and test assertions to confirm nominal behavior. Enforce deterministic resource cleanup to prevent file descriptor and memory leaks.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9456,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9456) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006843,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0213",
+      "category": "Analytical reasoning",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could calculate the sample size required for a two-sample t-test to detect an effect size d=0.4 with 80% power at alpha=0.05. Prevent unintended side effects by ensuring data immutability where appropriate. Verify that all calculated metrics and status indicators reconcile accurately with inputs.",
+      "optimized_prompt": "I would appreciate it if you could calculate the sample size required for a two-sample t-test to detect an effect size d=0.4 with 80% power at alpha=0.05. Prevent unintended side effects by ensuring data immutability where appropriate. Verify that all calculated metrics and status indicators reconcile accurately with inputs.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9793,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.008011,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0235",
+      "category": "Analytical reasoning",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could prove that the language {ww | w in {0, 1}*} is not context-free using the pumping lemma.\n\nComprehensive Architectural and Operational Requirements:\n1. Epidemic SIR Dynamics: Formulate the continuous-time Susceptible-Infectious-Recovered (SIR) non-linear differential equations. Synthesize complex underlying mechanisms into high-signal specifications for peer engineering review.\n2. Validation & Safety Invariants: Derive the basic reproduction number R0 using the next-generation matrix method. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Prove that an epidemic outbreak occurs if and only if R0 strictly exceeds 1. Optimize critical computational loops to maximize execution throughput and minimize runtime resource overhead.\n4. Automated Verification & Testing: Compute the analytical herd immunity threshold and final epidemic size. Supply end-to-end regression test scripts demonstrating deterministic execution under heavy concurrent stress.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to A. J. Brown's published quality benchmarks.",
+      "optimized_prompt": "I would appreciate it if you could prove that the language {ww | w in {0, 1}*} is not context-free using the pumping lemma.\n\nComprehensive Architectural and Operational Requirements:\n1. Epidemic SIR Dynamics: Formulate the continuous-time Susceptible-Infectious-Recovered (SIR) non-linear differential equations. Synthesize complex underlying mechanisms into high-signal specifications for peer engineering review.\n2. Validation & Safety Invariants: Derive the basic reproduction number R0 using the next-generation matrix method. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Prove that an epidemic outbreak occurs if and only if R0 strictly exceeds 1. Optimize critical computational loops to maximize execution throughput and minimize runtime resource overhead.\n4. Automated Verification & Testing: Compute the analytical herd immunity threshold and final epidemic size. Supply end-to-end regression test scripts demonstrating deterministic execution under heavy concurrent stress.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to A. J. Brown's published quality benchmarks.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9939,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.087563,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0237",
+      "category": "Analytical reasoning",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could solve a multi-objective optimization problem to identify Pareto optimal solutions from a set of five alternatives. Ensure configurations persist reliably across system restarts and daemon reloads. Isolate external dependencies and provide clear fallback degradation strategies.",
+      "optimized_prompt": "I would appreciate it if you could solve a multi-objective optimization problem to identify Pareto optimal solutions from a set of five alternatives. Ensure configurations persist reliably across system restarts and daemon reloads. Isolate external dependencies and provide clear fallback degradation strategies.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9582,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9582) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006645,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0261",
+      "category": "Summarization and information extraction",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could summarize the environmental impact assessment for the proposed offshore wind farm project focusing on marine biodiversity. Ensure all operational constraints are verified.",
+      "optimized_prompt": "I would appreciate it if you could summarize the environmental impact assessment for the proposed offshore wind farm project focusing on marine biodiversity. Ensure all operational constraints are verified.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9648,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.005957,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0275",
+      "category": "Summarization and information extraction",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could condense this 50-page sustainability report into a summary of Scope 1, Scope 2, and Scope 3 greenhouse gas emissions. Enforce deterministic resource cleanup to prevent file descriptor and memory leaks. Maintain strict referential integrity and data consistency across all operations.",
+      "optimized_prompt": "I would appreciate it if you could condense this 50-page sustainability report into a summary of Scope 1, Scope 2, and Scope 3 greenhouse gas emissions. Enforce deterministic resource cleanup to prevent file descriptor and memory leaks. Maintain strict referential integrity and data consistency across all operations.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9439,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9439) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006395,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0295",
+      "category": "Summarization and information extraction",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could condense this 30-page university research ethics committee (IRB) application into a concise abstract of study risks and benefits. Provide comprehensive test cases exercising nominal, boundary, and negative failure paths. Provide practical verification steps and test assertions to confirm nominal behavior.",
+      "optimized_prompt": "I would appreciate it if you could condense this 30-page university research ethics committee (IRB) application into a concise abstract of study risks and benefits. Provide comprehensive test cases exercising nominal, boundary, and negative failure paths. Provide practical verification steps and test assertions to confirm nominal behavior.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9819,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.008987,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0298",
+      "category": "Summarization and information extraction",
+      "difficulty": "medium",
+      "original_prompt": "I need assistance to extract all clinical adverse events categorized by severity grade (CTCAE Grade 1-4) from this immunotherapy trial appendix. Verify that all calculated metrics and status indicators reconcile accurately with inputs. Document runtime computational complexity and memory usage bounds explicitly.",
+      "optimized_prompt": "I need assistance to extract all clinical adverse events categorized by severity grade (CTCAE Grade 1-4) from this immunotherapy trial appendix. Verify that all calculated metrics and status indicators reconcile accurately with inputs. Document runtime computational complexity and memory usage bounds explicitly.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": true,
+      "rollback_occurred": false,
+      "rollback_reason": null,
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.0033,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0308",
+      "category": "Summarization and information extraction",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could extract all candidate qualifications, interview rubrics, and evaluation scoring criteria from the senior engineering hiring guide. Optimize critical execution paths to maximize efficiency and minimize resource overhead. Include descriptive type annotations, comprehensive docstrings, and input sanitization.",
+      "optimized_prompt": "I would appreciate it if you could extract all candidate qualifications, interview rubrics, and evaluation scoring criteria from the senior engineering hiring guide. Optimize critical execution paths to maximize efficiency and minimize resource overhead. Include descriptive type annotations, comprehensive docstrings, and input sanitization.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.953,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9530) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006167,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0317",
+      "category": "Summarization and information extraction",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could summarize the technical challenges and proposed solutions in transitioning a monolithic architecture to event-driven microservices.\n\nComprehensive Architectural and Operational Requirements:\n1. Patent Litigation Verdict: Synthesize jury patent infringement findings, royalty rate awards, and damages calculations. Ensure all structural frameworks, component interfaces, and signatures are documented with rigorous precision.\n2. Validation & Safety Invariants: Detail willful infringement penalties, pre-judgment interest, and injunctive relief status. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Highlight key patent claims affirmed versus invalidated during claim construction. Provide clear visibility into algorithmic complexity, cache locality, and memory reclamation behavior.\n4. Automated Verification & Testing: Provide an executive legal risk table summarizing financial liability exposure. Supply a consolidated comparative data table or test harness summarizing key parameters and output assertions.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could summarize the technical challenges and proposed solutions in transitioning a monolithic architecture to event-driven microservices.\n\nComprehensive Architectural and Operational Requirements:\n1. Patent Litigation Verdict: Synthesize jury patent infringement findings, royalty rate awards, and damages calculations. Ensure all structural frameworks, component interfaces, and signatures are documented with rigorous precision.\n2. Validation & Safety Invariants: Detail willful infringement penalties, pre-judgment interest, and injunctive relief status. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Highlight key patent claims affirmed versus invalidated during claim construction. Provide clear visibility into algorithmic complexity, cache locality, and memory reclamation behavior.\n4. Automated Verification & Testing: Provide an executive legal risk table summarizing financial liability exposure. Supply a consolidated comparative data table or test harness summarizing key parameters and output assertions.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9951,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.088432,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0343",
+      "category": "CI/CD and developer workflows",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could develop an ArgoCD ApplicationSet manifest that dynamically generates applications from Git monorepo folders.",
+      "optimized_prompt": "I would appreciate it if you could develop an ArgoCD ApplicationSet manifest that dynamically generates applications from Git monorepo folders.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9762,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003552,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0357",
+      "category": "CI/CD and developer workflows",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could configure an AWS Karpenter provisioner manifest in Kubernetes that scales spot EC2 instances across ARM64 Graviton instance types based on pending pod nodeSelectors. Document runtime computational complexity and memory usage bounds explicitly. Structure the implementation with clean modular interfaces to facilitate automated testing.",
+      "optimized_prompt": "I would appreciate it if you could configure an AWS Karpenter provisioner manifest in Kubernetes that scales spot EC2 instances across ARM64 Graviton instance types based on pending pod nodeSelectors. Document runtime computational complexity and memory usage bounds explicitly. Structure the implementation with clean modular interfaces to facilitate automated testing.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9586,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9586) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.018269,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0367",
+      "category": "CI/CD and developer workflows",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could develop a Terraform module that provisions an Elasticache Redis cluster with automated failover and encryption.",
+      "optimized_prompt": "I would appreciate it if you could develop a Terraform module that provisions an Elasticache Redis cluster with automated failover and encryption.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9666,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003359,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0377",
+      "category": "CI/CD and developer workflows",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could create a Kubernetes Secret manifest encrypted with SOPS and AWS KMS for GitOps repository storage. Maintain strict referential integrity and data consistency across all operations. Provide comprehensive test cases exercising nominal, boundary, and negative failure paths.",
+      "optimized_prompt": "I would appreciate it if you could create a Kubernetes Secret manifest encrypted with SOPS and AWS KMS for GitOps repository storage. Maintain strict referential integrity and data consistency across all operations. Provide comprehensive test cases exercising nominal, boundary, and negative failure paths.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9564,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9564) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006721,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0390",
+      "category": "CI/CD and developer workflows",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could write a Python script that parses OpenVAS vulnerability XML reports and generates prioritized remediation CSVs. Handle transient network failures, timeouts, and unexpected disconnections gracefully. Implement structured logging hooks capturing execution metrics and contextual error traces.",
+      "optimized_prompt": "I would appreciate it if you could write a Python script that parses OpenVAS vulnerability XML reports and generates prioritized remediation CSVs. Handle transient network failures, timeouts, and unexpected disconnections gracefully. Implement structured logging hooks capturing execution metrics and contextual error traces.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9728,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.007655,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0398",
+      "category": "CI/CD and developer workflows",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could write a Python script that interrogates the GitHub API to list all repositories with inactive branch protection rules.\n\nComprehensive Architectural and Operational Requirements:\n1. Karpenter Node Autoscaling: Configure AWS Karpenter provisioners targeting EC2 Graviton ARM64 spot instances. Decouple domain business logic from external runtime I/O dependencies through clean trait abstractions.\n2. Validation & Safety Invariants: Set consolidation policies that terminate underutilized nodes to minimize cloud spend. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Configure interruption handling using SQS queues for spot termination notices. Detail operational efficiency gains and potential execution bottlenecks impacting system response latencies.\n4. Automated Verification & Testing: Include verification manifests demonstrating rapid node provisioning under load. Provide actionable engineering recommendations supported by empirical performance and validation evidence.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could write a Python script that interrogates the GitHub API to list all repositories with inactive branch protection rules.\n\nComprehensive Architectural and Operational Requirements:\n1. Karpenter Node Autoscaling: Configure AWS Karpenter provisioners targeting EC2 Graviton ARM64 spot instances. Decouple domain business logic from external runtime I/O dependencies through clean trait abstractions.\n2. Validation & Safety Invariants: Set consolidation policies that terminate underutilized nodes to minimize cloud spend. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Configure interruption handling using SQS queues for spot termination notices. Detail operational efficiency gains and potential execution bottlenecks impacting system response latencies.\n4. Automated Verification & Testing: Include verification manifests demonstrating rapid node provisioning under load. Provide actionable engineering recommendations supported by empirical performance and validation evidence.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9961,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.082312,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0418",
+      "category": "CI/CD and developer workflows",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could write a shell script that tests the latency of all DNS nameservers listed in /etc/resolv.conf using dig.\n\nComprehensive Architectural and Operational Requirements:\n1. Spinnaker Multi-Cloud: Configure Spinnaker deployment pipelines orchestrating blue-green deployments across AWS and GCP. Establish unambiguous architectural baselines against which subsequent operational variance can be evaluated.\n2. Validation & Safety Invariants: Integrate automated canary analysis (Kayenta) evaluating metric regressions. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Enforce manual judgment gates requiring approval from release managers. Synthesize historical performance trajectories with forward-looking scaling expectations under peak load.\n4. Automated Verification & Testing: Include verification runbooks documenting rollback procedures during failed stages. Validate that the overall deliverable adheres strictly to standard industry quality assurance criteria.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could write a shell script that tests the latency of all DNS nameservers listed in /etc/resolv.conf using dig.\n\nComprehensive Architectural and Operational Requirements:\n1. Spinnaker Multi-Cloud: Configure Spinnaker deployment pipelines orchestrating blue-green deployments across AWS and GCP. Establish unambiguous architectural baselines against which subsequent operational variance can be evaluated.\n2. Validation & Safety Invariants: Integrate automated canary analysis (Kayenta) evaluating metric regressions. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Enforce manual judgment gates requiring approval from release managers. Synthesize historical performance trajectories with forward-looking scaling expectations under peak load.\n4. Automated Verification & Testing: Include verification runbooks documenting rollback procedures during failed stages. Validate that the overall deliverable adheres strictly to standard industry quality assurance criteria.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9953,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.082226,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0424",
+      "category": "Data science and machine learning",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could write a PyTorch training loop with mixed-precision training (torch.cuda.amp) and gradient clipping to prevent exploding gradients. Ensure all operational constraints are verified.",
+      "optimized_prompt": "I would appreciate it if you could write a PyTorch training loop with mixed-precision training (torch.cuda.amp) and gradient clipping to prevent exploding gradients. Ensure all operational constraints are verified.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9518,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9518) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.005147,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0438",
+      "category": "Data science and machine learning",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could implement a spatial-temporal graph neural network (GNN) layer in PyTorch Geometric for traffic flow forecasting. Maintain full compatibility with standard production runtime environments. Apply defensive programming practices to eliminate undefined behaviors and race conditions.",
+      "optimized_prompt": "I would appreciate it if you could implement a spatial-temporal graph neural network (GNN) layer in PyTorch Geometric for traffic flow forecasting. Maintain full compatibility with standard production runtime environments. Apply defensive programming practices to eliminate undefined behaviors and race conditions.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.965,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.007916,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0448",
+      "category": "Data science and machine learning",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could write a script that calculates permutation feature importance on an out-of-bag validation set for a CatBoost regressor.",
+      "optimized_prompt": "I would appreciate it if you could write a script that calculates permutation feature importance on an out-of-bag validation set for a CatBoost regressor.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9829,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003541,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0458",
+      "category": "Data science and machine learning",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could develop a contrastive learning representation pipeline using SimCLR framework in PyTorch with NT-Xent loss. Document all architectural assumptions, prerequisites, and operational trade-offs clearly. Handle transient network failures, timeouts, and unexpected disconnections gracefully.",
+      "optimized_prompt": "I would appreciate it if you could develop a contrastive learning representation pipeline using SimCLR framework in PyTorch with NT-Xent loss. Document all architectural assumptions, prerequisites, and operational trade-offs clearly. Handle transient network failures, timeouts, and unexpected disconnections gracefully.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9702,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.008004,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0471",
+      "category": "Data science and machine learning",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could implement a custom scikit-learn estimator that wraps a genetic algorithm for sparse feature subset selection. Structure the implementation with clean modular interfaces to facilitate automated testing. Prevent unintended side effects by ensuring data immutability where appropriate.",
+      "optimized_prompt": "I would appreciate it if you could implement a custom scikit-learn estimator that wraps a genetic algorithm for sparse feature subset selection. Structure the implementation with clean modular interfaces to facilitate automated testing. Prevent unintended side effects by ensuring data immutability where appropriate.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9533,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9533) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006267,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0479",
+      "category": "Data science and machine learning",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could develop a multi-task learning neural network in PyTorch that shares backbone layers and branches into separate task heads.\n\nComprehensive Architectural and Operational Requirements:\n1. ONNX Model Parity: Export trained PyTorch deep neural networks to ONNX format with dynamic batch axes. Frame the solution around verifiable milestones, core deliverables, and organizational accountability.\n2. Validation & Safety Invariants: Optimize ONNX computation graphs using onnxruntime graph transformers. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Verify numerical parity between PyTorch and ONNX runtime outputs (tolerance 1e-5). Ensure all quantitative metrics reflect standard industry conventions, formal units, and mathematical formulas.\n4. Automated Verification & Testing: Benchmark p99 inference latency improvements in milliseconds. Validate that the overall deliverable adheres strictly to standard industry quality assurance criteria.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could develop a multi-task learning neural network in PyTorch that shares backbone layers and branches into separate task heads.\n\nComprehensive Architectural and Operational Requirements:\n1. ONNX Model Parity: Export trained PyTorch deep neural networks to ONNX format with dynamic batch axes. Frame the solution around verifiable milestones, core deliverables, and organizational accountability.\n2. Validation & Safety Invariants: Optimize ONNX computation graphs using onnxruntime graph transformers. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Verify numerical parity between PyTorch and ONNX runtime outputs (tolerance 1e-5). Ensure all quantitative metrics reflect standard industry conventions, formal units, and mathematical formulas.\n4. Automated Verification & Testing: Benchmark p99 inference latency improvements in milliseconds. Validate that the overall deliverable adheres strictly to standard industry quality assurance criteria.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9917,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.080468,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0499",
+      "category": "Data science and machine learning",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could write a Python pipeline that extracts tables from PDF documents using pdfplumber and cleans messy merged cells.\n\nComprehensive Architectural and Operational Requirements:\n1. FastText Embedding Training: Train FastText subword embedding models on domain-specific technical corpora. Structure the primary deliverable to emphasize actionable findings, modular abstractions, and stakeholder priorities.\n2. Validation & Safety Invariants: Evaluate word similarity benchmarks and out-of-vocabulary representation quality. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Optimize skip-gram architecture with negative sampling and subword n-gram bounds. Highlight resource allocation trade-offs and memory footprint implications across operational tiers.\n4. Automated Verification & Testing: Export normalized embedding vectors and nearest-neighbor search routines. Conclude with a prioritized action checklist detailing immediate implementation steps and verified owners.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could write a Python pipeline that extracts tables from PDF documents using pdfplumber and cleans messy merged cells.\n\nComprehensive Architectural and Operational Requirements:\n1. FastText Embedding Training: Train FastText subword embedding models on domain-specific technical corpora. Structure the primary deliverable to emphasize actionable findings, modular abstractions, and stakeholder priorities.\n2. Validation & Safety Invariants: Evaluate word similarity benchmarks and out-of-vocabulary representation quality. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Optimize skip-gram architecture with negative sampling and subword n-gram bounds. Highlight resource allocation trade-offs and memory footprint implications across operational tiers.\n4. Automated Verification & Testing: Export normalized embedding vectors and nearest-neighbor search routines. Conclude with a prioritized action checklist detailing immediate implementation steps and verified owners.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9934,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.083006,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0505",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could format the provided dataset of employee records into a clean Markdown table with columns ID, Name, Department, and Salary.",
+      "optimized_prompt": "I would appreciate it if you could format the provided dataset of employee records into a clean Markdown table with columns ID, Name, Department, and Salary.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9775,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003653,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0519",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could format the given list of software dependencies into a valid Cargo.toml configuration file with feature flags. Adhere strictly to established conventions and avoid deprecated or unverified methodologies. Adhere strictly to established conventions and avoid deprecated or unverified methodologies.",
+      "optimized_prompt": "I would appreciate it if you could format the given list of software dependencies into a valid Cargo.toml configuration file with feature flags. Adhere strictly to established conventions and avoid deprecated or unverified methodologies. Adhere strictly to established conventions and avoid deprecated or unverified methodologies.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9272,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9040) below active threshold (0.92).; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9272) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.004998,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0529",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could generate a valid .env configuration template defining database, auth, and cache settings with placeholder values.",
+      "optimized_prompt": "I would appreciate it if you could generate a valid .env configuration template defining database, auth, and cache settings with placeholder values.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.951,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9510) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003155,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0539",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could produce a strict JSON Schema validating an ISO 8601 date-time string pattern and geographic coordinate bounding box. Isolate external dependencies and provide clear fallback degradation strategies. Ensure execution latencies remain strictly within expected production service-level bounds.",
+      "optimized_prompt": "I would appreciate it if you could produce a strict JSON Schema validating an ISO 8601 date-time string pattern and geographic coordinate bounding box. Isolate external dependencies and provide clear fallback degradation strategies. Ensure execution latencies remain strictly within expected production service-level bounds.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9448,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9448) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006854,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0552",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could format the given list of scientific publications into APA 7th edition formatted bibliographic references. Verify all preconditions before dispatching operations to downstream processing pipelines. Optimize critical execution paths to maximize efficiency and minimize resource overhead.",
+      "optimized_prompt": "I would appreciate it if you could format the given list of scientific publications into APA 7th edition formatted bibliographic references. Verify all preconditions before dispatching operations to downstream processing pipelines. Optimize critical execution paths to maximize efficiency and minimize resource overhead.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9437,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9437) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.005939,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0560",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could produce a Markdown table summarizing 5 cloud providers and their GPU instance types and hourly pricing.\n\nComprehensive Architectural and Operational Requirements:\n1. FHIR Patient Resource: Generate a HL7 FHIR Release 4 Patient resource JSON payload. Establish unambiguous architectural baselines against which subsequent operational variance can be evaluated.\n2. Validation & Safety Invariants: Include identifier, telecom, birthDate, address, and contact arrays. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Ensure coding systems, code values, and display names match FHIR specs. Structure data presentation to enable rapid cross-sectional comparison across operating environments.\n4. Automated Verification & Testing: Validate resource against official HL7 FHIR R4 schema definitions. Conclude with a prioritized action checklist detailing immediate implementation steps and verified owners.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could produce a Markdown table summarizing 5 cloud providers and their GPU instance types and hourly pricing.\n\nComprehensive Architectural and Operational Requirements:\n1. FHIR Patient Resource: Generate a HL7 FHIR Release 4 Patient resource JSON payload. Establish unambiguous architectural baselines against which subsequent operational variance can be evaluated.\n2. Validation & Safety Invariants: Include identifier, telecom, birthDate, address, and contact arrays. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Ensure coding systems, code values, and display names match FHIR specs. Structure data presentation to enable rapid cross-sectional comparison across operating environments.\n4. Automated Verification & Testing: Validate resource against official HL7 FHIR R4 schema definitions. Conclude with a prioritized action checklist detailing immediate implementation steps and verified owners.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.936,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9360) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.073213,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0563",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "medium",
+      "original_prompt": "I need assistance to produce a JSON Schema Draft 7 defining an object with dependentRequired and oneOf conditional logic.\n\nComprehensive Architectural and Operational Requirements:\n1. CloudEvents 1.0 JSON: Generate an event message payload conforming to CloudEvents 1.0 JSON specification. Structure the primary deliverable to emphasize actionable findings, modular abstractions, and stakeholder priorities.\n2. Validation & Safety Invariants: Populate specversion, id, source, type, time, and datacontenttype headers. Verify that all preconditions, invariants, and input parameters are strictly validated to prevent state corruption.\n3. Operational Efficiency & Scaling: Nest domain-specific telemetry attributes inside the data payload object. Highlight resource allocation trade-offs and memory footprint implications across operational tiers.\n4. Automated Verification & Testing: Validate event against CloudEvents JSON Schema v1.0 specification. Include a structured audit trail linking key technical conclusions directly to source code or document coordinates.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I need assistance to produce a JSON Schema Draft 7 defining an object with dependentRequired and oneOf conditional logic.\n\nComprehensive Architectural and Operational Requirements:\n1. CloudEvents 1.0 JSON: Generate an event message payload conforming to CloudEvents 1.0 JSON specification. Structure the primary deliverable to emphasize actionable findings, modular abstractions, and stakeholder priorities.\n2. Validation & Safety Invariants: Populate specversion, id, source, type, time, and datacontenttype headers. Verify that all preconditions, invariants, and input parameters are strictly validated to prevent state corruption.\n3. Operational Efficiency & Scaling: Nest domain-specific telemetry attributes inside the data payload object. Highlight resource allocation trade-offs and memory footprint implications across operational tiers.\n4. Automated Verification & Testing: Validate event against CloudEvents JSON Schema v1.0 specification. Include a structured audit trail linking key technical conclusions directly to source code or document coordinates.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": true,
+      "rollback_occurred": false,
+      "rollback_reason": null,
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.057718,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0578",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "hard",
+      "original_prompt": "Please demonstrate how to produce a Markdown table comparing 5 container runtime engines across security features and OCI compliance.\n\nComprehensive Architectural and Operational Requirements:\n1. Protobuf v3 Definition: Generate a Google Protocol Buffers version 3 (.proto) schema definition file. Frame the solution around verifiable milestones, core deliverables, and organizational accountability.\n2. Validation & Safety Invariants: Define syntax = 'proto3', package names, messages, enums, and nested types. Verify that all preconditions, invariants, and input parameters are strictly validated to prevent state corruption.\n3. Operational Efficiency & Scaling: Assign unique sequential field numbers and appropriate primitive data types. Synthesize historical performance trajectories with forward-looking scaling expectations under peak load.\n4. Automated Verification & Testing: Verify file compiles cleanly using protoc compiler without warnings. Supply a consolidated comparative data table or test harness summarizing key parameters and output assertions.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "Demonstrate how to produce a Markdown table comparing 5 container runtime engines across security features and OCI compliance.\n\nComprehensive Architectural and Operational Requirements:\n1. Protobuf v3 Definition: Generate a Google Protocol Buffers version 3 (.proto) schema definition file. Frame the solution around verifiable milestones, core deliverables, and organizational accountability.\n2. Validation & Safety Invariants: Define syntax = 'proto3', package names, messages, enums, and nested types. Verify that all preconditions, invariants, and input parameters are strictly validated to prevent state corruption.\n3. Operational Efficiency & Scaling: Assign unique sequential field numbers and appropriate primitive data types. Synthesize historical performance trajectories with forward-looking scaling expectations under peak load.\n4. Automated Verification & Testing: Verify file compiles cleanly using protoc compiler without warnings. Supply a consolidated comparative data table or test harness summarizing key parameters and output assertions.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9996,
+      "accepted": true,
+      "rollback_occurred": false,
+      "rollback_reason": null,
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.035715,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0580",
+      "category": "Structured output and formatting constraints",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could generate a strict JSON object mapping 8 programming languages to their file extensions and typing paradigms.\n\nComprehensive Architectural and Operational Requirements:\n1. DICOM JSON Metadata: Generate a DICOM JSON model document conforming to PS3.18 Chapter F. Organize implementation details under clear thematic headings corresponding to key functional domains.\n2. Validation & Safety Invariants: Format DICOM tags as 8-character uppercase hex strings with VR and Value arrays. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Populate PatientID, StudyInstanceUID, Modality, and SeriesNumber tags. Isolate high-impact variance drivers to facilitate targeted optimizations and prevent CPU contention.\n4. Automated Verification & Testing: Validate JSON structure against DICOM PS3.18 standards. Include a structured audit trail linking key technical conclusions directly to source code or document coordinates.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could generate a strict JSON object mapping 8 programming languages to their file extensions and typing paradigms.\n\nComprehensive Architectural and Operational Requirements:\n1. DICOM JSON Metadata: Generate a DICOM JSON model document conforming to PS3.18 Chapter F. Organize implementation details under clear thematic headings corresponding to key functional domains.\n2. Validation & Safety Invariants: Format DICOM tags as 8-character uppercase hex strings with VR and Value arrays. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Populate PatientID, StudyInstanceUID, Modality, and SeriesNumber tags. Isolate high-impact variance drivers to facilitate targeted optimizations and prevent CPU contention.\n4. Automated Verification & Testing: Validate JSON structure against DICOM PS3.18 standards. Include a structured audit trail linking key technical conclusions directly to source code or document coordinates.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9724,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.081729,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0586",
+      "category": "General technical instructions",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could provide step-by-step instructions to configure Linux kernel parameters in /etc/sysctl.conf for a high-traffic web server. Follow W. E. B. Du Bois's guidelines.",
+      "optimized_prompt": "I would appreciate it if you could provide step-by-step instructions to configure Linux kernel parameters in /etc/sysctl.conf for a high-traffic web server. Follow W. E. B. Du Bois's guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9676,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003681,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0599",
+      "category": "General technical instructions",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could explain how to diagnose high CPU load on a Linux server using top, vmstat, mpstat, and perf profiling tools.",
+      "optimized_prompt": "I would appreciate it if you could explain how to diagnose high CPU load on a Linux server using top, vmstat, mpstat, and perf profiling tools.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9816,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.00335,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0600",
+      "category": "General technical instructions",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could provide step-by-step instructions to generate an SSL certificate signing request (CSR) with SAN extensions using OpenSSL. Ensure robust error handling, boundary validation, and clear diagnostic messaging. Guard against unexpected null values, empty collections, and extreme boundary limits. Adhere strictly to W. E. B. Du Bois's guidelines.",
+      "optimized_prompt": "I would appreciate it if you could provide step-by-step instructions to generate an SSL certificate signing request (CSR) with SAN extensions using OpenSSL. Ensure robust error handling, boundary validation, and clear diagnostic messaging. Guard against unexpected null values, empty collections, and extreme boundary limits. Adhere strictly to W. E. B. Du Bois's guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9365,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9365) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.02646,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0603",
+      "category": "General technical instructions",
+      "difficulty": "easy",
+      "original_prompt": "I need assistance to explain how to configure auditd (Linux Audit Daemon) to monitor and log all modifications to /etc/shadow and /etc/passwd. Verify all preconditions before dispatching operations to downstream processing pipelines. Optimize critical execution paths to maximize efficiency and minimize resource overhead.",
+      "optimized_prompt": "I need assistance to explain how to configure auditd (Linux Audit Daemon) to monitor and log all modifications to /etc/shadow and /etc/passwd. Verify all preconditions before dispatching operations to downstream processing pipelines. Optimize critical execution paths to maximize efficiency and minimize resource overhead.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": true,
+      "rollback_occurred": false,
+      "rollback_reason": null,
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003301,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0613",
+      "category": "General technical instructions",
+      "difficulty": "medium",
+      "original_prompt": "I need assistance to explain how to set up multi-factor authentication (MFA) for SSH logins on Linux using Google Authenticator PAM. Ensure all operational constraints are verified.",
+      "optimized_prompt": "I need assistance to explain how to set up multi-factor authentication (MFA) for SSH logins on Linux using Google Authenticator PAM. Ensure all operational constraints are verified.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": true,
+      "rollback_occurred": false,
+      "rollback_reason": null,
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.002694,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0620",
+      "category": "General technical instructions",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could provide step-by-step instructions to tune TCP socket buffer sizes (rmem, wmem) in Linux for high-bandwidth networks. Guard against unexpected null values, empty collections, and extreme boundary limits. Maintain full compatibility with standard production runtime environments.",
+      "optimized_prompt": "I would appreciate it if you could provide step-by-step instructions to tune TCP socket buffer sizes (rmem, wmem) in Linux for high-bandwidth networks. Guard against unexpected null values, empty collections, and extreme boundary limits. Maintain full compatibility with standard production runtime environments.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9424,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9424) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006263,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0629",
+      "category": "General technical instructions",
+      "difficulty": "medium",
+      "original_prompt": "Could you provide instructions to explain how to configure AppArmor profiles on Ubuntu to restrict execution capabilities of a custom binary. Ensure clean separation of concerns between business logic and external I/O routines. Document all architectural assumptions, prerequisites, and operational trade-offs clearly. Adhere strictly to Dr. A. B. Smith's guidelines.",
+      "optimized_prompt": "Could you provide instructions to explain how to configure AppArmor profiles on Ubuntu to restrict execution capabilities of a custom binary. Ensure clean separation of concerns between business logic and external I/O routines. Document all architectural assumptions, prerequisites, and operational trade-offs clearly. Adhere strictly to Dr. A. B. Smith's guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9727,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Localized semantic change: original section coverage (0.2875) below chunk threshold (0.65).; Localized semantic change: original section coverage (0.2875) below chunk threshold (0.65).; Localized semantic change: original section coverage (0.2875) below chunk threshold (0.65).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.016903,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0633",
+      "category": "General technical instructions",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could explain how to monitor memory swapping activity and adjust the vm.swappiness kernel parameter in Linux. Include descriptive type annotations, comprehensive docstrings, and input sanitization. Adhere to principle of least privilege and enforce non-root execution boundaries.",
+      "optimized_prompt": "I would appreciate it if you could explain how to monitor memory swapping activity and adjust the vm.swappiness kernel parameter in Linux. Include descriptive type annotations, comprehensive docstrings, and input sanitization. Adhere to principle of least privilege and enforce non-root execution boundaries.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9556,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9556) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006583,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0641",
+      "category": "General technical instructions",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could explain how to analyze memory allocation fragmentation on Linux using /proc/buddyinfo and slabtop.\n\nComprehensive Architectural and Operational Requirements:\n1. Linux Bridge TAP: Configure Linux network bridges and TAP interfaces for KVM/QEMU virtualization. Structure the primary deliverable to emphasize actionable findings, modular abstractions, and stakeholder priorities.\n2. Validation & Safety Invariants: Set bridge-nf-call-iptables parameters and configure static MAC address bindings. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Persist network configuration using systemd-networkd across system reboots. Benchmark component performance against relevant industry standards and published academic baselines.\n4. Automated Verification & Testing: Supply ip link and brctl verification commands testing interface forwarding. Include a structured audit trail linking key technical conclusions directly to source code or document coordinates.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to W. E. B. Du Bois's published quality benchmarks.",
+      "optimized_prompt": "I would appreciate it if you could explain how to analyze memory allocation fragmentation on Linux using /proc/buddyinfo and slabtop.\n\nComprehensive Architectural and Operational Requirements:\n1. Linux Bridge TAP: Configure Linux network bridges and TAP interfaces for KVM/QEMU virtualization. Structure the primary deliverable to emphasize actionable findings, modular abstractions, and stakeholder priorities.\n2. Validation & Safety Invariants: Set bridge-nf-call-iptables parameters and configure static MAC address bindings. Enforce strict validation protocols to reconcile any internal discrepancies across reported sections or data payloads.\n3. Operational Efficiency & Scaling: Persist network configuration using systemd-networkd across system reboots. Benchmark component performance against relevant industry standards and published academic baselines.\n4. Automated Verification & Testing: Supply ip link and brctl verification commands testing interface forwarding. Include a structured audit trail linking key technical conclusions directly to source code or document coordinates.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to W. E. B. Du Bois's published quality benchmarks.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9966,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.09006,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0658",
+      "category": "General technical instructions",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could provide instructions to configure an Apache ZooKeeper ensemble across three nodes with quorum verification. Validate that all output structures conform precisely to required format specifications. Ensure configurations persist reliably across system restarts and daemon reloads. Ensure complete adherence to established technical guidelines.",
+      "optimized_prompt": "I would appreciate it if you could provide instructions to configure an Apache ZooKeeper ensemble across three nodes with quorum verification. Validate that all output structures conform precisely to required format specifications. Ensure configurations persist reliably across system restarts and daemon reloads. Ensure complete adherence to established technical guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9643,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.022983,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0661",
+      "category": "General technical instructions",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could explain how to configure a Linux server to generate a kernel core dump on panic using kexec and kdump.\n\nComprehensive Architectural and Operational Requirements:\n1. Chrony NTP Server: Deploy Chrony NTP time servers synchronizing against stratum-1 GPS hardware clocks. Synthesize complex underlying mechanisms into high-signal specifications for peer engineering review.\n2. Validation & Safety Invariants: Configure makestep directives and hardware timestamping on network adapters. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Restrict client subnet access and prevent amplification attacks with clientloglimit. Optimize critical computational loops to maximize execution throughput and minimize runtime resource overhead.\n4. Automated Verification & Testing: Supply chronyc sources and chronyc tracking commands checking jitter. Summarize immediate architectural decisions required to ensure backward compatibility and smooth rollout.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could explain how to configure a Linux server to generate a kernel core dump on panic using kexec and kdump.\n\nComprehensive Architectural and Operational Requirements:\n1. Chrony NTP Server: Deploy Chrony NTP time servers synchronizing against stratum-1 GPS hardware clocks. Synthesize complex underlying mechanisms into high-signal specifications for peer engineering review.\n2. Validation & Safety Invariants: Configure makestep directives and hardware timestamping on network adapters. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Restrict client subnet access and prevent amplification attacks with clientloglimit. Optimize critical computational loops to maximize execution throughput and minimize runtime resource overhead.\n4. Automated Verification & Testing: Supply chronyc sources and chronyc tracking commands checking jitter. Summarize immediate architectural decisions required to ensure backward compatibility and smooth rollout.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9976,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.081762,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0680",
+      "category": "Creative writing and content generation",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could compose a character profile and psychological backstory for a retired naval cryptographer solving Cold War ciphers.",
+      "optimized_prompt": "I would appreciate it if you could compose a character profile and psychological backstory for a retired naval cryptographer solving Cold War ciphers.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9649,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003361,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0701",
+      "category": "Creative writing and content generation",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could compose a poetic ballad recounting the tragic voyage of a lost Arctic exploration expedition in the 19th century. Ensure configurations persist reliably across system restarts and daemon reloads. Isolate external dependencies and provide clear fallback degradation strategies.",
+      "optimized_prompt": "I would appreciate it if you could compose a poetic ballad recounting the tragic voyage of a lost Arctic exploration expedition in the 19th century. Ensure configurations persist reliably across system restarts and daemon reloads. Isolate external dependencies and provide clear fallback degradation strategies.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9624,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.007927,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0712",
+      "category": "Creative writing and content generation",
+      "difficulty": "medium",
+      "original_prompt": "Please demonstrate how to draft a corporate rebranding announcement memo explaining why an established manufacturing company is adopting a modern identity. Ensure clean separation of concerns between business logic and external I/O routines. Document all architectural assumptions, prerequisites, and operational trade-offs clearly. Adhere strictly to A. Einstein's guidelines.",
+      "optimized_prompt": "Please demonstrate how to draft a corporate rebranding announcement memo explaining why an established manufacturing company is adopting a modern identity. Ensure clean separation of concerns between business logic and external I/O routines. Document all architectural assumptions, prerequisites, and operational trade-offs clearly. Adhere strictly to A. Einstein's guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9688,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Localized semantic change: original section coverage (0.2874) below chunk threshold (0.65).; Localized semantic change: original section coverage (0.2937) below chunk threshold (0.65).; Localized semantic change: original section coverage (0.2937) below chunk threshold (0.65).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.01681,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0714",
+      "category": "Creative writing and content generation",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could write a contemporary literary fiction scene depicting an estranged father and daughter reuniting at a highway rest stop. Verify that all calculated metrics and status indicators reconcile accurately with inputs. Document runtime computational complexity and memory usage bounds explicitly.",
+      "optimized_prompt": "I would appreciate it if you could write a contemporary literary fiction scene depicting an estranged father and daughter reuniting at a highway rest stop. Verify that all calculated metrics and status indicators reconcile accurately with inputs. Document runtime computational complexity and memory usage bounds explicitly.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9512,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9512) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006468,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0738",
+      "category": "Creative writing and content generation",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could write an alternate history scenario where the electric battery was invented in ancient Rome by Heron of Alexandria. Implement structured logging hooks capturing execution metrics and contextual error traces. Ensure clean separation of concerns between business logic and external I/O routines.",
+      "optimized_prompt": "I would appreciate it if you could write an alternate history scenario where the electric battery was invented in ancient Rome by Heron of Alexandria. Implement structured logging hooks capturing execution metrics and contextual error traces. Ensure clean separation of concerns between business logic and external I/O routines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.979,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.007987,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0742",
+      "category": "Creative writing and content generation",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could draft a persuasive marketing pitch for an ultra-premium heirloom fountain pen crafted from reclaimed aerospace titanium.\n\nComprehensive Architectural and Operational Requirements:\n1. Forgotten Railway Depot: Evoke rusted switch tracks, overgrown dandelion weeds, and weathered red brick locomotive roundhouses. Ensure all structural frameworks, component interfaces, and signatures are documented with rigorous precision.\n2. Validation & Safety Invariants: Capture a retired conductor walking empty platforms where express passenger trains once paused. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Pace the scene through sensory echoes of whistling steam and ringing brass bells. Provide clear visibility into algorithmic complexity, cache locality, and memory reclamation behavior.\n4. Automated Verification & Testing: End with evening shadows stretching across silent iron rails pointing west. Confirm that all output artifacts can be parsed and executed without manual human intervention or patching.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could draft a persuasive marketing pitch for an ultra-premium heirloom fountain pen crafted from reclaimed aerospace titanium.\n\nComprehensive Architectural and Operational Requirements:\n1. Forgotten Railway Depot: Evoke rusted switch tracks, overgrown dandelion weeds, and weathered red brick locomotive roundhouses. Ensure all structural frameworks, component interfaces, and signatures are documented with rigorous precision.\n2. Validation & Safety Invariants: Capture a retired conductor walking empty platforms where express passenger trains once paused. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Pace the scene through sensory echoes of whistling steam and ringing brass bells. Provide clear visibility into algorithmic complexity, cache locality, and memory reclamation behavior.\n4. Automated Verification & Testing: End with evening shadows stretching across silent iron rails pointing west. Confirm that all output artifacts can be parsed and executed without manual human intervention or patching.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9966,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.082424,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0761",
+      "category": "Conversational and multilingual assistance",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could explain the cultural etiquette rules for attending a traditional Korean wedding ceremony for a first-time foreign visitor.",
+      "optimized_prompt": "I would appreciate it if you could explain the cultural etiquette rules for attending a traditional Korean wedding ceremony for a first-time foreign visitor.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.987,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003341,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0775",
+      "category": "Conversational and multilingual assistance",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could draft a formal letter of recommendation for a senior software engineer applying for a prestigious graduate fellowship. Optimize critical execution paths to maximize efficiency and minimize resource overhead. Include descriptive type annotations, comprehensive docstrings, and input sanitization.",
+      "optimized_prompt": "I would appreciate it if you could draft a formal letter of recommendation for a senior software engineer applying for a prestigious graduate fellowship. Optimize critical execution paths to maximize efficiency and minimize resource overhead. Include descriptive type annotations, comprehensive docstrings, and input sanitization.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9457,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9457) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006129,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0795",
+      "category": "Conversational and multilingual assistance",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could draft an encouraging message from a project manager to a development team that just completed an intense release sprint. Ensure clean separation of concerns between business logic and external I/O routines. Document all architectural assumptions, prerequisites, and operational trade-offs clearly. Adhere strictly to J. K. Rowling's guidelines.",
+      "optimized_prompt": "I would appreciate it if you could draft an encouraging message from a project manager to a development team that just completed an intense release sprint. Ensure clean separation of concerns between business logic and external I/O routines. Document all architectural assumptions, prerequisites, and operational trade-offs clearly. Adhere strictly to J. K. Rowling's guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9142,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Localized semantic change: original section coverage (0.4153) below chunk threshold (0.65).; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9142) below active threshold (0.92).; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9142) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.017157,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0798",
+      "category": "Conversational and multilingual assistance",
+      "difficulty": "medium",
+      "original_prompt": "I need assistance to explain why false cognates (faux amis) between English and French create common translation traps with examples. Ensure robust error handling, boundary validation, and clear diagnostic messaging. Guard against unexpected null values, empty collections, and extreme boundary limits.",
+      "optimized_prompt": "I need assistance to explain why false cognates (faux amis) between English and French create common translation traps with examples. Ensure robust error handling, boundary validation, and clear diagnostic messaging. Guard against unexpected null values, empty collections, and extreme boundary limits.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": true,
+      "rollback_occurred": false,
+      "rollback_reason": null,
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003522,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0816",
+      "category": "Conversational and multilingual assistance",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could translate this Norwegian fisheries management regulation into English preserving maritime zone definitions.\n\nComprehensive Architectural and Operational Requirements:\n1. Korean Honorific Speech: Explain the Korean speech level system: Hasoseo-che, Hasio-che, Haeyo-che, and Hae-che. Decouple domain business logic from external runtime I/O dependencies through clean trait abstractions.\n2. Validation & Safety Invariants: Guide a software engineer in addressing senior Korean executives and peer team members. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Highlight age-based linguistic hierarchy and kinship honorific suffixes. Detail operational efficiency gains and potential execution bottlenecks impacting system response latencies.\n4. Automated Verification & Testing: Provide realistic office Slack chat dialogues showing appropriate polite register. Deliver an automated test suite matrix mapping identified edge cases directly to concrete test assertions.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could translate this Norwegian fisheries management regulation into English preserving maritime zone definitions.\n\nComprehensive Architectural and Operational Requirements:\n1. Korean Honorific Speech: Explain the Korean speech level system: Hasoseo-che, Hasio-che, Haeyo-che, and Hae-che. Decouple domain business logic from external runtime I/O dependencies through clean trait abstractions.\n2. Validation & Safety Invariants: Guide a software engineer in addressing senior Korean executives and peer team members. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Highlight age-based linguistic hierarchy and kinship honorific suffixes. Detail operational efficiency gains and potential execution bottlenecks impacting system response latencies.\n4. Automated Verification & Testing: Provide realistic office Slack chat dialogues showing appropriate polite register. Deliver an automated test suite matrix mapping identified edge cases directly to concrete test assertions.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9971,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.082247,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0819",
+      "category": "Conversational and multilingual assistance",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could draft a formal letter to an insurance company appealing a denied reimbursement claim for a necessary medical procedure. Provide practical verification steps and test assertions to confirm nominal behavior. Enforce deterministic resource cleanup to prevent file descriptor and memory leaks.",
+      "optimized_prompt": "I would appreciate it if you could draft a formal letter to an insurance company appealing a denied reimbursement claim for a necessary medical procedure. Provide practical verification steps and test assertions to confirm nominal behavior. Enforce deterministic resource cleanup to prevent file descriptor and memory leaks.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9558,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9558) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006527,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0842",
+      "category": "Tool-use and agentic workflows",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could design an agentic workflow that monitors AWS S3 bucket event notifications, triggers virus scans, and quarantine infected objects.",
+      "optimized_prompt": "I would appreciate it if you could design an agentic workflow that monitors AWS S3 bucket event notifications, triggers virus scans, and quarantine infected objects.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9826,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003121,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0855",
+      "category": "Tool-use and agentic workflows",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could define a function calling schema for a translation tool accepting source_text, source_lang, target_lang, and formal_register boolean. Handle transient network failures, timeouts, and unexpected disconnections gracefully. Implement structured logging hooks capturing execution metrics and contextual error traces.",
+      "optimized_prompt": "I would appreciate it if you could define a function calling schema for a translation tool accepting source_text, source_lang, target_lang, and formal_register boolean. Handle transient network failures, timeouts, and unexpected disconnections gracefully. Implement structured logging hooks capturing execution metrics and contextual error traces.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9597,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9597) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006397,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0875",
+      "category": "Tool-use and agentic workflows",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could develop an agentic workflow that monitors SSL certificate expiration dates and triggers automated ACME certbot renewals. Adhere to principle of least privilege and enforce non-root execution boundaries. Verify all preconditions before dispatching operations to downstream processing pipelines.",
+      "optimized_prompt": "I would appreciate it if you could develop an agentic workflow that monitors SSL certificate expiration dates and triggers automated ACME certbot renewals. Adhere to principle of least privilege and enforce non-root execution boundaries. Verify all preconditions before dispatching operations to downstream processing pipelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9624,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.00832,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0888",
+      "category": "Tool-use and agentic workflows",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could create a tool schema for an electronic document signing tool that sends signing requests to recipient email addresses. Enforce deterministic resource cleanup to prevent file descriptor and memory leaks. Maintain strict referential integrity and data consistency across all operations.",
+      "optimized_prompt": "I would appreciate it if you could create a tool schema for an electronic document signing tool that sends signing requests to recipient email addresses. Enforce deterministic resource cleanup to prevent file descriptor and memory leaks. Maintain strict referential integrity and data consistency across all operations.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9598,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9598) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.006252,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0898",
+      "category": "Tool-use and agentic workflows",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could write a Python tool that calculates the cyclomatic complexity of Python source code files using the radon library.\n\nComprehensive Architectural and Operational Requirements:\n1. Document OCR & Indexer: Define tool interfaces for extract_pdf_text, compute_embeddings, and upsert_vector_store. Frame the solution around verifiable milestones, core deliverables, and organizational accountability.\n2. Validation & Safety Invariants: Implement batch processing loops with exponential backoff for OCR rate limit errors. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Log extraction throughput metrics and vector store insertion latency. Ensure all quantitative metrics reflect standard industry conventions, formal units, and mathematical formulas.\n4. Automated Verification & Testing: Provide sample traces processing scanned invoices and indexing structured line items. Ensure the final deliverable provides complete operational clarity for enterprise production deployment.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could write a Python tool that calculates the cyclomatic complexity of Python source code files using the radon library.\n\nComprehensive Architectural and Operational Requirements:\n1. Document OCR & Indexer: Define tool interfaces for extract_pdf_text, compute_embeddings, and upsert_vector_store. Frame the solution around verifiable milestones, core deliverables, and organizational accountability.\n2. Validation & Safety Invariants: Implement batch processing loops with exponential backoff for OCR rate limit errors. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Log extraction throughput metrics and vector store insertion latency. Ensure all quantitative metrics reflect standard industry conventions, formal units, and mathematical formulas.\n4. Automated Verification & Testing: Provide sample traces processing scanned invoices and indexing structured line items. Ensure the final deliverable provides complete operational clarity for enterprise production deployment.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9964,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.079803,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0923",
+      "category": "Safety-sensitive and professional applications",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could draft an informed consent disclosure document for patients enrolling in an experimental gene therapy clinical trial.",
+      "optimized_prompt": "I would appreciate it if you could draft an informed consent disclosure document for patients enrolling in an experimental gene therapy clinical trial.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9527,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Cosine similarity (0.9527) below active threshold (0.96).; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003193,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0936",
+      "category": "Safety-sensitive and professional applications",
+      "difficulty": "easy",
+      "original_prompt": "I would appreciate it if you could provide guidance for occupational health nurses on conducting audiometric baseline testing under OSHA 1910.95 noise standards. Structure the implementation with clean modular interfaces to facilitate automated testing. Prevent unintended side effects by ensuring data immutability where appropriate.",
+      "optimized_prompt": "I would appreciate it if you could provide guidance for occupational health nurses on conducting audiometric baseline testing under OSHA 1910.95 noise standards. Structure the implementation with clean modular interfaces to facilitate automated testing. Prevent unintended side effects by ensuring data immutability where appropriate.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9777,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.008491,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0939",
+      "category": "Safety-sensitive and professional applications",
+      "difficulty": "easy",
+      "original_prompt": "I need assistance to provide responsible consumer health guidance on interpreting home blood pressure monitor readings and identifying hypertensive urgency. Enforce deterministic resource cleanup to prevent file descriptor and memory leaks. Maintain strict referential integrity and data consistency across all operations. Ensure complete adherence to established technical guidelines.",
+      "optimized_prompt": "I need assistance to provide responsible consumer health guidance on interpreting home blood pressure monitor readings and identifying hypertensive urgency. Enforce deterministic resource cleanup to prevent file descriptor and memory leaks. Maintain strict referential integrity and data consistency across all operations. Ensure complete adherence to established technical guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": true,
+      "rollback_occurred": false,
+      "rollback_reason": null,
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.011172,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0948",
+      "category": "Safety-sensitive and professional applications",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could provide engineering safety guidelines for lockout/tagout (LOTO) energy isolation procedures under OSHA 1910.147.",
+      "optimized_prompt": "I would appreciate it if you could provide engineering safety guidelines for lockout/tagout (LOTO) energy isolation procedures under OSHA 1910.147.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9778,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.003688,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0956",
+      "category": "Safety-sensitive and professional applications",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could draft an ethical guidelines document for civil engineers regarding whistleblowing on structural safety compromises. Ensure execution latencies remain strictly within expected production service-level bounds. Validate that all output structures conform precisely to required format specifications. Ensure complete adherence to established technical guidelines.",
+      "optimized_prompt": "I would appreciate it if you could draft an ethical guidelines document for civil engineers regarding whistleblowing on structural safety compromises. Ensure execution latencies remain strictly within expected production service-level bounds. Validate that all output structures conform precisely to required format specifications. Ensure complete adherence to established technical guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9642,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.022673,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0969",
+      "category": "Safety-sensitive and professional applications",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could provide responsible consumer guidance explaining when over-the-counter pain medications (NSAIDs vs acetaminophen) carry organ toxicities. Document runtime computational complexity and memory usage bounds explicitly. Structure the implementation with clean modular interfaces to facilitate automated testing.",
+      "optimized_prompt": "I would appreciate it if you could provide responsible consumer guidance explaining when over-the-counter pain medications (NSAIDs vs acetaminophen) carry organ toxicities. Document runtime computational complexity and memory usage bounds explicitly. Structure the implementation with clean modular interfaces to facilitate automated testing.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9607,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.007693,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0972",
+      "category": "Safety-sensitive and professional applications",
+      "difficulty": "medium",
+      "original_prompt": "I need assistance to provide emergency medical guidance for bystander recognition and management of heat stroke versus heat exhaustion. Optimize critical execution paths to maximize efficiency and minimize resource overhead. Include descriptive type annotations, comprehensive docstrings, and input sanitization. Ensure complete adherence to established technical guidelines.",
+      "optimized_prompt": "I need assistance to provide emergency medical guidance for bystander recognition and management of heat stroke versus heat exhaustion. Optimize critical execution paths to maximize efficiency and minimize resource overhead. Include descriptive type annotations, comprehensive docstrings, and input sanitization. Ensure complete adherence to established technical guidelines.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 1.0,
+      "accepted": true,
+      "rollback_occurred": false,
+      "rollback_reason": null,
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.010229,
+      "preservation_violations": []
+    },
+    {
+      "prompt_id": "ige-0979",
+      "category": "Safety-sensitive and professional applications",
+      "difficulty": "medium",
+      "original_prompt": "I would appreciate it if you could explain the legal limits of copyright protection for functional computer software user interfaces under the merger doctrine.\n\nComprehensive Architectural and Operational Requirements:\n1. FDA Drug Recalls: Detail FDA 21 CFR Part 7 recall classification protocols across Class I, Class II, and Class III. Establish unambiguous architectural baselines against which subsequent operational variance can be evaluated.\n2. Validation & Safety Invariants: Outline immediate quarantine, consignee notification, and public warning issuance procedures. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Specify root-cause testing protocols for detecting nitrosamine impurities and particulate contamination. Structure data presentation to enable rapid cross-sectional comparison across operating environments.\n4. Automated Verification & Testing: Provide a standardized recall strategy document ready for FDA district office submission. Supply end-to-end regression test scripts demonstrating deterministic execution under heavy concurrent stress.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could explain the legal limits of copyright protection for functional computer software user interfaces under the merger doctrine.\n\nComprehensive Architectural and Operational Requirements:\n1. FDA Drug Recalls: Detail FDA 21 CFR Part 7 recall classification protocols across Class I, Class II, and Class III. Establish unambiguous architectural baselines against which subsequent operational variance can be evaluated.\n2. Validation & Safety Invariants: Outline immediate quarantine, consignee notification, and public warning issuance procedures. Retain all technical, financial, and statutory designations exactly as documented in authoritative source records.\n3. Operational Efficiency & Scaling: Specify root-cause testing protocols for detecting nitrosamine impurities and particulate contamination. Structure data presentation to enable rapid cross-sectional comparison across operating environments.\n4. Automated Verification & Testing: Provide a standardized recall strategy document ready for FDA district office submission. Supply end-to-end regression test scripts demonstrating deterministic execution under heavy concurrent stress.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9946,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.088439,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    },
+    {
+      "prompt_id": "ige-0999",
+      "category": "Safety-sensitive and professional applications",
+      "difficulty": "hard",
+      "original_prompt": "I would appreciate it if you could provide engineering guidelines for implementing seismic shutoff valves on commercial natural gas supply lines.\n\nComprehensive Architectural and Operational Requirements:\n1. Cyber Ransomware Incident: Detail CISA and FBI emergency response playbooks for enterprise ransomware infections. Organize implementation details under clear thematic headings corresponding to key functional domains.\n2. Validation & Safety Invariants: Specify immediate network isolation of infected hosts while preserving system memory for forensics. Document explicit operational boundaries and exclusions identifying edge-case states not supported by the system.\n3. Operational Efficiency & Scaling: Highlight legal considerations regarding OFAC sanctions compliance before any ransom negotiation. Isolate high-impact variance drivers to facilitate targeted optimizations and prevent CPU contention.\n4. Automated Verification & Testing: Provide an executive incident response timeline for notifying regulatory authorities. Supply a consolidated comparative data table or test harness summarizing key parameters and output assertions.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "optimized_prompt": "I would appreciate it if you could provide engineering guidelines for implementing seismic shutoff valves on commercial natural gas supply lines.\n\nComprehensive Architectural and Operational Requirements:\n1. Cyber Ransomware Incident: Detail CISA and FBI emergency response playbooks for enterprise ransomware infections. Organize implementation details under clear thematic headings corresponding to key functional domains.\n2. Validation & Safety Invariants: Specify immediate network isolation of infected hosts while preserving system memory for forensics. Document explicit operational boundaries and exclusions identifying edge-case states not supported by the system.\n3. Operational Efficiency & Scaling: Highlight legal considerations regarding OFAC sanctions compliance before any ransom negotiation. Isolate high-impact variance drivers to facilitate targeted optimizations and prevent CPU contention.\n4. Automated Verification & Testing: Provide an executive incident response timeline for notifying regulatory authorities. Supply a consolidated comparative data table or test harness summarizing key parameters and output assertions.\n5. Professional Governance Oversight: Confirm that all deliverable components strictly conform to established enterprise architecture standards and production sign-off criteria.",
+      "token_reduction": 0,
+      "token_reduction_pct": 0.0,
+      "semantic_similarity": 0.9952,
+      "accepted": false,
+      "rollback_occurred": true,
+      "rollback_reason": "Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Missing conditional/exception indicator 'if'.; Semantic fidelity guard rejected candidate; safely rolled back to original prompt.",
+      "is_net_carbon_debt": true,
+      "net_energy_saved_wh": -0.081238,
+      "preservation_violations": [
+        "Missing conditional/exception indicator 'if'."
+      ]
+    }
+  ]
+}

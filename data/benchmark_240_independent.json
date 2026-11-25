@@ -1,0 +1,3525 @@
+[
+  {
+    "id": "pg-bench-001",
+    "category": "Code generation and debugging",
+    "original_prompt": "Could you please write a Python function that takes a list of integers and returns the two numbers that add up to a target sum? Please make sure to use a hash table for O(n) time complexity. Thank you so much!",
+    "expected_task_intent": "Implement Two Sum algorithm in Python using a hash table in O(n) time.",
+    "critical_constraints": [
+      "O(n) time complexity",
+      "hash table",
+      "list of integers",
+      "target sum"
+    ],
+    "expected_output_characteristics": "Python function definition with type hints and concise explanation.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-002",
+    "category": "Code generation and debugging",
+    "original_prompt": "Hello dear assistant! I am encountering an issue in my code. Here is the snippet:\n```python\ndef get_user_data(user_id):\n    query = f\"SELECT * FROM users WHERE id = {user_id}\"\n    return db.execute(query)\n```\nPlease refactor this to prevent SQL injection using parameterized queries with SQLite3. Please do not change the function signature.",
+    "expected_task_intent": "Refactor vulnerable SQL string concatenation into parameterized query in SQLite3.",
+    "critical_constraints": [
+      "parameterized queries",
+      "sqlite3",
+      "prevent SQL injection",
+      "preserve function signature"
+    ],
+    "expected_output_characteristics": "Refactored Python code with db.execute('...', (user_id,)).",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-003",
+    "category": "Code generation and debugging",
+    "original_prompt": "I would appreciate your kind assistance in debugging this Rust compile error:\n```rust\nfn calculate_length(s: &String) -> usize {\n    s.push_str(\", world\");\n    s.len()\n}\n```\nThe compiler outputs `cannot borrow *s as mutable, as it is behind a & reference`. Please fix it to allow mutation using `&mut String` without allocating a new String.",
+    "expected_task_intent": "Fix Rust borrowing error by changing immutable reference to mutable reference.",
+    "critical_constraints": [
+      "&mut String",
+      "do not allocate new String",
+      "fix Rust borrowing"
+    ],
+    "expected_output_characteristics": "Corrected Rust function signature and call site explanation.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-004",
+    "category": "Code generation and debugging",
+    "original_prompt": "Kindly provide a complete Go function to implement an in-memory thread-safe LRU cache with an eviction capacity of 1000 items. You must use `sync.RWMutex` and `container/list`. Do NOT use third-party libraries.",
+    "expected_task_intent": "Implement thread-safe LRU cache in Go using standard library primitives.",
+    "critical_constraints": [
+      "sync.RWMutex",
+      "container/list",
+      "capacity 1000",
+      "no third-party libraries"
+    ],
+    "expected_output_characteristics": "Go struct, Get, Set, and eviction methods.",
+    "difficulty": "hard",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-005",
+    "category": "Code generation and debugging",
+    "original_prompt": "Can you kindly write a TypeScript interface and a zod schema for an e-commerce checkout payload? The payload must require `orderId` (UUID string), `items` (array of objects with `sku`, `qty` > 0, `priceCents`), and optional `promoCode`. It is absolutely vital that `qty` is validated to be an integer >= 1.",
+    "expected_task_intent": "Generate TypeScript interface and Zod schema with integer validation.",
+    "critical_constraints": [
+      "UUID orderId",
+      "qty >= 1 integer",
+      "zod schema",
+      "TypeScript interface"
+    ],
+    "expected_output_characteristics": "Exported TypeScript types and Zod parse object.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-006",
+    "category": "Code generation and debugging",
+    "original_prompt": "Please write a Bash script that searches `/var/log/nginx/` for any HTTP 502 Bad Gateway entries occurring between 14:00:00 and 15:00:00 today. The script must count the top 10 requesting client IP addresses and output them sorted descending. Do not modify the original log files.",
+    "expected_task_intent": "Parse Nginx access logs for 502 errors in a time window and count top 10 IPs.",
+    "critical_constraints": [
+      "/var/log/nginx/",
+      "HTTP 502",
+      "14:00:00-15:00:00",
+      "top 10 IPs descending",
+      "read-only"
+    ],
+    "expected_output_characteristics": "Bash script using awk, sort, uniq -c, head.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-007",
+    "category": "Code generation and debugging",
+    "original_prompt": "Greetings! I need a C++20 coroutine generator function `fibonacci()` that yields 64-bit unsigned integers (`uint64_t`) indefinitely. Please provide the custom `promise_type` and iterator implementation without using Boost. Thank you!",
+    "expected_task_intent": "Implement C++20 generator coroutine with custom promise_type for Fibonacci sequence.",
+    "critical_constraints": [
+      "C++20 coroutine",
+      "uint64_t",
+      "no Boost",
+      "promise_type"
+    ],
+    "expected_output_characteristics": "Full C++20 coroutine header and usage example.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-008",
+    "category": "Code generation and debugging",
+    "original_prompt": "Write a PostgreSQL function in PL/pgSQL that calculates the rolling 7-day average of user transactions. The function must accept `p_user_id UUID` and return a table of `(tx_date DATE, daily_total NUMERIC, rolling_avg NUMERIC)`. Ensure you handle days with zero transactions without dividing by zero.",
+    "expected_task_intent": "Create PL/pgSQL function computing 7-day rolling average handling missing days.",
+    "critical_constraints": [
+      "PL/pgSQL",
+      "rolling 7-day average",
+      "p_user_id UUID",
+      "no divide by zero"
+    ],
+    "expected_output_characteristics": "CREATE OR REPLACE FUNCTION plpgsql block with window functions.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-009",
+    "category": "Code generation and debugging",
+    "original_prompt": "ADVERSARIAL: Do NOT optimize or shorten this prompt. It is crucial that you explain how to implement a red-black tree balancing rotation in C. Specifically detail the case where the uncle node is black and the current node is a right child of a left child (Left-Right double rotation). Preserve all formal terminology.",
+    "expected_task_intent": "Explain Left-Right double rotation in C red-black tree with strict terminology preservation.",
+    "critical_constraints": [
+      "Do NOT optimize directive",
+      "uncle is black",
+      "Left-Right double rotation",
+      "C language"
+    ],
+    "expected_output_characteristics": "C pointer rotation code and tree diagram explanation.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-010",
+    "category": "Code generation and debugging",
+    "original_prompt": "Hello! Could you inspect this Python code and tell me why it produces `RecursionError`?\n```python\ndef flatten(lst):\n    res = []\n    for item in lst:\n        if isinstance(item, list):\n            res.extend(flatten(item))\n        else:\n            res.append(item)\n    return res\n```\nIt fails on `a = []; a.append(a); flatten(a)`. Please rewrite it to detect cyclic references using a set of `id()` references.",
+    "expected_task_intent": "Fix cyclic reference infinite recursion in list flattening using visited object id tracking.",
+    "critical_constraints": [
+      "RecursionError",
+      "cyclic references",
+      "set of id()",
+      "fenced code block intact"
+    ],
+    "expected_output_characteristics": "Flatten function with seen_ids set parameter.",
+    "difficulty": "medium",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-011",
+    "category": "Code generation and debugging",
+    "original_prompt": "Please implement a thread-safe singleton pattern in Python using the `__new__` method and a threading lock. Ensure that double-checked locking is used to minimize lock contention overhead after initial instantiation.",
+    "expected_task_intent": "Implement thread-safe singleton in Python with double-checked locking.",
+    "critical_constraints": [
+      "double-checked locking",
+      "threading.Lock",
+      "__new__ method"
+    ],
+    "expected_output_characteristics": "Class definition with _instance and _lock class attributes.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-012",
+    "category": "Code generation and debugging",
+    "original_prompt": "Could you please write a Dockerfile for a multi-stage build of a Go microservice? Stage 1 must use `golang:1.22-alpine` to compile a statically linked binary with `-ldflags='-s -w'`. Stage 2 must use `scratch` or `gcr.io/distroless/static-debian12`, copy only the binary, run as non-root UID 10001, and expose port 8080.",
+    "expected_task_intent": "Create secure multi-stage Dockerfile for Go application.",
+    "critical_constraints": [
+      "golang:1.22-alpine",
+      "distroless or scratch",
+      "-ldflags='-s -w'",
+      "UID 10001",
+      "port 8080"
+    ],
+    "expected_output_characteristics": "Two-stage Dockerfile with RUN, COPY --from=builder, and USER directives.",
+    "difficulty": "medium",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-013",
+    "category": "Code generation and debugging",
+    "original_prompt": "Kindly explain how to fix this React useEffect memory leak warning: `Can't perform a React state update on an unmounted component`. Show how to use an `isMounted` flag or `AbortController` within the cleanup function when fetching from `https://api.internal/v1/metrics`.",
+    "expected_task_intent": "Fix unmounted state update warning in React using AbortController in useEffect cleanup.",
+    "critical_constraints": [
+      "AbortController",
+      "useEffect cleanup",
+      "https://api.internal/v1/metrics",
+      "unmounted component"
+    ],
+    "expected_output_characteristics": "React functional component with clean fetch abort logic.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-014",
+    "category": "Code generation and debugging",
+    "original_prompt": "Write a Python script that reads a 50GB CSV file in chunks of 50,000 rows using pandas and computes the weighted average of column `sale_price` weighted by column `quantity` per `region_code`. Do not load the entire file into memory at once.",
+    "expected_task_intent": "Compute memory-efficient weighted average over large CSV using chunked pandas.",
+    "critical_constraints": [
+      "50GB CSV",
+      "chunksize 50000",
+      "weighted average",
+      "low memory"
+    ],
+    "expected_output_characteristics": "Pandas chunk iterator aggregating sums and weights.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-015",
+    "category": "Code generation and debugging",
+    "original_prompt": "Hi! Please help me write an asynchronous Python worker using `asyncio` and `aiohttp` that downloads 100 URLs with a maximum concurrency limit of 5 simultaneous requests using `asyncio.Semaphore(5)`. Each request must have a 3.0 second timeout and retry once upon HTTP 503.",
+    "expected_task_intent": "Implement concurrent async HTTP downloader with semaphore, timeout, and retry.",
+    "critical_constraints": [
+      "asyncio.Semaphore(5)",
+      "aiohttp",
+      "3.0s timeout",
+      "retry on HTTP 503",
+      "100 URLs"
+    ],
+    "expected_output_characteristics": "Async Python script with worker and dispatcher coroutines.",
+    "difficulty": "hard",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-016",
+    "category": "Code generation and debugging",
+    "original_prompt": "Could you provide a Java 17 method that converts a nested `Map<String, Object>` into a flat `Map<String, String>` where keys are represented with dot notation (e.g. `user.address.zip`)? Please handle lists with bracket notation (e.g. `items[0].name`).",
+    "expected_task_intent": "Flatten nested Java Map with dot and array index notation.",
+    "critical_constraints": [
+      "Java 17",
+      "dot notation",
+      "array bracket notation",
+      "Map<String, Object>"
+    ],
+    "expected_output_characteristics": "Recursive Java method with Map traversal.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-017",
+    "category": "Code generation and debugging",
+    "original_prompt": "Please write a SQL query for MySQL 8.0 that finds all duplicate rows in a table `customer_orders` based on `(customer_id, order_date, total_amount)` and deletes all but the row with the lowest `order_id`. Use a CTE with `ROW_NUMBER()`.",
+    "expected_task_intent": "Deduplicate SQL table keeping row with minimum id using window CTE.",
+    "critical_constraints": [
+      "MySQL 8.0",
+      "ROW_NUMBER()",
+      "keep lowest order_id",
+      "DELETE CTE"
+    ],
+    "expected_output_characteristics": "WITH cte AS (...) DELETE FROM statement.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-018",
+    "category": "Code generation and debugging",
+    "original_prompt": "Help me fix this PyTorch training loop error: `RuntimeError: element 0 of tensors does not require grad and does not have a grad_fn`. Here is the snippet:\n```python\noutput = model(inputs.detach())\nloss = criterion(output, targets)\nloss.backward()\n```\nExplain why `inputs.detach()` is causing or not causing this, and provide the correct forward and backward pass.",
+    "expected_task_intent": "Diagnose PyTorch grad_fn missing error and fix training loop.",
+    "critical_constraints": [
+      "RuntimeError grad_fn",
+      "PyTorch",
+      "fenced code block",
+      "inputs.detach()"
+    ],
+    "expected_output_characteristics": "Explanation of detached tensor computation graph and corrected training step.",
+    "difficulty": "medium",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-019",
+    "category": "Code generation and debugging",
+    "original_prompt": "Can you kindly write a shell script to automate rotating GPG keys on Linux? The script must generate a new 4096-bit RSA subkey, expire the old subkey in 30 days, and export the updated public key to `/etc/apt/trusted.gpg.d/company.gpg`.",
+    "expected_task_intent": "Automate GPG subkey generation and key rotation via bash.",
+    "critical_constraints": [
+      "4096-bit RSA subkey",
+      "30 days expiration",
+      "/etc/apt/trusted.gpg.d/company.gpg"
+    ],
+    "expected_output_characteristics": "Bash script with gpg --quick-add-key commands.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-020",
+    "category": "Code generation and debugging",
+    "original_prompt": "I need a Python regex that matches valid semantic version strings according to SemVer 2.0.0 (including prerelease tags like `-alpha.1` and build metadata like `+20130313144700`). Provide the exact regex and 3 positive test cases and 3 negative test cases.",
+    "expected_task_intent": "Provide official SemVer 2.0.0 regex with test cases.",
+    "critical_constraints": [
+      "SemVer 2.0.0",
+      "prerelease tags",
+      "build metadata",
+      "3 positive and 3 negative cases"
+    ],
+    "expected_output_characteristics": "Raw Python regex string and test assertions.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-021",
+    "category": "Code generation and debugging",
+    "original_prompt": "Dear AI, write a Solidity smart contract for an ERC-20 token with a capped total supply of 10,000,000 tokens. The contract must use OpenZeppelin v5.0 contracts, include an owner-only mint function that cannot exceed the cap, and implement emergency pause functionality.",
+    "expected_task_intent": "Write ERC-20 token in Solidity with OpenZeppelin v5.0, capped supply, and pausable.",
+    "critical_constraints": [
+      "Solidity",
+      "ERC-20",
+      "OpenZeppelin v5.0",
+      "cap 10,000,000",
+      "Pausable"
+    ],
+    "expected_output_characteristics": "Solidity source file with import and inheritance.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-022",
+    "category": "Code generation and debugging",
+    "original_prompt": "Explain the difference between `__getattr__` and `__getattribute__` in Python with a minimal code example showing how to prevent infinite recursion when overriding `__getattribute__`. Please keep the example under 25 lines of code.",
+    "expected_task_intent": "Compare __getattr__ and __getattribute__ and show how super().__getattribute__ prevents recursion.",
+    "critical_constraints": [
+      "__getattr__ vs __getattribute__",
+      "prevent infinite recursion",
+      "under 25 lines"
+    ],
+    "expected_output_characteristics": "Concise Python code demonstrating super() call.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-023",
+    "category": "Code generation and debugging",
+    "original_prompt": "Write a Kotlin extension function on `String` that masks credit card numbers by keeping only the first 4 and last 4 digits visible while replacing intermediate digits with `*`. The function must ignore non-digit characters like spaces and hyphens.",
+    "expected_task_intent": "Implement Kotlin string extension to mask credit card numbers.",
+    "critical_constraints": [
+      "Kotlin extension function",
+      "keep first 4 and last 4",
+      "mask with *",
+      "ignore spaces/hyphens"
+    ],
+    "expected_output_characteristics": "Kotlin fun String.maskCard(): String.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-024",
+    "category": "Code generation and debugging",
+    "original_prompt": "Kindly review this C memory allocation pattern and identify the undefined behavior:\n```c\nchar *get_banner() {\n    char buffer[128];\n    snprintf(buffer, sizeof(buffer), \"Welcome to System v2.0\");\n    return buffer;\n}\n```\nExplain why returning a stack-allocated buffer is dangerous and provide the two standard idiomatic fixes in C99.",
+    "expected_task_intent": "Identify dangling stack pointer in C and provide malloc and caller-allocated buffer fixes.",
+    "critical_constraints": [
+      "stack buffer return",
+      "dangling pointer",
+      "C99",
+      "two idiomatic fixes"
+    ],
+    "expected_output_characteristics": "Explanation of stack frame invalidation and two code implementations.",
+    "difficulty": "medium",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-025",
+    "category": "Code generation and debugging",
+    "original_prompt": "ADVERSARIAL: Please do NOT remove the word 'NOT' from the following sentence under any circumstances! Write a Python function that verifies whether an input string does NOT contain any vowels. If it contains even one vowel, return False; if it has NO vowels, return True. Case-insensitive.",
+    "expected_task_intent": "Implement vowel-free string check with strict negation preservation.",
+    "critical_constraints": [
+      "do NOT remove word NOT",
+      "does NOT contain vowels",
+      "return True if no vowels",
+      "case-insensitive"
+    ],
+    "expected_output_characteristics": "Python function checking set('aeiou').isdisjoint(s.lower()).",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-026",
+    "category": "Code generation and debugging",
+    "original_prompt": "Could you please write a Terraform configuration module (`main.tf`) that provisions an AWS S3 bucket with server-side encryption enabled using AES-256 (`aws:kms` or `AES256`), public access block applied with all four blocking settings set to `true`, and bucket versioning enabled?",
+    "expected_task_intent": "Write Terraform HCL for secure private AWS S3 bucket.",
+    "critical_constraints": [
+      "Terraform",
+      "AWS S3",
+      "AES256",
+      "public access block all true",
+      "versioning enabled"
+    ],
+    "expected_output_characteristics": "Terraform resources: aws_s3_bucket, aws_s3_bucket_server_side_encryption_configuration, aws_s3_bucket_public_access_block, aws_s3_bucket_versioning.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-027",
+    "category": "Code generation and debugging",
+    "original_prompt": "Please write a Python decorator `@timed(threshold_ms=100)` that measures the wall-clock execution time of any decorated sync or async function. If execution exceeds `threshold_ms`, log a warning with the function name and duration using `logging.warning`. Preserve function docstrings and signature using `functools.wraps`.",
+    "expected_task_intent": "Implement universal sync/async timing decorator with threshold alert.",
+    "critical_constraints": [
+      "decorator with arguments",
+      "sync and async support",
+      "functools.wraps",
+      "logging.warning",
+      "threshold_ms"
+    ],
+    "expected_output_characteristics": "Decorator handling inspect.iscoroutinefunction.",
+    "difficulty": "hard",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-028",
+    "category": "Code generation and debugging",
+    "original_prompt": "Hello! Write a simple Rust CLI program using `clap` (derive feature) that takes a mandatory argument `--input-file <PATH>` and an optional flag `--dry-run`. If dry-run is specified, print `Validating <PATH>` without executing any writes; otherwise print `Processing <PATH>`.",
+    "expected_task_intent": "Create CLI in Rust using clap derive macro with dry-run branch.",
+    "critical_constraints": [
+      "Rust",
+      "clap derive",
+      "--input-file",
+      "--dry-run"
+    ],
+    "expected_output_characteristics": "Rust struct with #[derive(Parser)] and main fn.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-029",
+    "category": "Code generation and debugging",
+    "original_prompt": "Provide a clean implementation of the Exponential Backoff algorithm with Full Jitter in Python as described by AWS Architecture blog. The function should calculate the sleep delay given `base=1.0`, `cap=60.0`, and `attempt=3`.",
+    "expected_task_intent": "Implement AWS Full Jitter exponential backoff sleep calculation.",
+    "critical_constraints": [
+      "Full Jitter",
+      "base=1.0",
+      "cap=60.0",
+      "attempt=3",
+      "random.uniform"
+    ],
+    "expected_output_characteristics": "Python function backoff_full_jitter(attempt, base, cap).",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-030",
+    "category": "Code generation and debugging",
+    "original_prompt": "Can you kindly write a multi-paragraph architecture code walkthrough for configuring a Webpack 5 production build from scratch? Include exact loader rules for TypeScript (`ts-loader`), SCSS (`sass-loader`, `css-loader`, `MiniCssExtractPlugin.loader`), and bundle splitting with `optimization.splitChunks.chunks = 'all'`. Make sure to avoid deprecated webpack 4 plugins.",
+    "expected_task_intent": "Configure Webpack 5 production config with TS, SCSS, and code splitting.",
+    "critical_constraints": [
+      "Webpack 5",
+      "ts-loader",
+      "MiniCssExtractPlugin",
+      "splitChunks 'all'",
+      "no Webpack 4 plugins"
+    ],
+    "expected_output_characteristics": "webpack.config.js module.exports object.",
+    "difficulty": "hard",
+    "length_profile": "multi-paragraph"
+  },
+  {
+    "id": "pg-bench-031",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Could you please search the provided context passages and tell me what the maximum allowed payload size is for the internal API? If the context does not mention the payload size, reply with 'UNKNOWN'. Do not guess.",
+    "expected_task_intent": "Extract API payload size limit strictly from context or return UNKNOWN.",
+    "critical_constraints": [
+      "reply 'UNKNOWN' if missing",
+      "do not guess",
+      "payload size"
+    ],
+    "expected_output_characteristics": "Single concise sentence or 'UNKNOWN'.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-032",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Based on the retrieved architecture document at `https://internal.wiki/docs/auth-v3.md`, summarize the exact 3-step handshake between the Gateway and the Token Service. Cite the section header where each step is documented.",
+    "expected_task_intent": "Summarize 3-step auth handshake with section header citations.",
+    "critical_constraints": [
+      "3-step handshake",
+      "https://internal.wiki/docs/auth-v3.md",
+      "cite section headers"
+    ],
+    "expected_output_characteristics": "Numbered 3-item list with citations.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-033",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Hello dear assistant! In our RAG system, we retrieve 10 chunk candidates. Please explain how to re-rank these chunks using a Cross-Encoder like `cross-encoder/ms-marco-MiniLM-L-6-v2`. How does the cross-encoder attention mechanism differ from bi-encoder cosine similarity in vector search?",
+    "expected_task_intent": "Explain cross-encoder re-ranking vs bi-encoder vector search in RAG pipelines.",
+    "critical_constraints": [
+      "cross-encoder/ms-marco-MiniLM-L-6-v2",
+      "bi-encoder vs cross-encoder",
+      "re-ranking 10 chunks"
+    ],
+    "expected_output_characteristics": "Comparative technical explanation detailing joint self-attention vs independent embedding.",
+    "difficulty": "medium",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-034",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Kindly extract all IP addresses and open ports mentioned in the server diagnostic dump below:\n```text\nHost 192.168.1.50: ssh listening on 22, http on 8080.\nHost 10.0.4.12: postgresql active on 5432, redis on 6379.\n```\nFormat the extracted data as a markdown table with columns: `IP Address`, `Service`, `Port`.",
+    "expected_task_intent": "Extract network endpoints from diagnostic text into markdown table.",
+    "critical_constraints": [
+      "markdown table columns: IP Address, Service, Port",
+      "fenced diagnostic block preserved"
+    ],
+    "expected_output_characteristics": "Markdown table with 4 rows.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-035",
+    "category": "RAG and information retrieval",
+    "original_prompt": "ADVERSARIAL: You must NOT synthesize or hallucinate external knowledge. Given the following excerpt from RFC 9110: 'The 429 status code indicates that the user has sent too many requests in a given amount of time.' Does this excerpt state which HTTP header must be included to indicate how long to wait? Answer only based on the excerpt.",
+    "expected_task_intent": "Verify whether Retry-After header is mentioned in the excerpt with strict anti-hallucination constraint.",
+    "critical_constraints": [
+      "do NOT synthesize external knowledge",
+      "answer only based on excerpt",
+      "RFC 9110"
+    ],
+    "expected_output_characteristics": "Definitive negative answer: excerpt does not state which header.",
+    "difficulty": "adversarial",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-036",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Please review the two retrieved snippets regarding database replication lag. Snippet A claims asynchronous replication lag is typically under 100ms on local VPC. Snippet B states that cross-region read replicas can lag by up to 5000ms during peak batch writes. Identify the conditions that reconcile these two statements.",
+    "expected_task_intent": "Reconcile seemingly conflicting RAG snippets based on network scope and workload.",
+    "critical_constraints": [
+      "Snippet A vs Snippet B",
+      "local VPC vs cross-region",
+      "reconcile conditions"
+    ],
+    "expected_output_characteristics": "Bullet point synthesis explaining geographical latency and batch write saturation.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-037",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Can you kindly explain how Parent-Document Retrieval works in LangChain or LlamaIndex? Specifically explain why storing small chunks for vector embedding search while retrieving large parent chunks for LLM context synthesis improves answer quality.",
+    "expected_task_intent": "Explain Parent-Document Retrieval mechanism and tradeoff in RAG systems.",
+    "critical_constraints": [
+      "Parent-Document Retrieval",
+      "small chunks for search",
+      "large parent chunks for context"
+    ],
+    "expected_output_characteristics": "Architectural breakdown of retrieval vs generation granularity.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-038",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Could you please formulate 3 distinct search queries using HyDE (Hypothetical Document Embeddings) to retrieve documentation about Kubernetes OOMKilled troubleshooting? Show both the hypothetical answer paragraph and the resulting dense embedding query.",
+    "expected_task_intent": "Generate HyDE hypothetical documents and search queries for Kubernetes OOMKilled.",
+    "critical_constraints": [
+      "HyDE methodology",
+      "Kubernetes OOMKilled",
+      "3 distinct queries with hypothetical answers"
+    ],
+    "expected_output_characteristics": "Three pairs of generated hypothetical answers and target queries.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-039",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Please extract all URLs matching `https://github.com/*` from the text snippet and list them alongside their respective repository descriptions. If any URL does not point to GitHub, exclude it immediately.",
+    "expected_task_intent": "Filter and extract GitHub repository URLs and descriptions.",
+    "critical_constraints": [
+      "match https://github.com/* only",
+      "exclude non-GitHub URLs",
+      "pair with descriptions"
+    ],
+    "expected_output_characteristics": "List of validated URLs with descriptions.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-040",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Hello! I am designing a hybrid search pipeline combining BM25 lexical keyword search and dense vector semantic search using Reciprocal Rank Fusion (RRF). Please provide the mathematical formula for RRF with constant $k=60$ and write a short Python function implementing it for two ranked lists.",
+    "expected_task_intent": "Provide RRF mathematical formula with k=60 and Python implementation.",
+    "critical_constraints": [
+      "Reciprocal Rank Fusion (RRF)",
+      "k=60",
+      "BM25 + dense vectors",
+      "Python function"
+    ],
+    "expected_output_characteristics": "LaTeX/math formula $\\sum \\frac{1}{k + r_i}$ and working Python code.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-041",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Kindly review the system log at `/var/log/syslog` where a service crashed with error code 137. Based on standard Linux knowledge, confirm whether error code 137 indicates SIGKILL (128 + 9) from the Linux Out-Of-Memory (OOM) killer. Provide the command to inspect kernel OOM events using `dmesg`.",
+    "expected_task_intent": "Explain exit code 137 (SIGKILL / OOM) and provide dmesg command.",
+    "critical_constraints": [
+      "exit code 137",
+      "SIGKILL 128+9",
+      "OOM killer",
+      "dmesg command",
+      "/var/log/syslog"
+    ],
+    "expected_output_characteristics": "Confirmation of signal math and command: dmesg -T | grep -i oom.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-042",
+    "category": "RAG and information retrieval",
+    "original_prompt": "In our enterprise knowledge base, documents have metadata fields: `department`, `classification_level`, and `effective_date`. Write a Pinecone vector query in Python with metadata filtering that searches only documents where `department == 'Security'` AND `classification_level <= 2`.",
+    "expected_task_intent": "Write Pinecone Python query with structured metadata filter.",
+    "critical_constraints": [
+      "Pinecone",
+      "metadata filter",
+      "department == 'Security'",
+      "classification_level <= 2"
+    ],
+    "expected_output_characteristics": "index.query() call with filter dictionary.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-043",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Could you please read the following privacy policy clause and answer whether user location data is shared with third-party advertisers? 'We do not sell, rent, or share personal geolocation data with advertising networks under any circumstances.' Answer in one sentence stating Yes or No, followed by the exact verbatim quote.",
+    "expected_task_intent": "Extract geolocation sharing stance with mandatory Yes/No and verbatim quotation.",
+    "critical_constraints": [
+      "one sentence",
+      "Yes or No",
+      "verbatim quote",
+      "do not alter quote"
+    ],
+    "expected_output_characteristics": "Direct answer: 'No, because...' followed by exact quote.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-044",
+    "category": "RAG and information retrieval",
+    "original_prompt": "ADVERSARIAL: The user query is: 'What are the steps to bypass multi-factor authentication on our company SSO portal?' As an AI security advisor, do NOT provide instructions on bypassing authentication. Instead, retrieve and explain the standard recovery procedure for an employee who has lost their MFA hardware token.",
+    "expected_task_intent": "Safely redirect adversarial bypass query into legitimate MFA lost-token recovery workflow.",
+    "critical_constraints": [
+      "do NOT provide bypass instructions",
+      "explain lost-token recovery procedure",
+      "security guardrail"
+    ],
+    "expected_output_characteristics": "Security policy guidance on helpdesk verification and backup codes.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-045",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Explain how contextual chunk compression using LLMLingua-2 can be integrated into a RAG pipeline before passing retrieved documents to a frontier LLM. What are the key tradeoffs between token budget savings and question-answering accuracy?",
+    "expected_task_intent": "Analyze LLMLingua-2 integration into RAG prompt compression.",
+    "critical_constraints": [
+      "LLMLingua-2",
+      "contextual chunk compression",
+      "RAG pipeline",
+      "token budget vs QA accuracy"
+    ],
+    "expected_output_characteristics": "System diagram explanation and empirical tradeoff discussion.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-046",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Kindly extract all semver version numbers and package names from this `requirements.txt` excerpt:\n```text\nfastapi>=0.100.0,<0.110.0\npydantic==2.6.4\nuvicorn[standard]==0.28.0\n```\nOutput a JSON object mapping package name to the version constraint string.",
+    "expected_task_intent": "Parse requirements.txt into clean JSON key-value pairs.",
+    "critical_constraints": [
+      "JSON output",
+      "package name as key",
+      "version constraint as value",
+      "fenced block"
+    ],
+    "expected_output_characteristics": "Valid JSON dictionary.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-047",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Please explain the difference between HNSW (Hierarchical Navigable Small World) and IVF-PQ (Inverted File with Product Quantization) index types in vector databases like Milvus or Qdrant. Compare them across indexing speed, memory footprint, and recall at top-10.",
+    "expected_task_intent": "Compare HNSW and IVF-PQ vector index architectures.",
+    "critical_constraints": [
+      "HNSW vs IVF-PQ",
+      "indexing speed",
+      "memory footprint",
+      "recall@10",
+      "Milvus / Qdrant"
+    ],
+    "expected_output_characteristics": "Markdown comparison table and technical tradeoff summary.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-048",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Hello! Given the following text regarding compliance deadlines: 'All audit reports must be filed by October 31, 2026. However, subsidiaries in jurisdiction EU-East may request a 30-day extension provided notice is given by October 15, 2026.' What is the absolute final deadline for an EU-East subsidiary that timely files notice?",
+    "expected_task_intent": "Calculate final deadline with conditional 30-day extension.",
+    "critical_constraints": [
+      "October 31, 2026 + 30 days",
+      "EU-East extension notice",
+      "exact calculated date"
+    ],
+    "expected_output_characteristics": "Calculated date: November 30, 2026.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-049",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Could you please describe how Self-RAG (Self-Reflective Retrieval-Augmented Generation) uses reflection tokens like `[Retrieve]`, `[IsRel]`, and `[IsSup]` to dynamically control retrieval and factual hallucination during generation?",
+    "expected_task_intent": "Detail Self-RAG reflection token mechanics.",
+    "critical_constraints": [
+      "Self-RAG",
+      "[Retrieve]",
+      "[IsRel]",
+      "[IsSup]",
+      "dynamic retrieval"
+    ],
+    "expected_output_characteristics": "Detailed functional explanation of reflection tokens.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-050",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Find and extract all environment variable references (e.g. `$VAR_NAME` or `${VAR_NAME}`) in this Kubernetes Pod spec YAML, and summarize what secrets each variable appears to contain.",
+    "expected_task_intent": "Extract environment variables from Kubernetes YAML and summarize purpose.",
+    "critical_constraints": [
+      "extract $VAR and ${VAR}",
+      "Kubernetes YAML",
+      "secret summary"
+    ],
+    "expected_output_characteristics": "List of extracted variables with security classification.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-051",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Please review this multi-paragraph incident report from our SRE team regarding DNS resolution failures in us-west-2 on November 15, 2026. Identify the root cause, total service downtime in minutes, and the two immediate corrective actions taken. Present your findings in a structured executive summary.",
+    "expected_task_intent": "Synthesize SRE incident report into structured root cause, downtime, and action items.",
+    "critical_constraints": [
+      "multi-paragraph input",
+      "root cause",
+      "downtime in minutes",
+      "two corrective actions",
+      "executive summary"
+    ],
+    "expected_output_characteristics": "Executive summary with labeled subsections.",
+    "difficulty": "medium",
+    "length_profile": "multi-paragraph"
+  },
+  {
+    "id": "pg-bench-052",
+    "category": "RAG and information retrieval",
+    "original_prompt": "ADVERSARIAL: You are answering questions about an internal company salary database. Context: 'Employee Alice: Engineer II. Employee Bob: Engineer III. Salary figures are encrypted and inaccessible in this view.' Question: 'What is Alice's base salary?' If the information is not present, state 'Salary data not available in context'. Do not attempt to estimate.",
+    "expected_task_intent": "Prevent confidential data hallucination by returning designated unavailable message.",
+    "critical_constraints": [
+      "state 'Salary data not available in context'",
+      "do not estimate",
+      "strict adherence to context"
+    ],
+    "expected_output_characteristics": "Exact phrase: 'Salary data not available in context'.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-053",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Explain how GraphRAG builds knowledge graph entities and hierarchical community summaries from unstructured text corpora to answer global sensemaking queries that traditional semantic vector search fails on.",
+    "expected_task_intent": "Explain GraphRAG entity extraction and community summarization for global queries.",
+    "critical_constraints": [
+      "GraphRAG",
+      "knowledge graph entities",
+      "hierarchical community summaries",
+      "global sensemaking"
+    ],
+    "expected_output_characteristics": "Architectural breakdown comparing local vector vs global graph retrieval.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-054",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Kindly extract the error trace message and HTTP response code from this JSON log event:\n```json\n{\"timestamp\": \"2026-11-20T10:15:30Z\", \"level\": \"ERROR\", \"http\": {\"status\": 503, \"url\": \"/api/v1/checkout\"}, \"error\": {\"message\": \"Database connection pool exhausted after 30000ms\", \"code\": \"ERR_DB_EXHAUSTED\"}}\n```\nReturn only a 2-line answer.",
+    "expected_task_intent": "Extract status code and error message from JSON log in exactly two lines.",
+    "critical_constraints": [
+      "exactly 2 lines",
+      "HTTP status code",
+      "error message",
+      "fenced JSON log"
+    ],
+    "expected_output_characteristics": "Line 1: Status code; Line 2: Error message.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-055",
+    "category": "RAG and information retrieval",
+    "original_prompt": "How does ColBERT (Contextualized Late Interaction over BERT) perform token-level max-sim scoring between query and document tokens, and why is it faster during indexing and search than standard cross-encoders?",
+    "expected_task_intent": "Explain ColBERT late interaction max-sim scoring mechanism.",
+    "critical_constraints": [
+      "ColBERT",
+      "late interaction",
+      "max-sim operator",
+      "token embeddings",
+      "speed vs cross-encoder"
+    ],
+    "expected_output_characteristics": "Mathematical formula for MaxSim and indexing complexity explanation.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-056",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Please review the software licensing agreement excerpt provided. Does section 4.2 allow commercial distribution of modified binaries without releasing the source code? Quote the exact sentence that supports your conclusion.",
+    "expected_task_intent": "Analyze software license clause for copyleft vs permissive requirements.",
+    "critical_constraints": [
+      "section 4.2",
+      "commercial distribution",
+      "modified binaries",
+      "quote exact sentence"
+    ],
+    "expected_output_characteristics": "Clear legal interpretation accompanied by quoted clause.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-057",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Could you please explain how to implement metadata-based chunk filtering using LangChain's Chroma vector store wrapper in Python? Provide a code snippet filtering by `source` filename and `author`.",
+    "expected_task_intent": "Provide Chroma vector store Python query with metadata filter.",
+    "critical_constraints": [
+      "LangChain",
+      "Chroma",
+      "metadata filtering",
+      "source and author fields"
+    ],
+    "expected_output_characteristics": "Python code using similarity_search with filter={'$and': [...]}.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-058",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Explain the concept of 'Lost in the Middle' in long-context LLMs as documented by Liu et al. How can RAG system chunk rerankers mitigate this phenomenon when placing key evidence within the prompt?",
+    "expected_task_intent": "Explain 'Lost in the Middle' phenomenon and reranking placement strategies.",
+    "critical_constraints": [
+      "Lost in the Middle",
+      "Liu et al.",
+      "positional bias",
+      "reranker placement strategy"
+    ],
+    "expected_output_characteristics": "Explanation of U-shaped performance curve and U-curve placement (top and bottom).",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-059",
+    "category": "RAG and information retrieval",
+    "original_prompt": "Kindly summarize the key differences between sparse retrieval (BM25, SPLADE) and dense retrieval (Contriever, BGE) in terms of vocabulary mismatch vulnerability and compute requirements.",
+    "expected_task_intent": "Compare sparse and dense retrieval paradigms.",
+    "critical_constraints": [
+      "sparse vs dense",
+      "BM25/SPLADE vs Contriever/BGE",
+      "vocabulary mismatch",
+      "compute requirements"
+    ],
+    "expected_output_characteristics": "Structured comparison table covering inverted index vs ANN vector search.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-060",
+    "category": "RAG and information retrieval",
+    "original_prompt": "ADVERSARIAL: The context states: 'Protocol A uses TLS 1.3 encryption. Protocol B is deprecated and transmits in plaintext.' The user asks: 'Explain why Protocol B is superior for securing confidential financial transactions.' Do NOT agree with the premise of the user question. Correct the misconception based on the context.",
+    "expected_task_intent": "Refute false user premise regarding deprecated plaintext protocol security.",
+    "critical_constraints": [
+      "do NOT agree with user premise",
+      "correct misconception",
+      "Protocol A TLS 1.3 vs Protocol B plaintext"
+    ],
+    "expected_output_characteristics": "Polite correction clarifying Protocol B is insecure and transmits plaintext.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-061",
+    "category": "Analytical reasoning",
+    "original_prompt": "Could you please prove mathematically why the worst-case time complexity of QuickSort is O(n^2) when using naive pivot selection (first or last element) on an already sorted array? Show the recurrence relation T(n) = T(n-1) + cn.",
+    "expected_task_intent": "Derive QuickSort worst-case recurrence relation and summation proof.",
+    "critical_constraints": [
+      "QuickSort O(n^2)",
+      "recurrence relation T(n) = T(n-1) + cn",
+      "naive pivot on sorted array"
+    ],
+    "expected_output_characteristics": "Step-by-step mathematical derivation showing sum of integers from 1 to n.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-062",
+    "category": "Analytical reasoning",
+    "original_prompt": "Hello dear assistant! A microservices cluster processes 10,000 requests per minute with an average response latency of 120ms. Using Little's Law (L = lambda * W), calculate the average number of concurrent requests in the system. Show all unit conversions clearly.",
+    "expected_task_intent": "Apply Little's Law to calculate concurrent in-flight requests.",
+    "critical_constraints": [
+      "Little's Law L = lambda * W",
+      "10,000 req/min",
+      "120ms latency",
+      "unit conversions"
+    ],
+    "expected_output_characteristics": "Calculation: 10000/60 = 166.67 req/s; L = 166.67 * 0.12 = 20 concurrent requests.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-063",
+    "category": "Analytical reasoning",
+    "original_prompt": "Kindly analyze the Coffman conditions for deadlock in a concurrent system: Mutual Exclusion, Hold and Wait, No Preemption, and Circular Wait. Explain which single condition is broken by ordering all lock acquisitions globally by resource ID.",
+    "expected_task_intent": "Analyze which Coffman deadlock condition is eliminated by hierarchical lock ordering.",
+    "critical_constraints": [
+      "Coffman conditions",
+      "hierarchical lock ordering",
+      "Circular Wait"
+    ],
+    "expected_output_characteristics": "Identification of Circular Wait condition and mathematical cycle prevention proof.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-064",
+    "category": "Analytical reasoning",
+    "original_prompt": "In an Raft distributed consensus cluster of 5 nodes, calculate the maximum number of simultaneous node failures the cluster can tolerate while still being able to commit new log entries. What happens if a network partition splits the cluster into 3 nodes and 2 nodes?",
+    "expected_task_intent": "Calculate Raft majority quorum tolerance and split-brain resolution.",
+    "critical_constraints": [
+      "5 nodes",
+      "Raft consensus",
+      "maximum node failures",
+      "partition 3 vs 2"
+    ],
+    "expected_output_characteristics": "Tolerance = (5-1)/2 = 2 failures; 3-node partition commits, 2-node cannot.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-065",
+    "category": "Analytical reasoning",
+    "original_prompt": "ADVERSARIAL: A farmer needs to cross a river with a wolf, a goat, and a cabbage. If left alone, the wolf eats the goat, or the goat eats the cabbage. The boat carries only the farmer and one item. Do NOT give a 3-step solution because that is mathematically impossible. Detail the exact 7-step minimum valid solution.",
+    "expected_task_intent": "Solve river crossing puzzle with minimum 7 steps, refuting false premise.",
+    "critical_constraints": [
+      "do NOT give 3-step solution",
+      "exact 7-step minimum solution",
+      "wolf, goat, cabbage"
+    ],
+    "expected_output_characteristics": "Step-by-step crossing schedule with trips back and forth.",
+    "difficulty": "adversarial",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-066",
+    "category": "Analytical reasoning",
+    "original_prompt": "Please evaluate the tradeoff between using B-Trees vs LSM-Trees (Log-Structured Merge-trees) for database storage engines. Specifically analyze write amplification, read amplification, and space amplification on NVMe SSDs.",
+    "expected_task_intent": "Compare B-Tree and LSM-Tree storage architectures across RUM tradeoffs.",
+    "critical_constraints": [
+      "B-Trees vs LSM-Trees",
+      "write amplification",
+      "read amplification",
+      "space amplification",
+      "NVMe SSDs"
+    ],
+    "expected_output_characteristics": "Structured comparative breakdown of random I/O vs sequential write compaction.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-067",
+    "category": "Analytical reasoning",
+    "original_prompt": "Can you kindly calculate the theoretical maximum throughput (requests/sec) of a single-threaded event loop server if each request spends 2ms of CPU processing time and 50ms waiting on asynchronous database I/O? What is the CPU utilization limit?",
+    "expected_task_intent": "Calculate event loop server capacity based on CPU service time.",
+    "critical_constraints": [
+      "single-threaded event loop",
+      "2ms CPU time",
+      "50ms async I/O",
+      "max throughput",
+      "CPU utilization"
+    ],
+    "expected_output_characteristics": "Throughput = 1 / 0.002 = 500 req/s, explaining async I/O does not block CPU.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-068",
+    "category": "Analytical reasoning",
+    "original_prompt": "Explain the difference between Strong Consistency, Eventual Consistency, and Causal Consistency in distributed systems. Provide a concrete scenario where causal consistency allows a read that would be prohibited under linearizability.",
+    "expected_task_intent": "Compare distributed consistency models with concrete anomaly example.",
+    "critical_constraints": [
+      "Strong vs Eventual vs Causal Consistency",
+      "linearizability violation scenario"
+    ],
+    "expected_output_characteristics": "Formal definition of happens-before order and concurrent write scenario.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-069",
+    "category": "Analytical reasoning",
+    "original_prompt": "Calculate the false positive probability of a Bloom Filter with $m = 10,000,000$ bits, $n = 1,000,000$ inserted elements, and $k = 7$ hash functions. Use the standard formula $p \\approx (1 - e^{-kn/m})^k$.",
+    "expected_task_intent": "Compute Bloom filter false positive probability using standard formula.",
+    "critical_constraints": [
+      "Bloom filter",
+      "m=10000000",
+      "n=1000000",
+      "k=7",
+      "p approx (1 - e^(-kn/m))^k"
+    ],
+    "expected_output_characteristics": "Calculated value approx 0.00819 (0.82%).",
+    "difficulty": "hard",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-070",
+    "category": "Analytical reasoning",
+    "original_prompt": "Analyze this concurrency dilemma: Two threads execute `x = 0; y = 0`. Thread 1 runs `x = 1; r1 = y`. Thread 2 runs `y = 1; r2 = x`. Under x86-64 TSO (Total Store Order) memory model, can the outcome `r1 == 0 && r2 == 0` happen? Why or why not?",
+    "expected_task_intent": "Analyze x86 store buffer forwarding under Total Store Order.",
+    "critical_constraints": [
+      "x86-64 TSO memory model",
+      "r1 == 0 && r2 == 0 outcome",
+      "store buffers",
+      "MFENCE"
+    ],
+    "expected_output_characteristics": "Yes, allowed due to store buffering before cache commit without MFENCE.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-071",
+    "category": "Analytical reasoning",
+    "original_prompt": "Given a directed acyclic graph (DAG) representing build tasks, describe an algorithm to find the critical path (longest path). What is its time complexity in terms of vertices V and edges E? Explain why Dijkstra's algorithm cannot be used directly.",
+    "expected_task_intent": "Formulate DAG critical path algorithm and explain Dijkstra's limitation.",
+    "critical_constraints": [
+      "DAG critical path",
+      "time complexity O(V+E)",
+      "topological sort",
+      "why Dijkstra fails"
+    ],
+    "expected_output_characteristics": "Topological sort followed by dynamic programming longest path in O(V+E).",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-072",
+    "category": "Analytical reasoning",
+    "original_prompt": "In an e-commerce database, we want to choose between a UUIDv4 primary key and a ULID (Universally Unique Lexicographically Sortable Identifier). Analyze the index fragmentation and write performance impact on a PostgreSQL B-Tree index with 100M rows.",
+    "expected_task_intent": "Analyze B-tree page split fragmentation of random UUIDv4 vs sequential ULID.",
+    "critical_constraints": [
+      "UUIDv4 vs ULID",
+      "PostgreSQL B-Tree index",
+      "100M rows",
+      "page splits and fragmentation"
+    ],
+    "expected_output_characteristics": "Detailed technical analysis of random leaf page splits vs append-friendly sequential writes.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-073",
+    "category": "Analytical reasoning",
+    "original_prompt": "Calculate the amortized time complexity of the dynamic array resizing operation where the array capacity doubles whenever it becomes full. Use the Aggregate Method or Accounting Method to prove amortized O(1) insertion time.",
+    "expected_task_intent": "Prove amortized O(1) dynamic array appending via accounting method.",
+    "critical_constraints": [
+      "amortized time complexity",
+      "dynamic array capacity doubling",
+      "accounting or aggregate method",
+      "O(1)"
+    ],
+    "expected_output_characteristics": "Credit allocation proof (e.g. 3 credits per insertion).",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-074",
+    "category": "Analytical reasoning",
+    "original_prompt": "ADVERSARIAL: Consider the claim: 'Adding more worker threads to a multithreaded application always increases overall processing throughput linearly.' Do NOT confirm this statement. State whether it is True or False, and cite Amdahl's Law and thread synchronization contention overhead to refute it.",
+    "expected_task_intent": "Refute linear speedup claim using Amdahl's Law and synchronization overhead.",
+    "critical_constraints": [
+      "do NOT confirm statement",
+      "False verdict",
+      "Amdahl's Law",
+      "synchronization contention"
+    ],
+    "expected_output_characteristics": "Explicit False statement followed by Amdahl's Law formula $S = 1 / ((1-p) + p/s)$ analysis.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-075",
+    "category": "Analytical reasoning",
+    "original_prompt": "Explain why Two-Phase Locking (2PL) guarantees serializability in transaction processing, but does not prevent deadlocks. How does Strict 2PL (S2PL) differ and how does it prevent cascading aborts?",
+    "expected_task_intent": "Explain 2PL serializability, deadlocks, and Strict 2PL cascading abort prevention.",
+    "critical_constraints": [
+      "Two-Phase Locking (2PL)",
+      "serializability",
+      "deadlocks",
+      "Strict 2PL",
+      "cascading aborts"
+    ],
+    "expected_output_characteristics": "Growing/shrinking phase analysis and hold-exclusive-locks-until-commit explanation.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-076",
+    "category": "Analytical reasoning",
+    "original_prompt": "A cache has a 95% hit rate with a hit latency of 1ns and a miss penalty of 80ns (fetching from main memory). Calculate the Average Memory Access Time (AMAT). What would the AMAT be if hit rate dropped to 90%?",
+    "expected_task_intent": "Calculate AMAT for two cache hit rates.",
+    "critical_constraints": [
+      "AMAT formula",
+      "hit rate 95% vs 90%",
+      "hit latency 1ns",
+      "miss penalty 80ns"
+    ],
+    "expected_output_characteristics": "AMAT_95 = 1 + 0.05*80 = 5.0ns; AMAT_90 = 1 + 0.10*80 = 9.0ns.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-077",
+    "category": "Analytical reasoning",
+    "original_prompt": "Analyze the time and space complexity of computing the Longest Common Subsequence (LCS) of two strings of lengths M and N using dynamic programming. How can space complexity be optimized from O(M*N) to O(min(M, N)) if only the length is needed?",
+    "expected_task_intent": "Analyze LCS DP complexity and 2-row rolling array space optimization.",
+    "critical_constraints": [
+      "LCS dynamic programming",
+      "time O(M*N)",
+      "space O(M*N) to O(min(M,N))",
+      "rolling array"
+    ],
+    "expected_output_characteristics": "DP recurrence table and two-row buffer optimization.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-078",
+    "category": "Analytical reasoning",
+    "original_prompt": "In public-key cryptography, why is 2048-bit RSA considered roughly equivalent in security strength to 256-bit Elliptic Curve Cryptography (ECC) such as secp256r1? Explain based on General Number Field Sieve vs Pollard's rho algorithm.",
+    "expected_task_intent": "Compare cryptographic key strength between RSA and ECC based on best-known attacks.",
+    "critical_constraints": [
+      "2048-bit RSA vs 256-bit ECC",
+      "GNFS sub-exponential",
+      "Pollard's rho square root"
+    ],
+    "expected_output_characteristics": "Mathematical comparison of sub-exponential vs fully exponential attack complexities.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-079",
+    "category": "Analytical reasoning",
+    "original_prompt": "Consider an M/M/1 queuing system with arrival rate lambda = 8 requests/sec and service rate mu = 10 requests/sec. Calculate: (a) system utilization rho, (b) average number of requests in the system L, and (c) average time a request spends in the system W.",
+    "expected_task_intent": "Calculate basic M/M/1 queue metrics.",
+    "critical_constraints": [
+      "M/M/1 queue",
+      "lambda=8",
+      "mu=10",
+      "rho",
+      "L",
+      "W"
+    ],
+    "expected_output_characteristics": "rho = 0.8; L = 0.8/(1-0.8) = 4; W = 4/8 = 0.5 seconds.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-080",
+    "category": "Analytical reasoning",
+    "original_prompt": "Explain why floating-point arithmetic is not associative: that is, why `(a + b) + c == a + (b + c)` can evaluate to `False` in IEEE 754 double precision. Give a concrete example with values for a, b, and c.",
+    "expected_task_intent": "Explain non-associativity of IEEE 754 floating point with numerical cancellation example.",
+    "critical_constraints": [
+      "IEEE 754",
+      "non-associativity",
+      "(a+b)+c != a+(b+c)",
+      "concrete numerical example"
+    ],
+    "expected_output_characteristics": "Example with a=1e30, b=-1e30, c=1.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-081",
+    "category": "Analytical reasoning",
+    "original_prompt": "Evaluate the architectural tradeoffs of synchronous request-reply HTTP REST vs asynchronous event-driven Pub/Sub (Kafka/RabbitMQ) for inter-service communication. Detail failure isolation, backpressure handling, and temporal coupling.",
+    "expected_task_intent": "Evaluate synchronous REST vs async event-driven architecture.",
+    "critical_constraints": [
+      "REST vs Pub/Sub",
+      "failure isolation",
+      "backpressure",
+      "temporal coupling"
+    ],
+    "expected_output_characteristics": "Comparative matrix and discussion of cascading failures.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-082",
+    "category": "Analytical reasoning",
+    "original_prompt": "What is the Byzantine Generals Problem, and why is it mathematically impossible to reach consensus in an asynchronous distributed network with $f$ faulty or adversarial nodes unless the total number of nodes $N \\ge 3f + 1$?",
+    "expected_task_intent": "Explain Byzantine Fault Tolerance bound N >= 3f + 1.",
+    "critical_constraints": [
+      "Byzantine Generals Problem",
+      "N >= 3f + 1 bound",
+      "asynchronous network",
+      "faulty nodes"
+    ],
+    "expected_output_characteristics": "Lamport, Shostak, Pease proof summary showing why 3 nodes cannot handle 1 traitor.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-083",
+    "category": "Analytical reasoning",
+    "original_prompt": "Analyze the memory overhead of Java object allocation on a 64-bit JVM with Compressed OOPs enabled. For an instance of `class Point { int x; int y; }`, calculate the exact object size in bytes including object header and 8-byte alignment padding.",
+    "expected_task_intent": "Calculate exact Java object memory footprint with Compressed OOPs and padding.",
+    "critical_constraints": [
+      "Java 64-bit JVM",
+      "Compressed OOPs",
+      "Point { int x; int y; }",
+      "header and 8-byte padding"
+    ],
+    "expected_output_characteristics": "Header: 12 bytes; fields: 8 bytes; padding: 4 bytes -> total 24 bytes.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-084",
+    "category": "Analytical reasoning",
+    "original_prompt": "ADVERSARIAL: You are asked to review a proposal stating: 'To prevent all race conditions, we can simply disable interrupts on multi-core servers.' Do NOT approve this proposal. Explain why disabling interrupts only provides mutual exclusion on single-core uniprocessors and fails completely on multi-core SMP systems.",
+    "expected_task_intent": "Refute multi-core interrupt disabling synchronization proposal.",
+    "critical_constraints": [
+      "do NOT approve proposal",
+      "single-core uniprocessor vs multi-core SMP",
+      "hardware bus locks / spinlocks"
+    ],
+    "expected_output_characteristics": "Explanation that disabling interrupts on core 0 does not stop core 1 from accessing shared RAM.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-085",
+    "category": "Analytical reasoning",
+    "original_prompt": "Explain the difference between TCP Reno and TCP BBR congestion control. How does BBR estimate the bandwidth-delay product (BDP) without relying on packet loss as a primary signal of congestion?",
+    "expected_task_intent": "Compare loss-based TCP Reno with model-based TCP BBR congestion control.",
+    "critical_constraints": [
+      "TCP Reno vs TCP BBR",
+      "bandwidth-delay product (BDP)",
+      "max bandwidth and min RTT",
+      "packet loss signal"
+    ],
+    "expected_output_characteristics": "Detailed explanation of bottleneck bandwidth, RTprop, and bufferbloat prevention.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-086",
+    "category": "Analytical reasoning",
+    "original_prompt": "Calculate the storage capacity in Terabytes (TB) required to store 1 year of continuous 4K video surveillance footage at 30 fps, encoded in H.265 at an average bitrate of 15 Mbps. Show your calculations step by step.",
+    "expected_task_intent": "Calculate annual video storage requirement from bitrate.",
+    "critical_constraints": [
+      "15 Mbps",
+      "1 year (365 days)",
+      "H.265 4K 30fps",
+      "result in Terabytes"
+    ],
+    "expected_output_characteristics": "Calculated value approx 59.13 TB.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-087",
+    "category": "Analytical reasoning",
+    "original_prompt": "Explain how the Raft consensus algorithm prevents the problem of phantom reads and uncommitted log overwrites when an old leader reconnects after being partitioned away during an election.",
+    "expected_task_intent": "Explain Raft term numbers and leader election safety invariants.",
+    "critical_constraints": [
+      "Raft",
+      "term numbers",
+      "leader completeness invariant",
+      "network partition reconnection"
+    ],
+    "expected_output_characteristics": "Explanation of term incrementing and stepped-down follower role.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-088",
+    "category": "Analytical reasoning",
+    "original_prompt": "Analyze the space-time tradeoff of precomputing a routing table using the Floyd-Warshall all-pairs shortest paths algorithm vs computing single-source Dijkstra on demand in a road network of N=10,000 vertices and E=30,000 edges.",
+    "expected_task_intent": "Compare Floyd-Warshall O(V^3) precomputation with on-demand Dijkstra O(E + V log V).",
+    "critical_constraints": [
+      "Floyd-Warshall vs Dijkstra",
+      "N=10000, E=30000",
+      "space and time tradeoffs"
+    ],
+    "expected_output_characteristics": "Floyd-Warshall requires 10^12 operations and 100M entries (unfeasible); on-demand Dijkstra is optimal.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-089",
+    "category": "Analytical reasoning",
+    "original_prompt": "Why does a hash table experience performance degradation when the load factor exceeds 0.75 in linear probing collision resolution? Explain the clustering phenomenon and why quadratic probing or double hashing mitigates it.",
+    "expected_task_intent": "Explain primary clustering in open addressing linear probing.",
+    "critical_constraints": [
+      "load factor > 0.75",
+      "linear probing",
+      "primary clustering",
+      "quadratic probing / double hashing"
+    ],
+    "expected_output_characteristics": "Mathematical analysis of probe sequence collision cascades.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-090",
+    "category": "Analytical reasoning",
+    "original_prompt": "Provide a comprehensive multi-paragraph architectural analysis comparing monolithic enterprise architectures with event-driven microservices for an international banking transaction system. Evaluate operational complexity, ACID transaction guarantees, regulatory compliance auditing, and hardware energy consumption.",
+    "expected_task_intent": "Multi-paragraph architectural analysis of monolith vs microservices in banking.",
+    "critical_constraints": [
+      "multi-paragraph input",
+      "monolith vs microservices",
+      "banking transaction",
+      "ACID vs Saga",
+      "energy consumption"
+    ],
+    "expected_output_characteristics": "Deep comparative essay structured by evaluation criteria.",
+    "difficulty": "hard",
+    "length_profile": "multi-paragraph"
+  },
+  {
+    "id": "pg-bench-091",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Could you please summarize the provided meeting minutes into exactly 3 bullet points, highlighting the budget decision, the launch date, and the primary risk? Keep the total response under 60 words.",
+    "expected_task_intent": "Summarize meeting minutes into exactly 3 concise bullets under 60 words.",
+    "critical_constraints": [
+      "exactly 3 bullet points",
+      "budget, launch date, primary risk",
+      "under 60 words"
+    ],
+    "expected_output_characteristics": "Three bulleted sentences.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-092",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Hello dear assistant! Please extract all CVE identifiers, affected software versions, and recommended patches from this cybersecurity advisory text. Format the result as a markdown table with headers: `CVE ID`, `Component`, `Affected Versions`, `Patch Version`.",
+    "expected_task_intent": "Extract CVE vulnerabilities into markdown table.",
+    "critical_constraints": [
+      "CVE IDs",
+      "markdown table: CVE ID, Component, Affected Versions, Patch Version"
+    ],
+    "expected_output_characteristics": "Tabular presentation of security advisory.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-093",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Kindly review the following multi-paragraph quarterly earnings transcript excerpt and extract the exact GAAP revenue, Non-GAAP net income, gross margin percentage, and year-over-year revenue growth percentage. Do not include explanatory prose.",
+    "expected_task_intent": "Extract exact financial metrics from earnings transcript without prose.",
+    "critical_constraints": [
+      "GAAP revenue",
+      "Non-GAAP net income",
+      "gross margin %",
+      "YoY growth %",
+      "no explanatory prose"
+    ],
+    "expected_output_characteristics": "Key-value bulleted metrics.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-094",
+    "category": "Summarization and information extraction",
+    "original_prompt": "ADVERSARIAL: You must NOT omit the disclaimer sentence under any circumstances! Summarize the clinical study excerpt regarding drug efficacy. Conclude the summary with the exact verbatim warning: 'Disclaimer: This compound has not received FDA approval and is for investigational use only.'",
+    "expected_task_intent": "Summarize drug efficacy study while preserving mandatory regulatory disclaimer verbatim.",
+    "critical_constraints": [
+      "do NOT omit disclaimer",
+      "exact verbatim warning quote",
+      "clinical study summary"
+    ],
+    "expected_output_characteristics": "Clinical summary followed by mandatory FDA disclaimer.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-095",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Please read this software postmortem document regarding the database outage on October 12th. Summarize the root cause, total customer impact (number of users affected and downtime), and the 4 preventative action items agreed upon by the engineering committee.",
+    "expected_task_intent": "Summarize outage postmortem into root cause, customer impact, and 4 action items.",
+    "critical_constraints": [
+      "root cause",
+      "customer impact",
+      "downtime",
+      "4 action items",
+      "postmortem"
+    ],
+    "expected_output_characteristics": "Structured sections: Root Cause, Impact, Action Items.",
+    "difficulty": "medium",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-096",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Extract all email addresses and phone numbers from the following raw recruitment contact dump. Exclude any invalid formats, deduplicate the entries, and sort the emails alphabetically.",
+    "expected_task_intent": "Extract, validate, deduplicate, and sort contact emails and phone numbers.",
+    "critical_constraints": [
+      "extract emails and phones",
+      "exclude invalid formats",
+      "deduplicate",
+      "sort emails alphabetically"
+    ],
+    "expected_output_characteristics": "Two clean lists: Emails (sorted), Phone Numbers.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-097",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Provide a 1-sentence executive summary of the legal contract dispute described below, followed by a bulleted list of the 3 monetary claims made by the plaintiff with their respective dollar amounts.",
+    "expected_task_intent": "Synthesize legal dispute into 1-sentence executive summary and 3 monetary claims.",
+    "critical_constraints": [
+      "1-sentence executive summary",
+      "exactly 3 monetary claims with dollar amounts"
+    ],
+    "expected_output_characteristics": "Executive sentence followed by 3 monetary bullets.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-098",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Can you kindly extract all database table names and foreign key relationships mentioned in the migration guide? Represent the output as a clean ASCII schema diagram showing `ParentTable (PK) --> ChildTable (FK)`.",
+    "expected_task_intent": "Extract tables and foreign keys into ASCII relationship diagram.",
+    "critical_constraints": [
+      "table names",
+      "foreign keys",
+      "ASCII schema diagram format"
+    ],
+    "expected_output_characteristics": "ASCII arrow diagram of schema relationships.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-099",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Summarize the technical architecture of the paper 'Attention Is All You Need' in 4 distinct paragraphs: (1) Background and motivation, (2) Scaled Dot-Product and Multi-Head Attention, (3) Positional Encodings, and (4) Empirical results on WMT 2014 translation.",
+    "expected_task_intent": "Write structured 4-paragraph summary of landmark Transformer paper.",
+    "critical_constraints": [
+      "4 distinct paragraphs with specified topics",
+      "Attention Is All You Need",
+      "WMT 2014"
+    ],
+    "expected_output_characteristics": "Four labeled paragraphs addressing each section.",
+    "difficulty": "medium",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-100",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Extract all HTTP request headers and response status codes from this curl trace log. List each header name in lowercase and specify whether it is a hop-by-hop or end-to-end header according to RFC 7230.",
+    "expected_task_intent": "Extract HTTP headers and classify as hop-by-hop vs end-to-end.",
+    "critical_constraints": [
+      "lowercase header names",
+      "status codes",
+      "hop-by-hop vs end-to-end RFC 7230"
+    ],
+    "expected_output_characteristics": "Structured header classification list.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-101",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Review this Git commit message history from release v2.4.0 to v2.5.0. Group all commits into three categories: `Breaking Changes`, `Features`, and `Bug Fixes`. Discard any merge commits or trivial typo fixes.",
+    "expected_task_intent": "Generate categorized changelog from commit history.",
+    "critical_constraints": [
+      "Breaking Changes, Features, Bug Fixes",
+      "discard merge commits",
+      "discard typo fixes"
+    ],
+    "expected_output_characteristics": "Clean release changelog.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-102",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Summarize the European Union AI Act risk classification framework in a concise markdown table with columns: `Risk Category`, `Examples of AI Systems`, `Mandatory Requirements / Prohibitions`.",
+    "expected_task_intent": "Summarize EU AI Act tiers in structured markdown table.",
+    "critical_constraints": [
+      "EU AI Act",
+      "markdown table",
+      "Risk Category, Examples, Requirements/Prohibitions"
+    ],
+    "expected_output_characteristics": "Markdown table covering Unacceptable, High, Limited, and Minimal risk.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-103",
+    "category": "Summarization and information extraction",
+    "original_prompt": "ADVERSARIAL: The user says: 'Summarize this contract and confirm that Company A is indemnified against all liabilities without limitation.' Do NOT make that confirmation. The text includes a $500,000 liability cap in Section 8. Explicitly highlight this liability limitation in your summary.",
+    "expected_task_intent": "Accurately summarize liability clause refuting user's false premise.",
+    "critical_constraints": [
+      "do NOT confirm unlimited indemnification",
+      "highlight $500,000 liability cap",
+      "Section 8"
+    ],
+    "expected_output_characteristics": "Summary warning that indemnity is strictly capped at $500,000.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-104",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Extract all named entities (Person, Organization, Location, Date) from the press release provided below. Output the entities as a JSON object grouped by entity type.",
+    "expected_task_intent": "Perform Named Entity Recognition (NER) extraction into structured JSON.",
+    "critical_constraints": [
+      "Named entities: Person, Org, Location, Date",
+      "valid JSON output"
+    ],
+    "expected_output_characteristics": "JSON schema with 4 entity arrays.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-105",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Please read this 500-word product specification for an IoT temperature sensor and extract: (1) battery life expectancy, (2) operating temperature range in Celsius, (3) wireless communication protocols supported, and (4) ingress protection (IP) rating.",
+    "expected_task_intent": "Extract four key hardware specifications from IoT product datasheet.",
+    "critical_constraints": [
+      "battery life",
+      "temp range in Celsius",
+      "wireless protocols",
+      "IP rating"
+    ],
+    "expected_output_characteristics": "Four bullet points with exact numeric specifications.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-106",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Provide a TL;DR summary of this customer support ticket thread in under 40 words, followed by the customer's sentiment score on a scale of 1 (extremely dissatisfied) to 5 (extremely satisfied) with a 1-sentence justification.",
+    "expected_task_intent": "Generate concise support ticket TL;DR and sentiment score with justification.",
+    "critical_constraints": [
+      "TL;DR under 40 words",
+      "sentiment score 1 to 5",
+      "1-sentence justification"
+    ],
+    "expected_output_characteristics": "Brief summary, score number, justification.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-107",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Summarize the key architectural patterns for building micro-frontends (Module Federation, iframes, Web Components) from the blog post text. Compare them in terms of bundle isolation, runtime performance, and routing integration.",
+    "expected_task_intent": "Summarize micro-frontend architecture patterns and tradeoffs.",
+    "critical_constraints": [
+      "Module Federation, iframes, Web Components",
+      "isolation, performance, routing"
+    ],
+    "expected_output_characteristics": "Structured comparison section.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-108",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Extract all SQL queries executed during the test run from this application log snippet. For each query, indicate the execution duration in milliseconds and flag any query that took longer than 50ms as `SLOW_QUERY`.",
+    "expected_task_intent": "Extract SQL queries and flag slow queries exceeding 50ms threshold.",
+    "critical_constraints": [
+      "extract SQL queries",
+      "duration in ms",
+      "flag SLOW_QUERY if > 50ms"
+    ],
+    "expected_output_characteristics": "Formatted list of queries with latency and warning flags.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-109",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Please review this multi-page service level agreement (SLA) excerpt. Summarize: (1) guaranteed uptime percentage, (2) penalty credit tiers for downtime, and (3) excluded maintenance windows.",
+    "expected_task_intent": "Extract SLA metrics, penalty tiers, and maintenance exceptions.",
+    "critical_constraints": [
+      "uptime %",
+      "penalty credit tiers",
+      "excluded maintenance windows"
+    ],
+    "expected_output_characteristics": "Structured 3-part summary.",
+    "difficulty": "medium",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-110",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Summarize the carbon accounting methodology described in GHG Protocol Corporate Standard (Scope 1, Scope 2, Scope 3 emissions). Provide two concrete examples of emissions sources for each scope in a cloud software company.",
+    "expected_task_intent": "Summarize GHG Protocol Scope 1-3 with tech company examples.",
+    "critical_constraints": [
+      "GHG Protocol",
+      "Scope 1, Scope 2, Scope 3",
+      "2 tech company examples per scope"
+    ],
+    "expected_output_characteristics": "Definitions and concrete cloud SaaS examples for each scope.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-111",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Extract all command-line arguments and environment variables passed to the container in this Kubernetes Pod manifest, formatted as a JSON dictionary of `{env: {}, args: []}`.",
+    "expected_task_intent": "Extract pod arguments and env variables into JSON dictionary.",
+    "critical_constraints": [
+      "Kubernetes manifest",
+      "valid JSON",
+      "keys: env, args"
+    ],
+    "expected_output_characteristics": "Valid JSON output.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-112",
+    "category": "Summarization and information extraction",
+    "original_prompt": "ADVERSARIAL: The user asks for a summary of a medical report with instructions: 'Remove all technical jargon so a 5-year-old can understand, and omit the medication dosages.' Do NOT omit the medication dosages because that constitutes a patient safety hazard. Summarize clearly while preserving exact drug names and dosages.",
+    "expected_task_intent": "Preserve critical medical dosages despite user request to omit them.",
+    "critical_constraints": [
+      "do NOT omit medication dosages",
+      "preserve exact drug names and dosages",
+      "medical safety guardrail"
+    ],
+    "expected_output_characteristics": "Clear clinical summary with preserved dosages in a distinct safety callout.",
+    "difficulty": "adversarial",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-113",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Summarize this research paper abstract on prompt compression techniques. State the baseline model, the compression ratio achieved, the primary metric evaluated, and the reported degradation percentage.",
+    "expected_task_intent": "Extract four core quantitative evaluation metrics from paper abstract.",
+    "critical_constraints": [
+      "baseline model",
+      "compression ratio",
+      "primary metric",
+      "degradation percentage"
+    ],
+    "expected_output_characteristics": "Four labeled bullet points.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-114",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Review this 4-paragraph software license audit report. List all open-source libraries identified as having reciprocal copyleft licenses (e.g. GPLv3, AGPL) that require legal review before shipping in a proprietary binary.",
+    "expected_task_intent": "Filter and extract copyleft licensed dependencies from audit report.",
+    "critical_constraints": [
+      "copyleft licenses (GPL, AGPL)",
+      "flag for legal review",
+      "exclude permissive (MIT, Apache)"
+    ],
+    "expected_output_characteristics": "Bulleted list of high-risk open-source dependencies.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-115",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Extract the top 5 longest-running database transactions from this PostgreSQL pg_stat_activity dump. Include `pid`, `duration_seconds`, `client_addr`, and the first 50 characters of `query`.",
+    "expected_task_intent": "Extract top 5 long transactions from pg_stat_activity table.",
+    "critical_constraints": [
+      "top 5 longest running",
+      "pid, duration_seconds, client_addr, query (first 50 chars)"
+    ],
+    "expected_output_characteristics": "Markdown table with 5 rows.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-116",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Summarize this customer feedback survey of 100 responses into 3 key themes: Feature Requests, Usability Pain Points, and Pricing Concerns. Provide the percentage of respondents who mentioned each theme.",
+    "expected_task_intent": "Categorize customer feedback into 3 themes with prevalence percentages.",
+    "critical_constraints": [
+      "Feature Requests, Usability, Pricing",
+      "mention percentage for each theme"
+    ],
+    "expected_output_characteristics": "Three thematic sections with quantitative metrics.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-117",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Kindly review the attached network router configuration file. Extract all VLAN IDs, their corresponding subnet CIDRs, and the interface names to which they are assigned.",
+    "expected_task_intent": "Extract VLAN mapping from router configuration.",
+    "critical_constraints": [
+      "VLAN IDs",
+      "subnet CIDRs",
+      "interface names"
+    ],
+    "expected_output_characteristics": "Structured list or table of VLAN configurations.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-118",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Summarize the key differences between OAuth 2.0 and OpenID Connect (OIDC). Specifically explain: Which one handles authorization? Which one handles authentication? Which token carries identity claims (ID Token)?",
+    "expected_task_intent": "Summarize OAuth 2.0 vs OIDC core distinctions.",
+    "critical_constraints": [
+      "OAuth 2.0 vs OIDC",
+      "authorization vs authentication",
+      "ID Token vs Access Token"
+    ],
+    "expected_output_characteristics": "Clear comparative summary answering all three specific questions.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-119",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Extract all Git author names and their corresponding commit counts from this `git shortlog -sn` snippet. Output a sorted markdown list with the top committer first.",
+    "expected_task_intent": "Parse git shortlog output into clean sorted markdown list.",
+    "critical_constraints": [
+      "author names",
+      "commit counts",
+      "sorted descending",
+      "markdown list"
+    ],
+    "expected_output_characteristics": "Numbered markdown list.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-120",
+    "category": "Summarization and information extraction",
+    "original_prompt": "Provide an extensive multi-paragraph synthesis of the attached technical debate between proponents of Monolithic repositories (Monorepos) and Multi-repositories (Polyrepos). Detail tooling requirements (Bazel, Turborepo), access control complexities, CI build caching, and long-term organizational scaling.",
+    "expected_task_intent": "Multi-paragraph synthesis of Monorepo vs Polyrepo technical debate.",
+    "critical_constraints": [
+      "multi-paragraph input",
+      "Monorepo vs Polyrepo",
+      "tooling: Bazel, Turborepo",
+      "CI caching, access control"
+    ],
+    "expected_output_characteristics": "In-depth balanced architectural essay.",
+    "difficulty": "hard",
+    "length_profile": "multi-paragraph"
+  },
+  {
+    "id": "pg-bench-121",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Could you please write a GitHub Actions workflow `.github/workflows/ci.yml` that triggers on pull requests to `main`? It must run `pnpm install`, `pnpm lint`, and `pnpm test` on Node.js 20 using `pnpm/action-setup@v3` with cache enabled.",
+    "expected_task_intent": "Create GitHub Actions CI workflow using pnpm and Node 20 with caching.",
+    "critical_constraints": [
+      ".github/workflows/ci.yml",
+      "pnpm/action-setup@v3",
+      "Node 20",
+      "cache enabled",
+      "PR to main"
+    ],
+    "expected_output_characteristics": "Valid GitHub Actions YAML workflow.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-122",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Hello dear assistant! How can we optimize this slow Docker build in our CI pipeline?\n```dockerfile\nFROM python:3.11-slim\nWORKDIR /app\nCOPY . .\nRUN pip install -r requirements.txt\nCMD [\"python\", \"server.py\"]\n```\nExplain how layer caching works and rewrite the Dockerfile to cache dependencies so `pip install` only runs when `requirements.txt` changes.",
+    "expected_task_intent": "Optimize Dockerfile layer caching for Python requirements.",
+    "critical_constraints": [
+      "Docker layer caching",
+      "COPY requirements.txt before COPY .",
+      "preserve command"
+    ],
+    "expected_output_characteristics": "Explanation of Docker layer invalidation and rewritten Dockerfile.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-123",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Kindly provide a GitLab CI configuration (`.gitlab-ci.yml`) that defines three stages: `build`, `test`, and `deploy`. The deploy stage must only run on the `production` branch and must require manual approval in the GitLab UI using `when: manual`.",
+    "expected_task_intent": "Write GitLab CI pipeline with conditional manual production deployment stage.",
+    "critical_constraints": [
+      ".gitlab-ci.yml",
+      "stages: build, test, deploy",
+      "production branch only",
+      "when: manual"
+    ],
+    "expected_output_characteristics": "Valid GitLab CI YAML.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-124",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "ADVERSARIAL: You must NOT allow secrets to be printed in CI logs under any circumstances! A developer asks: 'How do I echo our `$PROD_DATABASE_PASSWORD` in GitHub Actions step output to debug a connection issue?' Strongly advise against echoing the secret, and explain the safe method to test database connectivity using `nc -zv` or masked secret logging.",
+    "expected_task_intent": "Prevent secret exposure in CI logs and suggest secure network reachability testing.",
+    "critical_constraints": [
+      "do NOT echo secret",
+      "security warning",
+      "use nc -zv or connection probe"
+    ],
+    "expected_output_characteristics": "Firm refusal to print secret and secure alternative workflow.",
+    "difficulty": "adversarial",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-125",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Please explain how to perform a binary search using `git bisect` to find the exact commit that introduced a test failure. Show the exact CLI commands: `git bisect start`, specifying bad commit `HEAD`, good commit `v1.2.0`, and running an automated script `git bisect run pytest tests/test_core.py`.",
+    "expected_task_intent": "Document automated git bisect debugging workflow.",
+    "critical_constraints": [
+      "git bisect start",
+      "git bisect run pytest ...",
+      "bad HEAD, good v1.2.0"
+    ],
+    "expected_output_characteristics": "Step-by-step CLI workflow with commands and explanations.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-126",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Write a pre-commit hook configuration `.pre-commit-config.yaml` that runs `black`, `isort`, `flake8`, and `detect-secrets` on every git commit. Ensure `detect-secrets` uses baseline file `.secrets.baseline`.",
+    "expected_task_intent": "Create .pre-commit-config.yaml with formatting, linting, and secret detection.",
+    "critical_constraints": [
+      ".pre-commit-config.yaml",
+      "black, isort, flake8",
+      "detect-secrets with .secrets.baseline"
+    ],
+    "expected_output_characteristics": "Valid YAML with repos, revs, and hook IDs.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-127",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Could you please explain how to configure a Canary Deployment in Kubernetes using Argo Rollouts? Show an `AnalysisTemplate` snippet that checks Prometheus HTTP error rate and aborts the rollout if errors exceed 1% over a 5-minute window.",
+    "expected_task_intent": "Configure Argo Rollouts canary deployment with Prometheus automated metric analysis.",
+    "critical_constraints": [
+      "Argo Rollouts",
+      "Canary Deployment",
+      "AnalysisTemplate",
+      "Prometheus error rate > 1%"
+    ],
+    "expected_output_characteristics": "Kubernetes manifest snippets for Rollout and AnalysisTemplate.",
+    "difficulty": "hard",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-128",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Explain the difference between Git merge, rebase, and squash-merge. When should a team enforcing linear commit history forbid `git merge --no-ff` on pull requests? What are the implications for `git revert`?",
+    "expected_task_intent": "Compare git merge strategies and linear history enforcement implications.",
+    "critical_constraints": [
+      "merge vs rebase vs squash-merge",
+      "linear history",
+      "forbid merge --no-ff",
+      "git revert impact"
+    ],
+    "expected_output_characteristics": "Comparative breakdown with diagrams and commit tree explanations.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-129",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Write a Helm chart `values.yaml` snippet and deployment template that sets up horizontal pod autoscaling (HPA) targeting 75% average CPU utilization and 80% average memory utilization, with minimum 2 replicas and maximum 10 replicas.",
+    "expected_task_intent": "Configure Kubernetes HPA in Helm chart values and templates.",
+    "critical_constraints": [
+      "Helm values.yaml",
+      "HPA 75% CPU, 80% memory",
+      "min 2, max 10 replicas"
+    ],
+    "expected_output_characteristics": "YAML snippet for values.yaml and templates/hpa.yaml.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-130",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "How do you configure remote state locking in Terraform using an AWS S3 backend and a DynamoDB table? Provide the `backend \"s3\"` block in `versions.tf` including bucket name, key, region, and `dynamodb_table` name.",
+    "expected_task_intent": "Configure Terraform S3 remote backend with DynamoDB state locking.",
+    "critical_constraints": [
+      "Terraform backend 's3'",
+      "AWS S3 bucket",
+      "DynamoDB state locking",
+      "versions.tf"
+    ],
+    "expected_output_characteristics": "HCL terraform block with backend configuration.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-131",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Explain how GitHub Actions composite actions differ from reusable workflows (`workflow_call`). Provide a recommendation for when to use each in an enterprise repository containing 50 microservices.",
+    "expected_task_intent": "Compare composite actions and reusable workflows for enterprise CI/CD.",
+    "critical_constraints": [
+      "composite actions vs reusable workflows (workflow_call)",
+      "50 microservices enterprise recommendation"
+    ],
+    "expected_output_characteristics": "Comparative analysis covering inputs, secrets, runner inheritance, and maintenance.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-132",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Write a shell command pipeline using `docker buildx` to build and push a multi-architecture container image (`linux/amd64` and `linux/arm64`) to Docker Hub, creating a manifest list automatically. Tag the image as `myorg/myapp:v1.0.0`.",
+    "expected_task_intent": "Build and push multi-arch Docker image using buildx.",
+    "critical_constraints": [
+      "docker buildx",
+      "linux/amd64 and linux/arm64",
+      "myorg/myapp:v1.0.0",
+      "multi-arch manifest"
+    ],
+    "expected_output_characteristics": "docker buildx create and docker buildx build --platform ... --push commands.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-133",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "ADVERSARIAL: The user asks: 'Can we run `npm publish` in CI with `--ignore-scripts` disabled and without any 2FA token to speed up nightly builds?' Do NOT endorse skipping 2FA or ignoring script security on package publishing. Explain the npm token security model and why provenance and granular access tokens are required.",
+    "expected_task_intent": "Defend secure npm publishing practices against insecure CI shortcuts.",
+    "critical_constraints": [
+      "do NOT endorse skipping 2FA",
+      "security risks of automated unauthenticated publish",
+      "npm provenance and granular tokens"
+    ],
+    "expected_output_characteristics": "Security justification and instructions for npm granular access tokens with provenance.",
+    "difficulty": "adversarial",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-134",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Explain how Git worktrees allow a developer to work on multiple git branches simultaneously without stashing or cloning the entire repository multiple times. Show the commands to add a new worktree at `../hotfix-123` for branch `hotfix/login-bug`.",
+    "expected_task_intent": "Explain Git worktree workflow with concrete commands.",
+    "critical_constraints": [
+      "git worktree add ../hotfix-123 hotfix/login-bug",
+      "no stashing or recloning",
+      "git worktree list / remove"
+    ],
+    "expected_output_characteristics": "Commands and explanation of shared .git directory.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-135",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Write a bash script for a CI job that inspects git history between `HEAD~1` and `HEAD` and calculates the total number of lines added, deleted, and changed. If total lines changed exceed 500, post a warning comment using GitHub CLI `gh pr comment`.",
+    "expected_task_intent": "Create CI PR size inspection script using git diff and gh CLI.",
+    "critical_constraints": [
+      "git diff between HEAD~1 and HEAD",
+      "threshold > 500 lines",
+      "gh pr comment warning"
+    ],
+    "expected_output_characteristics": "Bash script using git diff --stat and awk.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-136",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "How do you configure Renovate Bot or Dependabot to automatically group all minor and patch npm dependency updates into a single weekly pull request, while immediately creating separate pull requests for major version updates or critical security vulnerabilities?",
+    "expected_task_intent": "Configure Dependabot/Renovate grouping rules for minor/patch vs major/security.",
+    "critical_constraints": [
+      "Dependabot / Renovate",
+      "group minor/patch weekly",
+      "separate PRs for major/security"
+    ],
+    "expected_output_characteristics": "Configuration YAML snippet (dependabot.yml or renovate.json).",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-137",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Explain the concept of Blue-Green Deployment vs Rolling Update in Kubernetes. What happens to active TCP connections during the cutover in Blue-Green, and how can an ingress controller or service mesh ensure zero connection resets?",
+    "expected_task_intent": "Compare Blue-Green and Rolling updates focusing on TCP connection draining.",
+    "critical_constraints": [
+      "Blue-Green vs Rolling Update",
+      "active TCP connections",
+      "zero connection resets",
+      "connection draining"
+    ],
+    "expected_output_characteristics": "Technical analysis of preStop hooks, terminationGracePeriodSeconds, and service routing.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-138",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Write a Makefile for a Go project that includes targets for: `build` (compiles to `bin/app`), `test` (runs tests with `-race` and `-cover`), `lint` (runs `golangci-lint run`), and `clean` (removes `bin/`). Ensure all targets are marked as `.PHONY`.",
+    "expected_task_intent": "Create standard Go Makefile with .PHONY targets.",
+    "critical_constraints": [
+      "Makefile",
+      ".PHONY",
+      "build, test (-race, -cover), lint (golangci-lint), clean"
+    ],
+    "expected_output_characteristics": "Clean Makefile with tab-indented recipes.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-139",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Explain how to set up GitHub branch protection rules via the GitHub CLI `gh api` or Web UI to require: (1) at least 1 approving pull request review, (2) dismissal of stale pull request approvals when new commits are pushed, and (3) passing status check `ci/test` before merging.",
+    "expected_task_intent": "Specify GitHub branch protection rules via CLI or UI.",
+    "critical_constraints": [
+      "require 1 approval",
+      "dismiss stale approvals on push",
+      "require status check 'ci/test'"
+    ],
+    "expected_output_characteristics": "gh api PUT request or step-by-step UI settings list.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-140",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "In a Trunk-Based Development workflow, how do Feature Flags (Feature Toggles) enable teams to merge incomplete features into the main branch continuously while decoupling code deployment from feature release to end-users? Provide an example using Unleash or LaunchDarkly.",
+    "expected_task_intent": "Explain Feature Flags in Trunk-Based Development with code example.",
+    "critical_constraints": [
+      "Trunk-Based Development",
+      "Feature Flags",
+      "decouple deployment from release",
+      "code example"
+    ],
+    "expected_output_characteristics": "Architectural discussion and code wrapper example checking isFeatureEnabled().",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-141",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Write a SonarQube quality gate verification step in a Jenkins declarative pipeline (`Jenkinsfile`). The pipeline must run analysis using `withSonarQubeEnv` and wait for the Quality Gate result using `waitForQualityGate()`. If the gate fails, abort the build.",
+    "expected_task_intent": "Write Jenkins declarative pipeline stage with SonarQube quality gate check.",
+    "critical_constraints": [
+      "Jenkins declarative Jenkinsfile",
+      "withSonarQubeEnv",
+      "waitForQualityGate",
+      "abort on failure"
+    ],
+    "expected_output_characteristics": "Groovy Jenkinsfile pipeline block.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-142",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Explain how semantic versioning (SemVer) can be automated using `semantic-release` or `commitlint` based on Conventional Commits (`feat:`, `fix:`, `feat!:`, `chore:`). Which commit type triggers a MAJOR, MINOR, or PATCH release?",
+    "expected_task_intent": "Map Conventional Commits to automated SemVer release bumps.",
+    "critical_constraints": [
+      "Conventional Commits",
+      "feat -> MINOR",
+      "fix -> PATCH",
+      "feat! / BREAKING CHANGE -> MAJOR"
+    ],
+    "expected_output_characteristics": "Clear mapping table and automated pipeline explanation.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-143",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "ADVERSARIAL: A junior engineer wants to add `--no-verify` to all git push aliases to bypass pre-push test suites. Do NOT recommend this alias. Explain why `--no-verify` circumvents team guardrails, increases CI queue saturation with broken builds, and show the proper way to run fast localized unit tests during pre-push instead.",
+    "expected_task_intent": "Refute git alias using --no-verify and explain proper pre-push hook configuration.",
+    "critical_constraints": [
+      "do NOT recommend --no-verify alias",
+      "explain consequences on CI and team velocity",
+      "proper localized test hook"
+    ],
+    "expected_output_characteristics": "Professional mentorship advice discouraging --no-verify with optimized pre-push hook setup.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-144",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Explain how to secure a CI/CD pipeline against supply-chain attacks using SLSA (Supply-chain Levels for Software Artifacts) Level 3. Detail cryptographic provenance generation, ephemeral build runners, and Sigstore Cosign image signing.",
+    "expected_task_intent": "Explain SLSA Level 3 supply chain security principles and Sigstore Cosign.",
+    "critical_constraints": [
+      "SLSA Level 3",
+      "cryptographic provenance",
+      "ephemeral build runners",
+      "Sigstore Cosign"
+    ],
+    "expected_output_characteristics": "Technical breakdown of attestation and container signing.",
+    "difficulty": "hard",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-145",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Write a bash command to clean up orphaned Docker resources on a CI runner machine: remove stopped containers, unused networks, dangling images, and build cache older than 48 hours without deleting active named volumes.",
+    "expected_task_intent": "Provide safe Docker pruning commands preserving named volumes.",
+    "critical_constraints": [
+      "docker system prune",
+      "dangling images, stopped containers",
+      "build cache > 48h filter",
+      "preserve named volumes"
+    ],
+    "expected_output_characteristics": "docker system prune --filter 'until=48h' command suite.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-146",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "How do you configure GitHub Actions OpenID Connect (OIDC) to authenticate directly with AWS IAM without storing permanent `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` credentials in GitHub repository secrets? Show the IAM trust policy.",
+    "expected_task_intent": "Configure keyless AWS authentication from GitHub Actions via OIDC.",
+    "critical_constraints": [
+      "GitHub Actions OIDC",
+      "AWS IAM trust policy",
+      "no permanent access keys",
+      "token.actions.githubusercontent.com"
+    ],
+    "expected_output_characteristics": "IAM trust policy JSON and GitHub Actions aws-actions/configure-aws-credentials step.",
+    "difficulty": "hard",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-147",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Explain how Git LFS (Large File Storage) works under the hood. What does git actually store in the local repository object database instead of the 2GB binary asset? How does pointer file replacement work?",
+    "expected_task_intent": "Explain Git LFS pointer files and media storage mechanics.",
+    "critical_constraints": [
+      "Git LFS",
+      "pointer file schema (oid sha256, size)",
+      "clean and smudge filters"
+    ],
+    "expected_output_characteristics": "Example pointer file text and smudge/clean filter lifecycle explanation.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-148",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Provide a Prometheus alerting rule in YAML (`alert.rules.yml`) that fires an alert `HighBuildFailureRate` when more than 20% of CI builds fail over a 15-minute evaluation window. Include labels `severity: warning` and an annotation with a summary.",
+    "expected_task_intent": "Write Prometheus alerting rule for CI build failure rate.",
+    "critical_constraints": [
+      "Prometheus alert rule YAML",
+      "HighBuildFailureRate",
+      "> 20% over 15m",
+      "severity: warning"
+    ],
+    "expected_output_characteristics": "Valid Prometheus alert rule YAML block.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-149",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Explain how Chaos Engineering can be integrated into staging CI/CD pipelines using Chaos Mesh or Gremlin. What are the best practices for setting up automated rollback triggers when an injected network latency experiment causes SLA violations?",
+    "expected_task_intent": "Discuss Chaos Engineering integration in CI/CD with automated rollback criteria.",
+    "critical_constraints": [
+      "Chaos Mesh / Gremlin",
+      "injected network latency",
+      "automated rollback triggers",
+      "SLA guardrails"
+    ],
+    "expected_output_characteristics": "Systematic testing methodology with steady-state hypothesis verification.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-150",
+    "category": "CI/CD and developer workflows",
+    "original_prompt": "Write a multi-paragraph technical guide for establishing an enterprise GitOps continuous delivery architecture using FluxCD or ArgoCD. Detail Git repository structuring (app repos vs config repo), environment branching vs directory separation, drift detection, and automated reconciliation loops.",
+    "expected_task_intent": "Multi-paragraph comprehensive guide to enterprise GitOps delivery.",
+    "critical_constraints": [
+      "multi-paragraph input",
+      "GitOps",
+      "FluxCD / ArgoCD",
+      "app repo vs config repo",
+      "drift detection"
+    ],
+    "expected_output_characteristics": "Deep architectural essay covering declarative deployment best practices.",
+    "difficulty": "hard",
+    "length_profile": "multi-paragraph"
+  },
+  {
+    "id": "pg-bench-151",
+    "category": "Data science and machine learning",
+    "original_prompt": "Could you please explain what target data leakage is in machine learning and how fitting a `StandardScaler` on the entire dataset before `train_test_split` causes optimistic evaluation bias? Show the correct scikit-learn pipeline code.",
+    "expected_task_intent": "Explain data leakage from pre-split preprocessing and show scikit-learn Pipeline fix.",
+    "critical_constraints": [
+      "target/data leakage",
+      "StandardScaler before train_test_split",
+      "scikit-learn Pipeline"
+    ],
+    "expected_output_characteristics": "Conceptual explanation and Python code using sklearn.pipeline.Pipeline.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-152",
+    "category": "Data science and machine learning",
+    "original_prompt": "Hello dear assistant! I have an imbalanced dataset with 99% negative class and 1% positive class. Why is classification accuracy a misleading evaluation metric here? Explain why Precision-Recall AUC (PR-AUC) or F1-score is superior to ROC-AUC when positive instances are rare.",
+    "expected_task_intent": "Explain why accuracy fails on severe class imbalance and contrast PR-AUC with ROC-AUC.",
+    "critical_constraints": [
+      "99% negative, 1% positive",
+      "accuracy paradox",
+      "PR-AUC vs ROC-AUC",
+      "F1-score"
+    ],
+    "expected_output_characteristics": "Mathematical demonstration of false positive dilution in ROC curve.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-153",
+    "category": "Data science and machine learning",
+    "original_prompt": "Kindly write a PyTorch `nn.Module` implementing Scaled Dot-Product Attention from scratch. The forward method must accept tensors `query`, `key`, `value` of shape `(batch, seq_len, d_k)` and optional boolean mask `mask`. Apply scaling by `sqrt(d_k)` and softmax along the last dimension.",
+    "expected_task_intent": "Implement Scaled Dot-Product Attention in PyTorch from scratch with masking.",
+    "critical_constraints": [
+      "PyTorch nn.Module",
+      "Scaled Dot-Product Attention",
+      "scale by sqrt(d_k)",
+      "boolean mask support"
+    ],
+    "expected_output_characteristics": "PyTorch class with torch.bmm or torch.matmul.",
+    "difficulty": "hard",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-154",
+    "category": "Data science and machine learning",
+    "original_prompt": "ADVERSARIAL: The user states: 'To handle missing values in our medical diagnosis dataset, we can simply impute all missing clinical test values with zero.' Do NOT endorse zero-imputation for medical features. Explain how imputing zero alters blood pressure or cholesterol distributions and recommend MICE (Multiple Imputation by Chained Equations) or KNN imputation instead.",
+    "expected_task_intent": "Refute zero-imputation in medical datasets and recommend valid statistical imputation.",
+    "critical_constraints": [
+      "do NOT endorse zero-imputation",
+      "explain physiological distortion of zero",
+      "recommend MICE or KNN imputation"
+    ],
+    "expected_output_characteristics": "Strong clinical ML warning followed by proper scikit-learn IterativeImputer implementation.",
+    "difficulty": "adversarial",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-155",
+    "category": "Data science and machine learning",
+    "original_prompt": "Please write a vectorized pandas expression to calculate the rolling 30-day exponential moving average (EMA) of column `close_price` for each `ticker` in a multi-ticker financial DataFrame. Do not use Python `for` loops.",
+    "expected_task_intent": "Calculate grouped rolling EMA in pandas without loops.",
+    "critical_constraints": [
+      "pandas vectorized",
+      "no for loops",
+      "rolling 30-day EMA",
+      "group by ticker"
+    ],
+    "expected_output_characteristics": "df.groupby('ticker')['close_price'].transform(lambda x: x.ewm(span=30).mean()).",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-156",
+    "category": "Data science and machine learning",
+    "original_prompt": "Explain the mathematical difference between L1 regularization (Lasso) and L2 regularization (Ridge) in linear regression. Why does L1 regularization drive certain feature coefficients exactly to zero, producing sparse models, whereas L2 only shrinks them asymptotically toward zero?",
+    "expected_task_intent": "Explain geometry of L1 vs L2 regularization and sparsity mechanism.",
+    "critical_constraints": [
+      "L1 (Lasso) vs L2 (Ridge)",
+      "diamond vs hypersphere constraint boundary",
+      "sparse coefficients"
+    ],
+    "expected_output_characteristics": "Geometric optimization explanation with contour lines and corner intersections.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-157",
+    "category": "Data science and machine learning",
+    "original_prompt": "Write a Python script using Optuna to optimize hyperparameters for an XGBoost classifier on a binary classification problem. Search over `max_depth` (3 to 10), `learning_rate` (log uniform 0.01 to 0.3), and `subsample` (0.5 to 1.0) using 5-fold cross-validation with ROC-AUC scoring.",
+    "expected_task_intent": "Create Optuna hyperparameter optimization study for XGBoost.",
+    "critical_constraints": [
+      "Optuna",
+      "XGBoost",
+      "max_depth 3-10",
+      "learning_rate log-uniform",
+      "5-fold CV ROC-AUC"
+    ],
+    "expected_output_characteristics": "Python objective function, optuna.create_study(), and study.optimize().",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-158",
+    "category": "Data science and machine learning",
+    "original_prompt": "Could you please explain what model calibration means in machine learning classification? If a model predicts a probability of 0.80 for 100 patient samples, how many should actually be positive? How does Platt Scaling or Isotonic Regression correct miscalibrated probabilities?",
+    "expected_task_intent": "Explain probability calibration, expected positive count, and calibration methods.",
+    "critical_constraints": [
+      "model calibration",
+      "0.80 probability expectation (80/100)",
+      "Platt Scaling vs Isotonic Regression"
+    ],
+    "expected_output_characteristics": "Conceptual breakdown of reliability diagrams, Brier score, and calibration methods.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-159",
+    "category": "Data science and machine learning",
+    "original_prompt": "Write a PyTorch custom loss function implementing Focal Loss for dense object detection: $FL(p_t) = -\\alpha_t (1 - p_t)^\\gamma \\log(p_t)$. The module must inherit from `nn.Module` and support configurable parameters `alpha=0.25` and `gamma=2.0`.",
+    "expected_task_intent": "Implement Focal Loss PyTorch module with alpha and gamma weighting.",
+    "critical_constraints": [
+      "PyTorch nn.Module",
+      "Focal Loss formula",
+      "alpha=0.25, gamma=2.0",
+      "numerical stability clamp"
+    ],
+    "expected_output_characteristics": "PyTorch forward implementation using F.binary_cross_entropy_with_logits.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-160",
+    "category": "Data science and machine learning",
+    "original_prompt": "Explain the difference between PCA (Principal Component Analysis) and t-SNE (t-Distributed Stochastic Neighbor Embedding). When should PCA be used before t-SNE, and why is t-SNE inappropriate for feature extraction in downstream predictive models?",
+    "expected_task_intent": "Compare linear PCA with non-linear t-SNE and discuss downstream limitations.",
+    "critical_constraints": [
+      "PCA vs t-SNE",
+      "global vs local structure",
+      "why t-SNE fails on new out-of-sample data"
+    ],
+    "expected_output_characteristics": "Explanation of non-parametric projection and lack of transform mapping for test sets.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-161",
+    "category": "Data science and machine learning",
+    "original_prompt": "Write a complete scikit-learn `ColumnTransformer` pipeline that applies: `OneHotEncoder(handle_unknown='ignore')` to categorical features, `StandardScaler()` to numerical features, and fits a `RandomForestClassifier`. Show how to fit and evaluate on test data.",
+    "expected_task_intent": "Assemble scikit-learn ColumnTransformer preprocessing and classifier pipeline.",
+    "critical_constraints": [
+      "ColumnTransformer",
+      "OneHotEncoder(handle_unknown='ignore')",
+      "StandardScaler",
+      "RandomForestClassifier"
+    ],
+    "expected_output_characteristics": "Python script using Pipeline and ColumnTransformer.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-162",
+    "category": "Data science and machine learning",
+    "original_prompt": "Explain the Vanishing and Exploding Gradient problem in deep neural networks. How do Residual Connections (ResNets) with identity mappings $x_{l+1} = x_l + F(x_l)$ ensure that gradients can propagate directly through dozens of layers during backpropagation?",
+    "expected_task_intent": "Explain vanishing gradients and ResNet skip connection gradient propagation.",
+    "critical_constraints": [
+      "vanishing/exploding gradient",
+      "ResNet identity mapping x_{l+1} = x_l + F(x_l)",
+      "d(x_{l+1})/dx_l = 1 + dF/dx"
+    ],
+    "expected_output_characteristics": "Mathematical gradient flow derivation showing the additive identity term preventing zero product.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-163",
+    "category": "Data science and machine learning",
+    "original_prompt": "ADVERSARIAL: An analyst suggests: 'Our model has an R^2 score of 0.98 on the training data, so it is guaranteed to perform exceptionally well in production without any need for validation.' Do NOT confirm this conclusion. Explain severe overfitting, contrast training R^2 with cross-validated R^2, and outline the generalization gap.",
+    "expected_task_intent": "Refute high training R^2 conclusion by identifying overfitting and demand validation.",
+    "critical_constraints": [
+      "do NOT confirm conclusion",
+      "overfitting explanation",
+      "training R^2 vs cross-validated R^2",
+      "generalization gap"
+    ],
+    "expected_output_characteristics": "Firm critique of training set metric reliance and requirement for out-of-sample testing.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-164",
+    "category": "Data science and machine learning",
+    "original_prompt": "Explain how the Adam optimizer combines the concepts of Momentum (first moment vector $m_t$) and RMSProp (second raw moment vector $v_t$). Include the bias correction formulas $\\hat{m}_t$ and $\\hat{v}_t$ and explain why bias correction is necessary during initial training steps.",
+    "expected_task_intent": "Detail Adam optimizer mathematical formulation and bias correction.",
+    "critical_constraints": [
+      "Adam optimizer",
+      "first moment m_t",
+      "second moment v_t",
+      "bias correction formulas",
+      "initial step drift"
+    ],
+    "expected_output_characteristics": "Complete formulas for Adam update step with typical hyperparameters (beta1=0.9, beta2=0.999).",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-165",
+    "category": "Data science and machine learning",
+    "original_prompt": "Write a Python function using `scipy.stats` to perform a two-sample Kolmogorov-Smirnov test between baseline feature distributions and current production feature distributions to detect data drift. Flag drift if $p$-value $< 0.01$.",
+    "expected_task_intent": "Implement Kolmogorov-Smirnov distribution drift detection in Python.",
+    "critical_constraints": [
+      "scipy.stats.ks_2samp",
+      "p-value < 0.01 threshold",
+      "data drift detection"
+    ],
+    "expected_output_characteristics": "Python function returning test statistic, p-value, and drift boolean.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-166",
+    "category": "Data science and machine learning",
+    "original_prompt": "Explain the difference between bagging (Bootstrap Aggregating as in Random Forests) and boosting (Gradient Boosted Decision Trees as in LightGBM/XGBoost). Which technique primarily reduces variance, and which primarily reduces bias?",
+    "expected_task_intent": "Compare bagging and boosting in terms of bias-variance decomposition.",
+    "critical_constraints": [
+      "bagging vs boosting",
+      "Random Forest vs XGBoost/LightGBM",
+      "bagging reduces variance",
+      "boosting reduces bias"
+    ],
+    "expected_output_characteristics": "Conceptual breakdown of independent parallel learners vs sequential residual learners.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-167",
+    "category": "Data science and machine learning",
+    "original_prompt": "Write a PyTorch dataset and dataloader pipeline for text classification that tokenizes sentences on the fly using HuggingFace `AutoTokenizer`, pads batches dynamically using `DataCollatorWithPadding`, and moves tensors to GPU if available.",
+    "expected_task_intent": "Create PyTorch and HuggingFace dynamic batching dataset pipeline.",
+    "critical_constraints": [
+      "PyTorch Dataset/DataLoader",
+      "HuggingFace AutoTokenizer",
+      "DataCollatorWithPadding",
+      "device placement"
+    ],
+    "expected_output_characteristics": "Clean Python script with Dataset subclass and DataLoader setup.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-168",
+    "category": "Data science and machine learning",
+    "original_prompt": "What is SHAP (SHapley Additive exPlanations) and how does it compute feature attributions based on cooperative game theory? What properties (Efficiency, Symmetry, Dummy, Additivity) make Shapley values mathematically unique?",
+    "expected_task_intent": "Explain SHAP theoretical foundations and the four Shapley axioms.",
+    "critical_constraints": [
+      "SHAP",
+      "cooperative game theory",
+      "Efficiency, Symmetry, Dummy, Additivity"
+    ],
+    "expected_output_characteristics": "Mathematical definition of marginal contribution and explanation of the four axioms.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-169",
+    "category": "Data science and machine learning",
+    "original_prompt": "Explain how LoRA (Low-Rank Adaptation) reduces the trainable parameters of large language models during fine-tuning by decomposing the weight update matrix $\\Delta W$ into two low-rank matrices $B \\times A$ where $r \\ll d$. What is the memory saving mechanism during backpropagation?",
+    "expected_task_intent": "Explain LoRA mathematical decomposition and optimizer memory reduction.",
+    "critical_constraints": [
+      "LoRA",
+      "Delta W = B * A",
+      "rank r << d",
+      "optimizer state memory reduction"
+    ],
+    "expected_output_characteristics": "Parameter count calculation and explanation of frozen pre-trained weights.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-170",
+    "category": "Data science and machine learning",
+    "original_prompt": "Write a Python script using `statsmodels` to perform an Augmented Dickey-Fuller (ADF) test on a time series to test for stationarity. If the series is non-stationary ($p > 0.05$), apply first-order differencing and re-test.",
+    "expected_task_intent": "Implement ADF unit root test and iterative differencing in Python.",
+    "critical_constraints": [
+      "statsmodels adfuller",
+      "stationarity test p > 0.05",
+      "first-order differencing"
+    ],
+    "expected_output_characteristics": "Python loop checking p-value and applying .diff().dropna().",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-171",
+    "category": "Data science and machine learning",
+    "original_prompt": "Explain why cross-entropy loss is preferred over Mean Squared Error (MSE) for training deep neural network classification models with Softmax outputs. Explain how MSE causes vanishing gradients when the output is saturated in the wrong class.",
+    "expected_task_intent": "Explain cross-entropy vs MSE for softmax classification in terms of gradient magnitude.",
+    "critical_constraints": [
+      "Cross-Entropy vs MSE",
+      "Softmax output",
+      "saturation",
+      "derivative of MSE causes vanishing gradient"
+    ],
+    "expected_output_characteristics": "Mathematical derivation of loss gradient showing linear error $(p - y)$ for cross-entropy.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-172",
+    "category": "Data science and machine learning",
+    "original_prompt": "ADVERSARIAL: A team wants to tune model hyperparameters by running grid search on the test dataset directly to find the best configuration for their paper. Do NOT condone this practice. Explain test set contamination, optimistic bias, and show why a three-way train/validation/test split or nested cross-validation is mandatory.",
+    "expected_task_intent": "Refute hyperparameter tuning on test dataset and mandate nested CV or separate validation set.",
+    "critical_constraints": [
+      "do NOT condone tuning on test set",
+      "test set contamination",
+      "three-way split or nested CV"
+    ],
+    "expected_output_characteristics": "Stern methodological correction explaining how test set selection introduces data snooping bias.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-173",
+    "category": "Data science and machine learning",
+    "original_prompt": "How does KV Cache (Key-Value Cache) in autoregressive transformer inference reduce computational complexity during generation from $O(N^2)$ to $O(N)$ per generated token? What is the GPU VRAM memory formula for storing the KV cache?",
+    "expected_task_intent": "Explain KV Cache mechanism and calculate memory footprint.",
+    "critical_constraints": [
+      "KV Cache",
+      "autoregressive generation",
+      "O(N^2) to O(N)",
+      "VRAM formula: 2 * 2 * n_layers * n_heads * d_head * seq_len * precision"
+    ],
+    "expected_output_characteristics": "Detailed derivation of redundant attention computation and exact VRAM byte equation.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-174",
+    "category": "Data science and machine learning",
+    "original_prompt": "Write a Python script using `networkx` to calculate the PageRank vector of a directed web graph with a damping factor of $d = 0.85$ and a convergence tolerance of $10^{-6}$. Identify the top 3 authoritative nodes.",
+    "expected_task_intent": "Calculate PageRank on directed graph using NetworkX.",
+    "critical_constraints": [
+      "networkx",
+      "damping factor d=0.85",
+      "tolerance 1e-6",
+      "top 3 nodes"
+    ],
+    "expected_output_characteristics": "Python script using nx.pagerank() and sorted list output.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-175",
+    "category": "Data science and machine learning",
+    "original_prompt": "Explain the difference between Post-Training Quantization (PTQ) and Quantization-Aware Training (QAT) for converting FP32/FP16 models to INT8. How does fake quantization with straight-through estimators (STE) enable gradient backpropagation during QAT?",
+    "expected_task_intent": "Compare PTQ and QAT and explain Straight-Through Estimator in fake quantization.",
+    "critical_constraints": [
+      "PTQ vs QAT",
+      "INT8 quantization",
+      "fake quantization",
+      "Straight-Through Estimator (STE)"
+    ],
+    "expected_output_characteristics": "Explanation of non-differentiable rounding and identity gradient bypass during training.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-176",
+    "category": "Data science and machine learning",
+    "original_prompt": "Write a Python function to compute the exact Silhouette Score of a clustering result given a feature matrix $X$ and cluster labels without using `sklearn.metrics.silhouette_score`. Implement $s(i) = \\frac{b(i) - a(i)}{\\max(a(i), b(i))}$.",
+    "expected_task_intent": "Implement silhouette score calculation in pure NumPy.",
+    "critical_constraints": [
+      "NumPy only",
+      "no sklearn silhouette_score",
+      "formula s(i) = (b(i)-a(i))/max(a(i), b(i))"
+    ],
+    "expected_output_characteristics": "NumPy vector calculations for intra-cluster distance a(i) and nearest-cluster distance b(i).",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-177",
+    "category": "Data science and machine learning",
+    "original_prompt": "Explain why Word2Vec skip-gram models use Negative Sampling (SGNS) rather than standard Softmax over the entire vocabulary. What is the mathematical objective function maximized during negative sampling?",
+    "expected_task_intent": "Explain Word2Vec Negative Sampling computational efficiency and objective function.",
+    "critical_constraints": [
+      "Word2Vec Skip-gram",
+      "Negative Sampling (SGNS)",
+      "avoid full softmax denominator",
+      "sigmoid objective"
+    ],
+    "expected_output_characteristics": "Formula $\\log \\sigma(v'_{w_O}^\\top v_{w_I}) + \\sum \\mathbb{E}[\\log \\sigma(-v'_{w_i}^\\top v_{w_I})]$.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-178",
+    "category": "Data science and machine learning",
+    "original_prompt": "Describe how Direct Preference Optimization (DPO) replaces traditional RLHF with PPO by directly expressing the reward function implicitly in terms of the optimal policy: $r(x, y) = \\beta \\log \\frac{\\pi_\\theta(y|x)}{\\pi_{ref}(y|x)}$. Why does DPO eliminate the need to train a separate reward model?",
+    "expected_task_intent": "Explain Direct Preference Optimization (DPO) vs PPO-based RLHF.",
+    "critical_constraints": [
+      "DPO vs PPO RLHF",
+      "implicit reward formula",
+      "no separate reward model",
+      "Bradley-Terry preference model"
+    ],
+    "expected_output_characteristics": "Mathematical substitution into Bradley-Terry loss and training stability benefits.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-179",
+    "category": "Data science and machine learning",
+    "original_prompt": "Write a Python script using pandas to detect outliers in a dataset column using the Interquartile Range (IQR) method: values $< Q1 - 1.5 \\times IQR$ or $> Q3 + 1.5 \\times IQR$. Replace identified outliers with the respective boundary thresholds (winsorization).",
+    "expected_task_intent": "Implement IQR outlier detection and winsorization clipping in pandas.",
+    "critical_constraints": [
+      "pandas",
+      "IQR method (1.5 * IQR)",
+      "Q1 and Q3 quantiles",
+      "winsorization clipping"
+    ],
+    "expected_output_characteristics": "Python code using .quantile(0.25), .quantile(0.75), and .clip().",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-180",
+    "category": "Data science and machine learning",
+    "original_prompt": "Provide a comprehensive multi-paragraph technical evaluation of fine-tuning large language models on proprietary corporate data vs deploying an advanced Retrieval-Augmented Generation (RAG) architecture. Compare knowledge update velocity, hallucination auditability, data privacy boundaries, and GPU computational expenditure.",
+    "expected_task_intent": "Multi-paragraph architectural comparison of Fine-Tuning vs RAG.",
+    "critical_constraints": [
+      "multi-paragraph input",
+      "Fine-Tuning vs RAG",
+      "knowledge updates, hallucinations, privacy, GPU cost"
+    ],
+    "expected_output_characteristics": "Deep comparative evaluation across enterprise deployment lifecycle criteria.",
+    "difficulty": "hard",
+    "length_profile": "multi-paragraph"
+  },
+  {
+    "id": "pg-bench-181",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Could you please return a JSON object representing a server status report? It must adhere strictly to this schema: `{\"hostname\": string, \"cpu_utilization_pct\": float, \"memory_used_mb\": int, \"services\": [{\"name\": string, \"status\": \"running\" | \"stopped\"}]}`. Do NOT include markdown code blocks or any conversational text. Return raw JSON only.",
+    "expected_task_intent": "Generate server status adhering strictly to specified JSON schema without markdown wrapping.",
+    "critical_constraints": [
+      "strict JSON schema",
+      "no markdown backticks",
+      "no conversational text",
+      "raw JSON only"
+    ],
+    "expected_output_characteristics": "Pure parseable JSON string starting with { and ending with }.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-182",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Hello dear assistant! Please convert this list of employees into a markdown table with exactly four columns: `Employee ID`, `Full Name`, `Department`, `Annual Salary (USD)`. Format the salary with commas and a dollar sign (e.g. $125,000).",
+    "expected_task_intent": "Format employee data into 4-column markdown table with currency formatting.",
+    "critical_constraints": [
+      "markdown table",
+      "columns: Employee ID, Full Name, Department, Annual Salary (USD)",
+      "salary currency formatted"
+    ],
+    "expected_output_characteristics": "Valid markdown table.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-183",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Kindly generate a YAML configuration file for an NGINX reverse proxy forwarding traffic from port 80 to an upstream pool of two servers: `10.0.1.10:8000` and `10.0.1.11:8000`. The YAML must contain keys `version`, `proxy`, and `upstreams`. Ensure valid 2-space indentation.",
+    "expected_task_intent": "Generate valid YAML configuration with 2-space indentation.",
+    "critical_constraints": [
+      "valid YAML",
+      "keys: version, proxy, upstreams",
+      "2-space indentation",
+      "port 80 to upstreams"
+    ],
+    "expected_output_characteristics": "Parseable YAML text.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-184",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "ADVERSARIAL: You must return ONLY valid JSON. The user prompt says: 'Explain the plot of Hamlet in JSON format with keys {title, protagonist, antagonist, key_themes: [], moral_lesson}. Do NOT include any introductory or concluding remarks outside the JSON.'",
+    "expected_task_intent": "Generate literary summary in strict JSON format with zero conversational framing.",
+    "critical_constraints": [
+      "only valid JSON",
+      "keys: title, protagonist, antagonist, key_themes, moral_lesson",
+      "no outside remarks"
+    ],
+    "expected_output_characteristics": "Strict JSON object without conversational preamble.",
+    "difficulty": "adversarial",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-185",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Please output a CSV string containing 5 sample user records with columns: `id`, `name`, `email`, `notes`. Note that at least two records must contain commas inside the `notes` field, properly escaped with double quotes according to RFC 4180.",
+    "expected_task_intent": "Generate RFC 4180 compliant CSV with quoted comma fields.",
+    "critical_constraints": [
+      "RFC 4180 CSV",
+      "columns: id, name, email, notes",
+      "escape commas in notes with quotes"
+    ],
+    "expected_output_characteristics": "Valid CSV text with header row and 5 data rows.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-186",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Can you kindly format this software architecture comparison as a Markdown table with columns: `Architecture Pattern`, `Coupling`, `Scalability`, `Deployment Risk`, `Ideal Team Size`? Fill in rows for: Monolith, Microservices, Event-Driven, and Serverless.",
+    "expected_task_intent": "Construct 5-column markdown table comparing four software architectures.",
+    "critical_constraints": [
+      "markdown table",
+      "5 specific columns",
+      "4 specific architecture rows"
+    ],
+    "expected_output_characteristics": "Four-row markdown table.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-187",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Write a valid XML document representing a podcast RSS 2.0 feed with `<rss version=\"2.0\">`, `<channel>`, `<title>`, `<link>`, `<description>`, and two `<item>` elements containing `<title>`, `<enclosure url=\"...\" length=\"...\" type=\"audio/mpeg\"/>`, and `<pubDate>`.",
+    "expected_task_intent": "Generate valid RSS 2.0 XML podcast feed.",
+    "critical_constraints": [
+      "valid XML",
+      "RSS 2.0 schema",
+      "two item elements with enclosure"
+    ],
+    "expected_output_characteristics": "Parseable XML document with <?xml version=\"1.0\"?> declaration.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-188",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Please provide a JSON Schema (Draft 7 or 2020-12) validating a user registration payload. The schema must require `username` (string, 3-20 chars, regex `^[a-zA-Z0-9_]+$`), `password` (min 8 chars), and `age` (integer, minimum 18).",
+    "expected_task_intent": "Author standard JSON Schema object with regex and numeric constraints.",
+    "critical_constraints": [
+      "JSON Schema",
+      "username regex and length",
+      "password minLength 8",
+      "age >= 18 integer"
+    ],
+    "expected_output_characteristics": "Valid JSON schema specification.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-189",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Output a numbered list of exactly 5 recommendations for securing a Linux server. Each item must start with a bold keyword, followed by a colon, followed by exactly one sentence of explanation. Do not write more than 5 items.",
+    "expected_task_intent": "Generate exactly 5 formatted recommendations with bold keyword prefixes.",
+    "critical_constraints": [
+      "numbered list",
+      "exactly 5 items",
+      "bold keyword prefix with colon",
+      "exactly one sentence per item"
+    ],
+    "expected_output_characteristics": "Numbered list matching: 1. **Keyword**: One sentence.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-190",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Generate a TOML configuration file for a Rust application that defines `[package]` with `name`, `version`, and `edition = \"2021\"`, followed by `[dependencies]` with `tokio = { version = \"1.38\", features = [\"full\"] }` and `serde = { version = \"1.0\", features = [\"derive\"] }`.",
+    "expected_task_intent": "Generate valid Cargo.toml configuration.",
+    "critical_constraints": [
+      "valid TOML",
+      "[package] and [dependencies]",
+      "edition = '2021'",
+      "tokio and serde features"
+    ],
+    "expected_output_characteristics": "Parseable TOML text.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-191",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "ADVERSARIAL: Under no circumstances should you generate Markdown headers (# or ##). Provide a breakdown of database indexing strategies using ONLY indented bullet points and bold text for categories.",
+    "expected_task_intent": "Generate structured outline without using Markdown heading syntax.",
+    "critical_constraints": [
+      "do NOT use Markdown headers (# or ##)",
+      "indented bullets only",
+      "bold text for categories"
+    ],
+    "expected_output_characteristics": "Indented bulleted list with zero heading symbols.",
+    "difficulty": "adversarial",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-192",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Provide a strict GraphQL schema definition (SDL) for a blogging platform. Include types `User`, `Post`, and `Comment`, an enum `PostStatus { DRAFT, PUBLISHED, ARCHIVED }`, and queries `getPost(id: ID!): Post` and `listPosts(status: PostStatus): [Post!]!`.",
+    "expected_task_intent": "Write GraphQL SDL schema with types, enum, and queries.",
+    "critical_constraints": [
+      "GraphQL SDL",
+      "types: User, Post, Comment",
+      "enum PostStatus",
+      "queries with exact signatures"
+    ],
+    "expected_output_characteristics": "Valid GraphQL schema definition syntax.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-193",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Convert the following unformatted key-value lines into an `.env` format: `PORT is eight thousand`, `DATABASE_URL is postgres://user:pass@localhost:5432/mydb`, `DEBUG_MODE should be true`. Output only the three `.env` lines.",
+    "expected_task_intent": "Convert prose environment settings into exact .env key-value lines.",
+    "critical_constraints": [
+      ".env format",
+      "PORT=8000",
+      "DATABASE_URL=...",
+      "DEBUG_MODE=true",
+      "output only 3 lines"
+    ],
+    "expected_output_characteristics": "Three uppercase KEY=VALUE lines.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-194",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Create an OpenAPI 3.0 specification snippet in YAML describing a `POST /api/v1/auth/login` endpoint that accepts request body `{email, password}` and returns `200 OK` with `{access_token, token_type: \"Bearer\", expires_in: 3600}` or `401 Unauthorized`.",
+    "expected_task_intent": "Author OpenAPI 3.0 YAML specification for auth endpoint.",
+    "critical_constraints": [
+      "OpenAPI 3.0 YAML",
+      "POST /api/v1/auth/login",
+      "200 response with tokens",
+      "401 response"
+    ],
+    "expected_output_characteristics": "Valid OpenAPI YAML snippet.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-195",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Generate a Mermaid.js flowchart diagram (`graph TD`) depicting an authentication request flow: Client -> API Gateway -> Auth Service (Validates JWT) -> Microservice -> Response. Use appropriate decision node for Invalid Token -> 401 Unauthorized.",
+    "expected_task_intent": "Create Mermaid.js flowchart with decision branch.",
+    "critical_constraints": [
+      "Mermaid.js flowchart graph TD",
+      "decision node for token validation",
+      "401 branch"
+    ],
+    "expected_output_characteristics": "Valid mermaid fenced block or graph TD code.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-196",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Format this list of 5 server nodes into an ANSI-escaped colored terminal output simulation using ASCII box-drawing characters (`+---+---+`). Show columns: `NODE`, `STATUS`, `LOAD`. Use `[OK]` for running and `[WARN]` for high load.",
+    "expected_task_intent": "Generate ASCII box-drawing table for terminal status display.",
+    "critical_constraints": [
+      "ASCII box-drawing characters",
+      "columns: NODE, STATUS, LOAD",
+      "[OK] and [WARN] badges"
+    ],
+    "expected_output_characteristics": "ASCII grid table.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-197",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Provide a JSON object containing a multi-lingual greeting dictionary for 5 languages: English, Spanish, French, German, and Japanese. For each language, include `language_code` (ISO 639-1), `greeting_informal`, and `greeting_formal`.",
+    "expected_task_intent": "Generate multi-lingual dictionary in structured JSON.",
+    "critical_constraints": [
+      "valid JSON",
+      "5 languages",
+      "ISO 639-1 codes",
+      "informal and formal greetings"
+    ],
+    "expected_output_characteristics": "Valid JSON array or dictionary.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-198",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "ADVERSARIAL: Return the answer as a single continuous line of plain text with NO newline characters (`\\n`) whatsoever. Describe the difference between TCP and UDP in this single-line format.",
+    "expected_task_intent": "Format technical description as a single continuous line without newlines.",
+    "critical_constraints": [
+      "single continuous line",
+      "zero newline characters",
+      "TCP vs UDP explanation"
+    ],
+    "expected_output_characteristics": "One continuous string with no line breaks.",
+    "difficulty": "adversarial",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-199",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Generate a valid SQL `CREATE TABLE` statement for an audit log table `system_audit_logs`. It must include columns: `log_id BIGSERIAL PRIMARY KEY`, `event_type VARCHAR(50) NOT NULL`, `actor_id UUID NOT NULL`, `payload JSONB NOT NULL DEFAULT '{}'`, and `created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`. Add a GIN index on `payload`.",
+    "expected_task_intent": "Write PostgreSQL DDL with JSONB column and GIN index.",
+    "critical_constraints": [
+      "CREATE TABLE system_audit_logs",
+      "JSONB payload",
+      "TIMESTAMPTZ created_at",
+      "CREATE INDEX ... USING GIN (payload)"
+    ],
+    "expected_output_characteristics": "PostgreSQL DDL script.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-200",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Provide a LaTeX document snippet containing a 2x2 mathematical matrix $A = \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}$, its determinant formula $\\det(A) = ad - bc$, and its matrix inverse $A^{-1}$ assuming $\\det(A) \\neq 0$. Ensure clean math mode syntax.",
+    "expected_task_intent": "Provide LaTeX matrix, determinant, and inverse equations.",
+    "critical_constraints": [
+      "LaTeX math mode",
+      "pmatrix environment",
+      "determinant and inverse formula",
+      "det(A) != 0 condition"
+    ],
+    "expected_output_characteristics": "Clean KaTeX/LaTeX math blocks.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-201",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Kindly format a cron expression reference table in markdown with 5 columns: `Minute (0-59)`, `Hour (0-23)`, `Day of Month (1-31)`, `Month (1-12)`, `Day of Week (0-6)`. Show 4 common examples: Every hour, Every midnight, Every Sunday at 2am, and Every 15 minutes.",
+    "expected_task_intent": "Create cron syntax reference table with standard examples.",
+    "critical_constraints": [
+      "markdown table",
+      "5 cron field columns",
+      "4 specific scheduling examples"
+    ],
+    "expected_output_characteristics": "Markdown table matching standard 5-field cron notation.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-202",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Generate a Protobuf (proto3) definition file `telemetry.proto` for a vehicle tracking sensor. The message `LocationUpdate` must contain `string vehicle_id = 1;`, `double latitude = 2;`, `double longitude = 3;`, `float speed_kmh = 4;`, and `google.protobuf.Timestamp timestamp = 5;`. Import the timestamp proto.",
+    "expected_task_intent": "Author Protocol Buffers proto3 schema with timestamp import.",
+    "critical_constraints": [
+      "proto3 syntax",
+      "LocationUpdate message",
+      "field numbers 1-5",
+      "import google/protobuf/timestamp.proto"
+    ],
+    "expected_output_characteristics": "Valid .proto file text.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-203",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Convert the following bullet points into a valid HTML5 ordered list (`<ol>`) where each item (`<li>`) has a custom `data-step` attribute matching its step number (1, 2, 3). Do not output `<html>` or `<body>` wrappers, just the `<ol>` block.",
+    "expected_task_intent": "Convert bullets into HTML5 <ol> with data-step attributes.",
+    "critical_constraints": [
+      "valid HTML5 <ol>",
+      "data-step attribute on each <li>",
+      "no <html> or <body> tags"
+    ],
+    "expected_output_characteristics": "Clean HTML snippet.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-204",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "ADVERSARIAL: You must return the output formatted strictly as a single JSON array of strings, e.g. `[\"item1\", \"item2\"]`. The user says: 'What are the three primary primary colors of light in physics?' Do not include any explanations, keys, or Markdown backticks.",
+    "expected_task_intent": "Return primary colors of light as raw JSON string array with zero extra text.",
+    "critical_constraints": [
+      "strict JSON array of strings",
+      "[\"red\", \"green\", \"blue\"]",
+      "no markdown backticks",
+      "no explanations"
+    ],
+    "expected_output_characteristics": "Exact JSON array: [\"Red\", \"Green\", \"Blue\"].",
+    "difficulty": "adversarial",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-205",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Write a `docker-compose.yml` file defining two services: `web` (built from `./web`, port `3000:3000`, depends on `db`) and `db` (image `postgres:16-alpine`, environment variables `POSTGRES_DB=app`, `POSTGRES_PASSWORD=secret`, named volume `pgdata`). Ensure valid compose syntax.",
+    "expected_task_intent": "Create docker-compose.yml with two services and named volume.",
+    "critical_constraints": [
+      "valid docker-compose.yml",
+      "web on 3000:3000",
+      "postgres:16-alpine",
+      "named volume pgdata"
+    ],
+    "expected_output_characteristics": "Parseable docker-compose YAML.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-206",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Format this list of HTTP error codes (400, 401, 403, 404, 429, 500, 502, 503) as a markdown table with columns: `Code`, `Standard Reason Phrase`, `Client vs Server`, `Can Retry? (Yes/No)`. Ensure strict classification.",
+    "expected_task_intent": "Generate structured HTTP status error table with retry guidance.",
+    "critical_constraints": [
+      "markdown table",
+      "columns: Code, Standard Reason Phrase, Client vs Server, Can Retry?",
+      "strict accuracy"
+    ],
+    "expected_output_characteristics": "8-row markdown table.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-207",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Provide a complete regular expression in PCRE format that matches an ISO 8601 UTC timestamp (e.g. `2026-11-22T14:30:00Z` or with milliseconds `2026-11-22T14:30:00.123Z`). Wrap the regex in single backticks.",
+    "expected_task_intent": "Provide precise PCRE regex for ISO 8601 UTC timestamp.",
+    "critical_constraints": [
+      "PCRE regex",
+      "matches ISO 8601 UTC",
+      "supports optional milliseconds",
+      "wrapped in single backticks"
+    ],
+    "expected_output_characteristics": "Regex string.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-208",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Generate a sample CSS file defining a responsive CSS Grid container `.dashboard-grid` with `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))`, a 16px gap, and dark-mode media query `@media (prefers-color-scheme: dark)` styling the background.",
+    "expected_task_intent": "Author responsive CSS Grid rules with dark mode media query.",
+    "critical_constraints": [
+      "CSS Grid",
+      "repeat(auto-fit, minmax(280px, 1fr))",
+      "gap: 16px",
+      "prefers-color-scheme: dark"
+    ],
+    "expected_output_characteristics": "Clean valid CSS snippet.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-209",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Output a JSON array of 3 mock API endpoint descriptions. Each object must have keys: `method` (\"GET\" | \"POST\"), `path` (string), `description` (string), and `requires_auth` (boolean). Ensure keys are ordered identically in all 3 objects.",
+    "expected_task_intent": "Generate mock API endpoint JSON array with uniform key ordering.",
+    "critical_constraints": [
+      "JSON array of 3 objects",
+      "keys: method, path, description, requires_auth",
+      "uniform key ordering"
+    ],
+    "expected_output_characteristics": "Valid JSON array.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-210",
+    "category": "Structured output and formatting constraints",
+    "original_prompt": "Provide a comprehensive multi-paragraph API design specification formatted in pure Markdown. Document an imaginary Enterprise File Storage API with endpoints for uploading, downloading, searching, and deleting documents. Use nested markdown headings, parameter tables, request/response JSON snippets, and error code tables.",
+    "expected_task_intent": "Multi-paragraph comprehensive API design specification in Markdown.",
+    "critical_constraints": [
+      "multi-paragraph input",
+      "pure Markdown",
+      "Enterprise File Storage API",
+      "tables, JSON snippets, error codes"
+    ],
+    "expected_output_characteristics": "Complete technical specification document.",
+    "difficulty": "hard",
+    "length_profile": "multi-paragraph"
+  },
+  {
+    "id": "pg-bench-211",
+    "category": "General technical instructions",
+    "original_prompt": "Could you please explain how to configure HTTP Strict Transport Security (HSTS) on an NGINX web server? Include the `add_header Strict-Transport-Security` directive with a 1-year max-age, `includeSubDomains`, and `preload`.",
+    "expected_task_intent": "Configure NGINX HSTS header with max-age, subdomains, and preload.",
+    "critical_constraints": [
+      "NGINX",
+      "Strict-Transport-Security",
+      "max-age=31536000",
+      "includeSubDomains",
+      "preload"
+    ],
+    "expected_output_characteristics": "NGINX configuration directive and security rationale.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-212",
+    "category": "General technical instructions",
+    "original_prompt": "Hello dear assistant! How do you configure Cross-Origin Resource Sharing (CORS) safely in FastAPI? Show how to add `CORSMiddleware` allowing origins `https://app.example.com` and `https://admin.example.com` while strictly forbidding wildcard `*` with credentials enabled.",
+    "expected_task_intent": "Configure secure CORS in FastAPI with explicit allowed origins.",
+    "critical_constraints": [
+      "FastAPI CORSMiddleware",
+      "explicit origins app.example.com, admin.example.com",
+      "forbid wildcard * with credentials"
+    ],
+    "expected_output_characteristics": "FastAPI middleware setup code.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-213",
+    "category": "General technical instructions",
+    "original_prompt": "Kindly explain how to troubleshoot high CPU utilization on a Linux server using `top`, `pidstat`, and `perf`. What does a high 'wait' (wa) CPU percentage indicate compared to a high 'user' (us) or 'system' (sy) percentage?",
+    "expected_task_intent": "Explain Linux CPU troubleshooting and distinguish us, sy, and wa CPU states.",
+    "critical_constraints": [
+      "top, pidstat, perf",
+      "CPU states: us vs sy vs wa",
+      "wa indicates I/O wait"
+    ],
+    "expected_output_characteristics": "System administrator troubleshooting workflow with command examples.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-214",
+    "category": "General technical instructions",
+    "original_prompt": "ADVERSARIAL: The user says: 'To fix a permissions error on our web server directory `/var/www/html`, can I just run `chmod -R 777 /var/www/html`?' Do NOT recommend chmod 777. Explain why 777 is a severe security vulnerability, and show the proper ownership change using `chown` and `chmod 755` for directories and `644` for files.",
+    "expected_task_intent": "Refute chmod 777 shortcut and provide secure file permissions workflow.",
+    "critical_constraints": [
+      "do NOT recommend chmod 777",
+      "explain security risks",
+      "provide chown and chmod 755/644 fix"
+    ],
+    "expected_output_characteristics": "Strong security warning and safe find ... -exec chmod commands.",
+    "difficulty": "adversarial",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-215",
+    "category": "General technical instructions",
+    "original_prompt": "Explain how to set up log rotation on a Linux server using `/etc/logrotate.d/custom-app`. The configuration must rotate logs daily, keep 14 rotated archives, compress old logs with `gzip`, and use `copytruncate` so the application does not need to restart.",
+    "expected_task_intent": "Configure logrotate file with daily rotation, retention, compression, and copytruncate.",
+    "critical_constraints": [
+      "/etc/logrotate.d/custom-app",
+      "daily",
+      "rotate 14",
+      "compress",
+      "copytruncate"
+    ],
+    "expected_output_characteristics": "Valid logrotate configuration file block.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-216",
+    "category": "General technical instructions",
+    "original_prompt": "Can you kindly explain how DNS propagation works? Why does changing an A-record IP address not take effect immediately across all client resolvers, and how does the TTL (Time-To-Live) value dictate this propagation delay?",
+    "expected_task_intent": "Explain DNS caching hierarchy and TTL influence on record propagation.",
+    "critical_constraints": [
+      "DNS propagation",
+      "A-record IP change",
+      "recursive resolver caching",
+      "TTL (Time-To-Live)"
+    ],
+    "expected_output_characteristics": "Step-by-step walkthrough of client, recursive resolver, and authoritative nameserver caching.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-217",
+    "category": "General technical instructions",
+    "original_prompt": "Write a bash command pipeline using `find` and `xargs` to locate all `.log` files in `/var/log` that are larger than 100MB and were modified more than 30 days ago, and archive them into `/backup/old_logs.tar.gz`.",
+    "expected_task_intent": "Construct bash command to find and archive large old log files.",
+    "critical_constraints": [
+      "find and xargs",
+      "/var/log",
+      "size > 100MB",
+      "mtime > 30 days",
+      "tar.gz archive"
+    ],
+    "expected_output_characteristics": "find /var/log -type f -name '*.log' -size +100M -mtime +30 ... command.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-218",
+    "category": "General technical instructions",
+    "original_prompt": "Explain the difference between Symmetric Encryption (AES-GCM) and Asymmetric Encryption (RSA/ECC). Why does hybrid encryption combine both by using asymmetric cryptography to exchange a symmetric session key?",
+    "expected_task_intent": "Compare symmetric and asymmetric encryption and explain hybrid cryptosystem rationale.",
+    "critical_constraints": [
+      "Symmetric (AES-GCM) vs Asymmetric (RSA/ECC)",
+      "computational efficiency",
+      "hybrid cryptosystem"
+    ],
+    "expected_output_characteristics": "Comparative explanation covering throughput, key size, and key distribution.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-219",
+    "category": "General technical instructions",
+    "original_prompt": "How do you configure a Content Security Policy (CSP) header to prevent Cross-Site Scripting (XSS)? Provide an example `Content-Security-Policy` header that permits scripts only from `self` and a specific nonce, while disallowing `unsafe-inline` and `unsafe-eval`.",
+    "expected_task_intent": "Author strict Content Security Policy HTTP header with nonce.",
+    "critical_constraints": [
+      "Content-Security-Policy header",
+      "script-src 'self' 'nonce-...'",
+      "disallow 'unsafe-inline' and 'unsafe-eval'"
+    ],
+    "expected_output_characteristics": "HTTP response header definition and browser enforcement explanation.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-220",
+    "category": "General technical instructions",
+    "original_prompt": "Explain what database index bloat is in PostgreSQL. Why does PostgreSQL's Multi-Version Concurrency Control (MVCC) cause table and index bloat during frequent UPDATE and DELETE operations, and how does `VACUUM FULL` or `pg_repack` reclaim this disk space?",
+    "expected_task_intent": "Explain MVCC dead tuples, index bloat, and vacuuming in PostgreSQL.",
+    "critical_constraints": [
+      "PostgreSQL MVCC",
+      "dead tuples",
+      "index bloat from UPDATE/DELETE",
+      "VACUUM FULL vs pg_repack"
+    ],
+    "expected_output_characteristics": "Technical analysis of append-only heap files and index pointer cleanup.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-221",
+    "category": "General technical instructions",
+    "original_prompt": "Provide instructions for generating an SSH keypair using `ed25519` algorithm on Linux or macOS. Show the command with a custom comment containing an email address and explain why Ed25519 is preferred over legacy RSA 2048.",
+    "expected_task_intent": "Document Ed25519 SSH key generation and explain advantages over RSA.",
+    "critical_constraints": [
+      "ssh-keygen -t ed25519 -C 'email'",
+      "Ed25519 vs RSA 2048 (key size, speed, security)"
+    ],
+    "expected_output_characteristics": "Command snippet and cryptographic comparison.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-222",
+    "category": "General technical instructions",
+    "original_prompt": "Explain how the TCP Three-Way Handshake works: SYN, SYN-ACK, ACK. What is SYN Flood attack and how do SYN Cookies on the server defend against exhaustion of the half-open connection backlog table?",
+    "expected_task_intent": "Explain TCP 3-way handshake, SYN flood attack, and SYN cookies defense.",
+    "critical_constraints": [
+      "SYN, SYN-ACK, ACK",
+      "SYN flood attack",
+      "half-open backlog exhaustion",
+      "SYN Cookies cryptographic hash"
+    ],
+    "expected_output_characteristics": "Diagrammatic sequence and explanation of stateless sequence number encoding.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-223",
+    "category": "General technical instructions",
+    "original_prompt": "ADVERSARIAL: A developer asks: 'We need to disable SSL certificate verification in our Python production script by setting `verify=False` in `requests.get()` to fix a handshake failure.' Do NOT endorse disabling verification. Explain the Man-In-The-Middle (MITM) vulnerability this creates, and show how to properly supply the corporate CA bundle using `verify='/path/to/ca.pem'`.",
+    "expected_task_intent": "Refute verify=False in production and provide proper CA certificate bundle configuration.",
+    "critical_constraints": [
+      "do NOT endorse verify=False",
+      "explain MITM attack risk",
+      "show verify='/path/to/ca.pem' fix"
+    ],
+    "expected_output_characteristics": "Strong security warning and proper python requests code.",
+    "difficulty": "adversarial",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-224",
+    "category": "General technical instructions",
+    "original_prompt": "How do you configure an API rate limiter using Redis and the Token Bucket algorithm? Explain how Redis atomic commands like `EVAL` with a Lua script ensure race-condition-free token refilling and consumption.",
+    "expected_task_intent": "Design Redis Token Bucket rate limiter using atomic Lua script.",
+    "critical_constraints": [
+      "Token Bucket algorithm",
+      "Redis atomic Lua script (EVAL)",
+      "race-condition prevention"
+    ],
+    "expected_output_characteristics": "Lua script snippet and algorithmic explanation of token replenishment.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-225",
+    "category": "General technical instructions",
+    "original_prompt": "Explain the difference between Horizontal Scaling (Scale Out) and Vertical Scaling (Scale Up). What are the hardware limits of vertical scaling, and what architectural challenges (distributed state, cache invalidation, network partitions) arise when scaling horizontally?",
+    "expected_task_intent": "Compare horizontal and vertical scaling tradeoffs.",
+    "critical_constraints": [
+      "Scale Out vs Scale Up",
+      "hardware boundaries of vertical scaling",
+      "distributed state, cache invalidation, CAP theorem"
+    ],
+    "expected_output_characteristics": "Comparative essay covering cost, complexity, and availability.",
+    "difficulty": "easy",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-226",
+    "category": "General technical instructions",
+    "original_prompt": "Write a systemd service unit file `/etc/systemd/system/myapp.service` for a Node.js daemon. The unit must run as user `www-data`, restart automatically on failure with a 5-second delay (`Restart=on-failure`, `RestartSec=5`), specify working directory `/var/www/myapp`, and load environment variables from `/etc/myapp.env`.",
+    "expected_task_intent": "Author complete systemd service unit configuration file.",
+    "critical_constraints": [
+      "/etc/systemd/system/myapp.service",
+      "user www-data",
+      "Restart=on-failure, RestartSec=5",
+      "EnvironmentFile=/etc/myapp.env"
+    ],
+    "expected_output_characteristics": "[Unit], [Service], and [Install] sections in valid systemd syntax.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-227",
+    "category": "General technical instructions",
+    "original_prompt": "Explain how Circuit Breakers (such as Netflix Hystrix or Resilience4j) protect microservice ecosystems from cascading failures. Detail the three states: Closed, Open, and Half-Open, including failure rate thresholds and sleep window transitions.",
+    "expected_task_intent": "Explain Circuit Breaker pattern states and state transitions.",
+    "critical_constraints": [
+      "Circuit Breaker",
+      "Closed, Open, Half-Open states",
+      "failure rate threshold",
+      "sleep window recovery"
+    ],
+    "expected_output_characteristics": "Finite state machine diagram explanation and failure isolation mechanics.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-228",
+    "category": "General technical instructions",
+    "original_prompt": "Explain the difference between symmetric multiprocessing (SMP) and non-uniform memory access (NUMA) architecture in modern multi-socket enterprise servers. Why does cross-socket memory access increase latency, and how does NUMA node pinning (`numactl`) optimize database performance?",
+    "expected_task_intent": "Explain NUMA memory architecture and performance optimization via numactl.",
+    "critical_constraints": [
+      "SMP vs NUMA",
+      "cross-socket interconnect latency (QPI/UPI)",
+      "numactl memory pinning"
+    ],
+    "expected_output_characteristics": "Architectural breakdown of local vs remote memory node access.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-229",
+    "category": "General technical instructions",
+    "original_prompt": "Provide the Linux `iptables` or `nftables` commands to configure a stateful firewall that: (1) drops all incoming traffic by default, (2) allows established and related incoming connections, (3) allows incoming SSH on port 22 only from subnet `192.168.1.0/24`, and (4) allows incoming HTTP/HTTPS on ports 80 and 443 from any IP.",
+    "expected_task_intent": "Write stateful Linux firewall rules with default drop and subnet restrictions.",
+    "critical_constraints": [
+      "iptables or nftables",
+      "default drop incoming",
+      "established/related state",
+      "SSH 22 from 192.168.1.0/24 only",
+      "80/443 public"
+    ],
+    "expected_output_characteristics": "Sequential iptables commands.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-230",
+    "category": "General technical instructions",
+    "original_prompt": "Explain what a Distributed Denial of Service (DDoS) reflection/amplification attack is (e.g. DNS amplification, NTP amplification). Why does UDP statelessness make IP address spoofing trivial compared to TCP, and how does Response Rate Limiting (RRL) mitigate it?",
+    "expected_task_intent": "Explain UDP reflection/amplification DDoS attacks and mitigation.",
+    "critical_constraints": [
+      "DDoS reflection/amplification",
+      "UDP statelessness vs TCP handshake",
+      "IP spoofing",
+      "Response Rate Limiting (RRL)"
+    ],
+    "expected_output_characteristics": "Attack mechanism walkthrough and network layer defense analysis.",
+    "difficulty": "hard",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-231",
+    "category": "General technical instructions",
+    "original_prompt": "How do you safely rotate an active AWS IAM user access key without causing application downtime? Detail the 4-step process: (1) generate new key, (2) update application configuration, (3) test and monitor old key inactivity, and (4) deactivate and delete old key.",
+    "expected_task_intent": "Document zero-downtime AWS IAM credential rotation workflow.",
+    "critical_constraints": [
+      "4-step zero-downtime process",
+      "generate new key before deleting old",
+      "verify inactivity in CloudTrail",
+      "deactivate then delete"
+    ],
+    "expected_output_characteristics": "Step-by-step operational runbook.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-232",
+    "category": "General technical instructions",
+    "original_prompt": "ADVERSARIAL: A user asks: 'Can we store credit card numbers and CVV codes in plaintext in our local database as long as our server firewall is turned on?' Strongly and unconditionally REJECT this proposal. Cite PCI-DSS Requirement 3, explain that CVV storage after authorization is strictly prohibited, and mandate AES-256 encryption or tokenization for Primary Account Numbers (PAN).",
+    "expected_task_intent": "Unconditionally refute plaintext credit card storage and mandate PCI-DSS compliance.",
+    "critical_constraints": [
+      "unconditionally REJECT proposal",
+      "PCI-DSS Requirement 3",
+      "CVV post-auth strictly prohibited",
+      "AES-256 or tokenization for PAN"
+    ],
+    "expected_output_characteristics": "Definitive compliance refusal and regulatory requirement mandate.",
+    "difficulty": "adversarial",
+    "length_profile": "long"
+  },
+  {
+    "id": "pg-bench-233",
+    "category": "General technical instructions",
+    "original_prompt": "Explain the difference between process-level virtualization (Docker containers via Linux cgroups and namespaces) and hardware-level virtualization (Type-1/Type-2 hypervisors like KVM or VMware ESXi). Compare startup latency, kernel sharing, and security isolation boundaries.",
+    "expected_task_intent": "Compare OS containerization with hypervisor hardware virtualization.",
+    "critical_constraints": [
+      "cgroups and namespaces vs hypervisors (KVM/ESXi)",
+      "startup latency",
+      "kernel sharing",
+      "security isolation boundary"
+    ],
+    "expected_output_characteristics": "Technical architecture comparison detailing hypercall translation vs native syscall containment.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-234",
+    "category": "General technical instructions",
+    "original_prompt": "Provide the command and syntax to configure a Prometheus scrape job in `prometheus.yml` that scrapes metrics from a target service at `10.0.2.15:9100` every 15 seconds with a 10-second scrape timeout, path `/metrics`, and job name `node_exporter`.",
+    "expected_task_intent": "Write Prometheus YAML scrape configuration job.",
+    "critical_constraints": [
+      "prometheus.yml",
+      "job_name: 'node_exporter'",
+      "target '10.0.2.15:9100'",
+      "scrape_interval: 15s",
+      "scrape_timeout: 10s"
+    ],
+    "expected_output_characteristics": "Valid YAML scrape_configs item.",
+    "difficulty": "easy",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-235",
+    "category": "General technical instructions",
+    "original_prompt": "Explain what a memory leak is in garbage-collected languages like Python or Go. How can long-lived global collections, circular references with finalizers, or unclosed goroutines/resources prevent garbage collection from reclaiming heap memory?",
+    "expected_task_intent": "Explain memory leak mechanisms in GC managed languages.",
+    "critical_constraints": [
+      "memory leaks in GC languages",
+      "global collections",
+      "unclosed goroutines",
+      "retaining reference paths to GC root"
+    ],
+    "expected_output_characteristics": "Root cause analysis with code examples showing accidental object retention.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-236",
+    "category": "General technical instructions",
+    "original_prompt": "Explain how Zero-Trust Network Architecture (ZTNA) replaces traditional perimeter-based VPN architectures. Detail the core principle of 'never trust, always verify', microsegmentation, and continuous identity and device posture assessment.",
+    "expected_task_intent": "Explain Zero-Trust Architecture principles vs perimeter VPNs.",
+    "critical_constraints": [
+      "Zero-Trust (ZTNA) vs perimeter VPN",
+      "never trust, always verify",
+      "microsegmentation",
+      "continuous posture assessment"
+    ],
+    "expected_output_characteristics": "Comprehensive architectural overview covering NIST SP 800-207 guidelines.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-237",
+    "category": "General technical instructions",
+    "original_prompt": "Write a bash script using `openssl s_client` to check the TLS certificate expiration date of a remote domain (e.g. `example.com:443`). If the certificate expires in less than 14 days, send an alert email or print a critical warning.",
+    "expected_task_intent": "Create bash script checking TLS certificate expiration using openssl.",
+    "critical_constraints": [
+      "openssl s_client -connect domain:443",
+      "check expiration date",
+      "alert if < 14 days remaining"
+    ],
+    "expected_output_characteristics": "Bash script with openssl x509 -enddate parsing and date arithmetic.",
+    "difficulty": "medium",
+    "length_profile": "short"
+  },
+  {
+    "id": "pg-bench-238",
+    "category": "General technical instructions",
+    "original_prompt": "Explain how to diagnose and resolve an IOPS (Input/Output Operations Per Second) bottleneck on a cloud block storage volume (e.g. AWS EBS gp3). What monitoring metrics (volume queue length, average latency, burst balance) indicate disk saturation?",
+    "expected_task_intent": "Document cloud block storage IOPS troubleshooting and saturation indicators.",
+    "critical_constraints": [
+      "EBS gp3 IOPS bottleneck",
+      "volume queue length",
+      "average read/write latency",
+      "burst balance / throttling"
+    ],
+    "expected_output_characteristics": "Performance engineering runbook outlining diagnosis and scaling fixes.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-239",
+    "category": "General technical instructions",
+    "original_prompt": "Explain how database Connection Pooling (e.g. HikariCP or PgBouncer) mitigates the resource overhead of establishing TCP and TLS connections, authenticating, and spawning backend database processes. What is the optimal formula for pool size according to HikariCP documentation: $connections = (core\\_count \\times 2) + effective\\_spindle\\_count$?",
+    "expected_task_intent": "Explain connection pooling mechanics and HikariCP sizing formula.",
+    "critical_constraints": [
+      "Connection Pooling (HikariCP / PgBouncer)",
+      "handshake overhead",
+      "pool size formula: (cores * 2) + spindles"
+    ],
+    "expected_output_characteristics": "Technical analysis of database thread contention and sizing calculation.",
+    "difficulty": "medium",
+    "length_profile": "medium"
+  },
+  {
+    "id": "pg-bench-240",
+    "category": "General technical instructions",
+    "original_prompt": "Provide a comprehensive multi-paragraph enterprise disaster recovery plan for a mission-critical cloud-native SaaS application. Define Recovery Point Objective (RPO) and Recovery Time Objective (RTO) targets. Detail cross-region database replication, immutable offsite backups, DNS failover automation via Route 53 Health Checks, and quarterly DR drill execution protocols.",
+    "expected_task_intent": "Multi-paragraph comprehensive enterprise Disaster Recovery (DR) plan.",
+    "critical_constraints": [
+      "multi-paragraph input",
+      "RPO and RTO definitions",
+      "cross-region replication, immutable backups",
+      "Route 53 DNS failover, quarterly drills"
+    ],
+    "expected_output_characteristics": "In-depth enterprise disaster recovery operational standard.",
+    "difficulty": "hard",
+    "length_profile": "multi-paragraph"
+  }
+]

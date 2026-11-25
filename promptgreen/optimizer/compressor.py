@@ -28,10 +28,10 @@ from promptgreen.optimizer.rule_pruner import ProtectedRegion, RuleBasedPruner
 logger = logging.getLogger("promptgreen.optimizer.compressor")
 
 
-# Default mode retention rate targets
+# Default mode retention rate targets (Chapter 6, Section 6.3.2)
 RETENTION_MODES: Dict[str, float] = {
-    "conservative": 0.75,
-    "balanced": 0.55,
+    "conservative": 0.80,
+    "balanced": 0.60,
     "aggressive": 0.40,
 }
 
@@ -150,6 +150,33 @@ class LLMLinguaCompressor:
     when neural models or packages are unavailable.
     """
 
+    _shared_llm_lingua: Optional[Any] = None
+    _shared_model_name: Optional[str] = None
+
+    @classmethod
+    def reset_shared_model(cls) -> None:
+        """Reset the process-level shared LLMLingua model cache."""
+        cls._shared_llm_lingua = None
+        cls._shared_model_name = None
+
+    @classmethod
+    def prewarm(cls, model_name: str = "microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank") -> bool:
+        """Pre-warm and cache the shared LLMLingua-2 model."""
+        if cls._shared_llm_lingua is not None:
+            return True
+        try:
+            from llmlingua import PromptCompressor as LLMLinguaEngine
+            cls._shared_llm_lingua = LLMLinguaEngine(
+                model_name=model_name,
+                device_map="cpu",
+                use_llmlingua2=True,
+            )
+            cls._shared_model_name = model_name
+            return True
+        except Exception as exc:
+            logger.debug(f"LLMLingua prewarm note: {exc}")
+            return False
+
     def __init__(
         self,
         config: Optional[CompressorConfig] = None,
@@ -213,8 +240,19 @@ class LLMLinguaCompressor:
         Lazily load the LLMLingua-2 model on CPU.
         Never crashes the application on failure.
         Records model loading latency in milliseconds.
+        Reuses process-level shared instance to avoid repeated memory allocations.
         """
         if self._model_loaded and self._llm_lingua is not None:
+            return True
+
+        if (
+            self.__class__._shared_llm_lingua is not None
+            and self.__class__._shared_model_name == self.config.model_name
+        ):
+            self._llm_lingua = self.__class__._shared_llm_lingua
+            self._model_loaded = True
+            self._model_available = True
+            self._model_loading_latency_ms = 0.0
             return True
 
         start_time = time.perf_counter()
@@ -231,6 +269,8 @@ class LLMLinguaCompressor:
                 device_map=self.config.device,
                 use_llmlingua2=self.config.use_llmlingua2,
             )
+            self.__class__._shared_llm_lingua = self._llm_lingua
+            self.__class__._shared_model_name = self.config.model_name
             self._model_loaded = True
             self._model_available = True
             self._model_loading_latency_ms = (time.perf_counter() - start_time) * 1000.0
@@ -246,15 +286,22 @@ class LLMLinguaCompressor:
     # Core Compression Method
     # -------------------------------------------------------------------------
 
-    def compress(self, prompt: str, mode: Optional[str] = None) -> CompressionResult:
+    def compress(
+        self,
+        prompt: str,
+        mode: Optional[str] = None,
+        target_retention_rate: Optional[float] = None,
+    ) -> CompressionResult:
         """
         Compress a prompt using Stage 1 structural protection followed by
         extractive token compression (LLMLingua-2 or deterministic fallback).
 
         Args:
             prompt: Original raw prompt text.
-            mode: "conservative" (0.75), "balanced" (0.55), or "aggressive" (0.40).
+            mode: "conservative" (0.80), "balanced" (0.60), or "aggressive" (0.40).
                   Defaults to self.config.mode.
+            target_retention_rate: Optional explicit target retention rate (e.g. 0.40, 0.60, 0.80).
+                  When provided, overrides mode defaults and length-adaptive heuristics.
 
         Returns:
             CompressionResult containing compressed text and transparent metrics.
@@ -264,14 +311,31 @@ class LLMLinguaCompressor:
 
         # Resolve mode and target retention rate
         active_mode = (mode or self.config.mode).lower()
-        if self.config.target_retention_rate is not None:
+        if target_retention_rate is not None:
+            target_rate = max(0.01, min(1.0, float(target_retention_rate)))
+        elif self.config.target_retention_rate is not None:
             target_rate = max(0.01, min(1.0, float(self.config.target_retention_rate)))
         elif active_mode in RETENTION_MODES:
             target_rate = RETENTION_MODES[active_mode]
         else:
-            warnings.append(f"Unknown mode '{active_mode}'; defaulting to 'balanced' (0.55).")
+            warnings.append(f"Unknown mode '{active_mode}'; defaulting to 'balanced' (0.60).")
             active_mode = "balanced"
             target_rate = RETENTION_MODES["balanced"]
+
+        # Length-adaptive calibration for short prompts: prevent semantic over-compression
+        is_short_prompt = False
+        if prompt and prompt.strip():
+            raw_words = re.findall(r"\b[A-Za-z0-9_-]+\b", prompt)
+            if len(raw_words) < 15:
+                # Ultra-short atomic queries (< 15 words) use deterministic lexical pruner
+                is_short_prompt = True
+            elif len(raw_words) < 35 and target_retention_rate is None and self.config.target_retention_rate is None:
+                if active_mode == "conservative":
+                    target_rate = max(target_rate, 0.92)
+                elif active_mode == "balanced":
+                    target_rate = max(target_rate, 0.85)
+                elif active_mode == "aggressive":
+                    target_rate = max(target_rate, 0.75)
 
         # Handle empty or whitespace-only prompts
         if not prompt or not prompt.strip():
@@ -304,6 +368,7 @@ class LLMLinguaCompressor:
         # Step 1: Stage 1 Structural Region Masking
         # ---------------------------------------------------------------------
         masked_prompt, placeholder_map, region_details = self.pruner.mask_protected_regions(prompt)
+        masked_prompt, placeholder_map = self._mask_extended_preservation(masked_prompt, placeholder_map)
         protected_region_count = len(placeholder_map)
 
         # ---------------------------------------------------------------------
@@ -335,9 +400,13 @@ class LLMLinguaCompressor:
         compressed_masked_text = ""
         neural_success = False
 
-        if self._llm_lingua is not None or model_available:
+        if self.config.use_llmlingua2 and (self._llm_lingua is not None or model_available):
             if self._llm_lingua is None and not self.load_model():
                 warnings.append(f"Model loading failed for '{self.config.model_name}'. Using deterministic fallback.")
+            elif is_short_prompt and self._llm_lingua is self.__class__._shared_llm_lingua:
+                # Ultra-short prompts (< 15 words) with real neural model use deterministic fallback
+                # to prevent destructive loss of single-word modifiers
+                neural_success = False
             else:
                 # Attempt LLMLingua-2 compression
                 try:
@@ -463,6 +532,104 @@ class LLMLinguaCompressor:
     # Neural LLMLingua-2 Handler
     # -------------------------------------------------------------------------
 
+    def _mask_extended_preservation(
+        self, masked_text: str, placeholder_map: Dict[str, str]
+    ) -> Tuple[str, Dict[str, str]]:
+        """
+        Extend structural masking to protect critical semantic regions (Section 5.3):
+        - Literal user placeholders (e.g. __CODE_BLOCK_0__)
+        - Negative & conditional instructions (e.g. 'Do not delete', 'must never drop')
+        - PascalCase / UpperCamelCase identifiers (e.g. 'GreenModelRouter')
+        - Numerical values, multipliers & units (e.g. '3.8x', '32 items')
+        - Non-ASCII unicode entities (e.g. 'café', 'brûlée', 'λ')
+        Operates strictly on non-placeholder text segments to avoid corrupting existing placeholders.
+        """
+        if not masked_text or not masked_text.strip():
+            return masked_text, placeholder_map
+
+        if placeholder_map:
+            keys_sorted = sorted(placeholder_map.keys(), key=len, reverse=True)
+            split_pattern = "(" + "|".join(re.escape(k) for k in keys_sorted) + ")"
+            parts = re.split(split_pattern, masked_text)
+        else:
+            parts = [masked_text]
+
+        new_parts: List[str] = []
+        ext_map = dict(placeholder_map)
+        ext_idx = len(placeholder_map)
+
+        for part in parts:
+            if part in placeholder_map:
+                new_parts.append(part)
+                continue
+
+            seg = part
+
+            # 1. User literal placeholders (e.g. __FOO_BAR__)
+            def repl_lit(m: re.Match) -> str:
+                nonlocal ext_idx
+                ph = f"__PG_EXT_LIT_{ext_idx}__"
+                ext_idx += 1
+                ext_map[ph] = m.group(0)
+                return ph
+            seg = re.sub(r"__(?:[A-Za-z0-9_]+)__", repl_lit, seg)
+
+            # 2. Negations and critical restrictive / conditional phrases
+            def repl_neg(m: re.Match) -> str:
+                nonlocal ext_idx
+                ph = f"__PG_EXT_NEG_{ext_idx}__"
+                ext_idx += 1
+                ext_map[ph] = m.group(0)
+                return ph
+            seg = re.sub(
+                r"\b(?:do\s+not|must\s+not|cannot|can\'?t|never|should\s+not|shouldn\'?t|won\'?t|without)\s+[a-zA-Z_]+(?:\s+[a-zA-Z_]+)?\b"
+                r"|\b(?:if|unless|whether|provided(?:\s+that)?|except(?:\s+when)?)\b(?:\s+[a-zA-Z_]+){1,2}",
+                repl_neg,
+                seg,
+                flags=re.IGNORECASE,
+            )
+
+            # 3. PascalCase / UpperCamelCase identifiers and names with initials
+            def repl_pascal(m: re.Match) -> str:
+                nonlocal ext_idx
+                ph = f"__PG_EXT_ID_{ext_idx}__"
+                ext_idx += 1
+                ext_map[ph] = m.group(0)
+                return ph
+            seg = re.sub(
+                r"\b(?:[A-Z]\.\s*)+[A-Z][a-z]+\b"
+                r"|\b[A-Z][a-z0-9]+(?:[A-Z][a-zA-Z0-9]*)+\b",
+                repl_pascal,
+                seg,
+            )
+
+            # 4. Numerical values, version strings, multipliers, and units
+            def repl_num(m: re.Match) -> str:
+                nonlocal ext_idx
+                ph = f"__PG_EXT_NUM_{ext_idx}__"
+                ext_idx += 1
+                ext_map[ph] = m.group(0)
+                return ph
+            seg = re.sub(
+                r"\bv?\d+(?:\.\d+)+(?:-[a-zA-Z0-9.]+)?\b"
+                r"|\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?(?:[a-zA-Z%]+)?\b",
+                repl_num,
+                seg,
+            )
+
+            # 5. Non-ASCII unicode entities (complete words or symbols)
+            def repl_uni(m: re.Match) -> str:
+                nonlocal ext_idx
+                ph = f"__PG_EXT_UNI_{ext_idx}__"
+                ext_idx += 1
+                ext_map[ph] = m.group(0)
+                return ph
+            seg = re.sub(r"\b\w*[^\x00-\x7F]+\w*\b|[^\x00-\x7F]", repl_uni, seg)
+
+            new_parts.append(seg)
+
+        return "".join(new_parts), ext_map
+
     def _compress_with_llmlingua(
         self,
         masked_text: str,
@@ -478,13 +645,19 @@ class LLMLinguaCompressor:
             return masked_text, True
 
         force_tokens = list(placeholder_map.keys())
+        if self.config.preserve_sentence_structure:
+            for p in [".", "?", "!", "\n"]:
+                if p not in force_tokens:
+                    force_tokens.append(p)
+        for q in ["how", "why", "what", "which"]:
+            if q not in force_tokens:
+                force_tokens.append(q)
 
         # Call LLMLingua PromptCompressor
         res = self._llm_lingua.compress_prompt(
             context=masked_text,
             rate=target_rate,
             force_tokens=force_tokens,
-            use_llmlingua2=self.config.use_llmlingua2,
         )
 
         compressed_text = res.get("compressed_prompt", masked_text) if isinstance(res, dict) else str(res)
@@ -538,7 +711,15 @@ class LLMLinguaCompressor:
             freq[lw] = freq.get(lw, 0) + 1
 
         # Stage C: Sentence-by-sentence token filtering
-        sentence_chunks = re.split(r"([.!?]+(?:\s+|\n+|$))", pruned)
+        # Protect abbreviations (e.g., i.e., Dr., etc.), initials, single-letter genus (E. coli), and numbers
+        sentence_split_pattern = (
+            r"(?<!\b[A-Za-z])"
+            r"(?<!\be\.g)(?<!\bi\.e)"
+            r"(?<!\b[Dd]r)(?<!\b[Mm]r)(?<!\b[Mm]rs)(?<!\b[Mm]s)(?<!\b[Pp]rof)(?<!\b[Vv]s)(?<!\betc)(?<!\bal)"
+            r"(?<!\b\d)"
+            r"([.!?]+(?:\s+(?=[A-Z0-9\"'`\n])|\n+|$))"
+        )
+        sentence_chunks = re.split(sentence_split_pattern, pruned)
         processed_sentences: List[str] = []
 
         for i in range(0, len(sentence_chunks), 2):
@@ -556,14 +737,19 @@ class LLMLinguaCompressor:
                 continue
 
             kept_tokens: List[str] = []
-            for match in token_matches:
+            for tok_idx, match in enumerate(token_matches):
                 ws, raw_tok = match.group(1), match.group(2)
                 word_clean = raw_tok.strip(".,;:?!'\"()[]{}").lower()
+
+                # Detect if token is a personal initial or initialism (e.g., 'A.', 'B.', 'J.', 'A.B.', 'A. B.')
+                next_raw = token_matches[tok_idx + 1].group(2) if tok_idx + 1 < len(token_matches) else ""
+                is_initial = self._is_personal_initial(raw_tok, next_raw)
 
                 # Determine if word is immune to pruning
                 is_immune = (
                     word_clean in IMMUNE_WORDS
                     or self._is_technical_or_identifier(raw_tok)
+                    or is_initial
                     or (
                         freq.get(word_clean, 0) == 1
                         and len(word_clean) > 3
@@ -576,12 +762,17 @@ class LLMLinguaCompressor:
                 drop = False
                 if not is_immune:
                     if word_clean in WEAK_ADVERBS:
-                        drop = True
+                        # Protect "very" in collocations like "thank you very much"
+                        if word_clean == "very" and kept_tokens and kept_tokens[-1].strip().lower() in ("thank", "thanks", "you"):
+                            drop = False
+                        else:
+                            drop = True
                     elif mode in ("balanced", "aggressive") and word_clean in FILLER_QUALIFIERS:
                         drop = True
                     elif mode == "aggressive" and word_clean in ARTICLES:
-                        # In aggressive mode, prune non-essential articles unless at sentence start
-                        drop = True
+                        # In aggressive mode, prune non-essential articles unless at sentence start or an initial
+                        if not is_initial:
+                            drop = True
 
                 if not drop:
                     kept_tokens.append(ws + raw_tok)
@@ -602,6 +793,8 @@ class LLMLinguaCompressor:
         result = "".join(processed_sentences)
         # Clean up stray spaces before punctuation
         result = re.sub(r" +([.,;?!])", r"\1", result)
+        # Fix indefinite article agreement if adverbs were dropped (e.g. "an [extremely] comprehensive" -> "a comprehensive")
+        result = self._fix_article_agreement(result)
         # Collapse multiple horizontal spaces while preserving line-leading indentation
         lines = result.split("\n")
         cleaned_lines = []
@@ -614,6 +807,61 @@ class LLMLinguaCompressor:
         return leading_ws + result + trailing_ws
 
     @staticmethod
+    def _fix_article_agreement(text: str) -> str:
+        """
+        Ensures correct English indefinite article agreement ('a' vs 'an').
+        Corrects 'an <consonant>' -> 'a <consonant>' and 'a <vowel>' -> 'an <vowel>',
+        respecting standard phonetic exceptions (silent h, /ju:/ initial sounds).
+        """
+        def repl_an(m):
+            art = m.group(1)
+            next_word = m.group(2)
+            nw_lower = next_word.lower()
+            if nw_lower.startswith(("hour", "honest", "honor", "heir")):
+                return m.group(0)
+            if re.match(r"^[b-df-hj-np-tv-z]", nw_lower):
+                replacement_art = "A" if art[0].isupper() else "a"
+                return f"{replacement_art} {next_word}"
+            return m.group(0)
+
+        def repl_a(m):
+            art = m.group(1)
+            next_word = m.group(2)
+            nw_lower = next_word.lower()
+            if nw_lower.startswith(("user", "univ", "uniq", "unif", "unit", "euro", "euph")):
+                return m.group(0)
+            if re.match(r"^[aeio]", nw_lower) or (nw_lower.startswith("u") and not nw_lower.startswith(("user", "univ", "uniq", "unif", "unit"))):
+                replacement_art = "An" if art[0].isupper() else "an"
+                return f"{replacement_art} {next_word}"
+            if nw_lower.startswith(("hour", "honest", "honor", "heir")):
+                replacement_art = "An" if art[0].isupper() else "an"
+                return f"{replacement_art} {next_word}"
+            return m.group(0)
+
+        text = re.sub(r"\b(an)\s+([a-zA-Z]+)", repl_an, text)
+        text = re.sub(r"\b(a)\s+([a-zA-Z]+)", repl_a, text)
+        return text
+
+    @staticmethod
+    def _is_personal_initial(token: str, next_token: str = "") -> bool:
+        """
+        Detect if a token is a personal initial (e.g. 'A.', 'B.', 'J.', 'A.B.', 'A.B.C.'),
+        optionally enclosed in quotes or brackets, or followed by punctuation.
+        Also detects bare initials followed by another initial (e.g. 'A' in 'A B Smith' or 'A' in 'A B.').
+        Prevents personal initials from being mistakenly pruned as English articles ('a').
+        """
+        stripped = token.strip("'\"()[]{}")
+        # 1. Standard single or multi-part dotted initial: A., B., J., A.B., A.B.C., A.-B.
+        if re.match(r"^(?:[A-Za-z]\.[-]?)+[,;:?!]?$", stripped):
+            return True
+        # 2. Standalone uppercase single letter followed by another initial: 'A' in 'A B Smith' or 'A' in 'A B.'
+        if len(stripped) == 1 and stripped.isupper() and next_token:
+            next_stripped = next_token.strip("'\"()[]{}")
+            if re.match(r"^[A-Za-z]\.?", next_stripped) and (len(next_stripped) == 1 or next_stripped.endswith(".")):
+                return True
+        return False
+
+    @staticmethod
     def _is_technical_or_identifier(token: str) -> bool:
         """
         Detect if a token is a programming identifier, numerical constraint,
@@ -622,6 +870,9 @@ class LLMLinguaCompressor:
         clean = token.strip(".,;:?!'\"()[]{}")
         if not clean:
             return False
+        # Personal initials or initialisms (A., B., J., A.B., etc.)
+        if LLMLinguaCompressor._is_personal_initial(token):
+            return True
         # Digits (numbers, versions, ports, units)
         if any(c.isdigit() for c in clean):
             return True
