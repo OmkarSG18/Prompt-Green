@@ -1350,44 +1350,6 @@
     <!-- filled by JS -->
   </div>
 
-  <!-- Detail Modal / Drawer -->
-  <div id="catModal" style="display:none;position:fixed;inset:0;z-index:9999;
-       background:rgba(7,10,17,0.92);overflow-y:auto;padding:5.5rem 1rem 2rem;">
-    <div style="max-width:900px;margin:0 auto;background:#0f172a;border:1px solid #1e293b;
-                border-radius:14px;padding:2rem;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
-        <h3 id="modalCatTitle" style="color:#34d399;margin:0;"></h3>
-        <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
-          <input id="modalSearch" type="text" placeholder="Search prompts…"
-            style="background:#1e293b;border:1px solid #334155;color:#e2e8f0;
-                   border-radius:6px;padding:0.4rem 0.75rem;font-size:0.85rem;width:200px;"
-            oninput="modalFilter()">
-          <select id="modalOutcome"
-            style="background:#1e293b;border:1px solid #334155;color:#e2e8f0;
-                   border-radius:6px;padding:0.4rem 0.75rem;font-size:0.85rem;"
-            onchange="modalFilter()">
-            <option value="">All outcomes</option>
-            <option value="accepted">Accepted</option>
-            <option value="rolled_back">Rolled back</option>
-          </select>
-          <button onclick="exportModalCSV()"
-            style="background:rgba(16,185,129,0.15);border:1px solid #10b981;
-                   color:#34d399;border-radius:6px;padding:0.4rem 0.9rem;
-                   font-size:0.82rem;cursor:pointer;">
-            ⬇ Export CSV
-          </button>
-          <button onclick="closeModal()"
-            style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.4);
-                   color:#f87171;border-radius:6px;padding:0.4rem 0.9rem;
-                   font-size:0.85rem;cursor:pointer;">✕ Close</button>
-        </div>
-      </div>
-      <div id="modalBody" style="color:#94a3b8;font-size:0.9rem;"></div>
-      <div id="modalPager" style="display:flex;gap:0.5rem;justify-content:center;
-           margin-top:1rem;flex-wrap:wrap;"></div>
-    </div>
-  </div>
-
   <!-- Export All Buttons -->
   <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem;">
     <button onclick="exportAll('csv')"
@@ -1625,6 +1587,44 @@
       PromptGreen V2.0 &bull; Sustainable Large Language Model Inference & Carbon Telemetry &bull; Academic Viva Evaluation Dossier
     </footer>
 
+  </div>
+
+  <!-- Detail Modal / Drawer (root stacking context above sticky navbar) -->
+  <div id="catModal" style="display:none;position:fixed;inset:0;z-index:9999;
+       background:rgba(7,10,17,0.92);overflow-y:auto;padding:2rem 1rem;">
+    <div style="max-width:900px;margin:0 auto;background:#0f172a;border:1px solid #1e293b;
+                border-radius:14px;padding:2rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.2rem;">
+        <h3 id="modalCatTitle" style="color:#34d399;margin:0;"></h3>
+        <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+          <input id="modalSearch" type="text" placeholder="Search prompts…"
+            style="background:#1e293b;border:1px solid #334155;color:#e2e8f0;
+                   border-radius:6px;padding:0.4rem 0.75rem;font-size:0.85rem;width:200px;"
+            oninput="modalFilter()">
+          <select id="modalOutcome"
+            style="background:#1e293b;border:1px solid #334155;color:#e2e8f0;
+                   border-radius:6px;padding:0.4rem 0.75rem;font-size:0.85rem;"
+            onchange="modalFilter()">
+            <option value="">All outcomes</option>
+            <option value="accepted">Accepted</option>
+            <option value="rolled_back">Rolled back</option>
+          </select>
+          <button onclick="exportModalCSV()"
+            style="background:rgba(16,185,129,0.15);border:1px solid #10b981;
+                   color:#34d399;border-radius:6px;padding:0.4rem 0.9rem;
+                   font-size:0.82rem;cursor:pointer;">
+            ⬇ Export CSV
+          </button>
+          <button onclick="closeModal()"
+            style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.4);
+                   color:#f87171;border-radius:6px;padding:0.4rem 0.9rem;
+                   font-size:0.85rem;cursor:pointer;">✕ Close</button>
+        </div>
+      </div>
+      <div id="modalBody" style="color:#94a3b8;font-size:0.9rem;"></div>
+      <div id="modalPager" style="display:flex;gap:0.5rem;justify-content:center;
+           margin-top:1rem;flex-wrap:wrap;"></div>
+    </div>
   </div>
 
   <script>
